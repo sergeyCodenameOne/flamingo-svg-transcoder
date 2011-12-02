@@ -19,17 +19,24 @@ package org.pushingpixels.flamingo.api.svg;
 import java.io.File;
 
 /**
- * Keeps the name of the image file and replaces illegal characters in Java class names.
- *
- * For example edit-copy.svg is turned into edit_copy
- *
+ * Generated a camel cased class name from an image file.
+ * 
+ * For example edit-copy.svg is turned into EditCopy
+ * 
  * @author Emmanuel Bourg
  * @version $Revision$, $Date$
  */
-public class DefaultNamingStrategy implements NamingStrategy {
+public class CamelCaseNamingStrategy implements NamingStrategy {
 
     public String getClassName(File file) {
         String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-        return name.replaceAll("[- ]", "_");
+        String[] parts = name.split("(_|\\s|-)+");
+
+        StringBuilder builder = new StringBuilder();
+        for (String part : parts) {
+            builder.append(part.substring(0, 1).toUpperCase());
+            builder.append(part.substring(1));
+        }
+        return builder.toString();
     }
 }

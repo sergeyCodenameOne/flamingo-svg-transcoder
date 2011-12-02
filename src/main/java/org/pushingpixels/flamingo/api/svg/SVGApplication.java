@@ -81,7 +81,7 @@ public class SVGApplication {
                     File f = fc.getSelectedFile();
                     lastDir = f.getParent();
                     try {
-                        String svgClassName = new DefaultNamingStrategy().getClassName(f);
+                        String svgClassName = new IconSuffixNamingStrategy(new CamelCaseNamingStrategy()).getClassName(f);
 
                         svgCanvas.setURI(f.toURI().toURL().toString());
 
