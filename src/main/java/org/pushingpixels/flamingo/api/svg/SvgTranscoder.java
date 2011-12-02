@@ -39,58 +39,56 @@ import org.w3c.dom.Document;
 
 /**
  * SVG to Java2D transcoder.
- * 
+ *
  * @author Kirill Grouchnikov.
  */
 public class SvgTranscoder extends SvgBaseTranscoder {
-	/**
-	 * URI of the SVG image.
-	 */
-	protected String uri;
+    /**
+     * URI of the SVG image.
+     */
+    protected String uri;
 
-	/**
-	 * Batik bridge context.
-	 */
-	private BridgeContext batikBridgeContext;
+    /**
+     * Batik bridge context.
+     */
+    private BridgeContext batikBridgeContext;
 
-	/**
-	 * Creates a new transcoder.
-	 * 
-	 * @param uri
-	 *            URI of the SVG image.
-	 * @param javaClassname
-	 *            Classname for the generated Java2D code.
-	 */
-	public SvgTranscoder(String uri, String javaClassname) {
-		super(javaClassname);
-		this.uri = uri;
-	}
+    /**
+     * Creates a new transcoder.
+     *
+     * @param uri           URI of the SVG image.
+     * @param javaClassname Classname for the generated Java2D code.
+     */
+    public SvgTranscoder(String uri, String javaClassname) {
+        super(javaClassname);
+        this.uri = uri;
+    }
 
-	/**
-	 * Transcodes the SVG image into Java2D code. Does nothing if the
-	 * {@link #listener} is <code>null</code>.
-	 */
-	public void transcode() {
-		if (this.listener == null)
-			return;
+    /**
+     * Transcodes the SVG image into Java2D code. Does nothing if the
+     * {@link #listener} is <code>null</code>.
+     */
+    public void transcode() {
+        if (this.listener == null) {
+            return;
+        }
 
-		UserAgentAdapter ua = new UserAgentAdapter();
-		DocumentLoader loader = new DocumentLoader(ua);
-		batikBridgeContext = new BridgeContext(ua, loader);
-		batikBridgeContext.setDynamicState(BridgeContext.DYNAMIC);
-		ua.setBridgeContext(batikBridgeContext);
+        UserAgentAdapter ua = new UserAgentAdapter();
+        DocumentLoader loader = new DocumentLoader(ua);
+        batikBridgeContext = new BridgeContext(ua, loader);
+        batikBridgeContext.setDynamicState(BridgeContext.DYNAMIC);
+        ua.setBridgeContext(batikBridgeContext);
 
-		GVTBuilder builder = new GVTBuilder();
-		Document svgDoc;
-		try {
-			svgDoc = loader.loadDocument(this.uri);
-			// System.out.println("Building: " + this.uri);
-			GraphicsNode gvtRoot = builder.build(batikBridgeContext, svgDoc);
+        GVTBuilder builder = new GVTBuilder();
+        Document svgDoc;
+        try {
+            svgDoc = loader.loadDocument(this.uri);
+            // System.out.println("Building: " + this.uri);
+            GraphicsNode gvtRoot = builder.build(batikBridgeContext, svgDoc);
 
-			this.transcode(gvtRoot);
-		} catch (IOException ex) {
-			Logger.getLogger(SvgTranscoder.class.getName()).log(Level.SEVERE,
-					null, ex);
-		}
-	}
+            this.transcode(gvtRoot);
+        } catch (IOException ex) {
+            Logger.getLogger(SvgTranscoder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

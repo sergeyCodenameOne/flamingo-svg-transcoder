@@ -35,15 +35,14 @@ import javax.swing.Icon;
 
 /**
  * Interface for icons that have resizability behaviour.
- * 
+ *
  * @author Kirill Grouchnikov
  */
 public interface ResizableIcon extends Icon {
-	/**
-	 * Changes the dimension of <code>this</code> icon.
-	 * 
-	 * @param newDimension
-	 *            New dimension for <code>this</code> icon.
-	 */
-	public void setDimension(Dimension newDimension);
+    /**
+     * Changes the dimension of <code>this</code> icon.
+     *
+     * @param newDimension New dimension for <code>this</code> icon.
+     */
+    public void setDimension(Dimension newDimension);
 }
