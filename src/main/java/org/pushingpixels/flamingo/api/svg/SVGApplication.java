@@ -81,10 +81,7 @@ public class SVGApplication {
                     File f = fc.getSelectedFile();
                     lastDir = f.getParent();
                     try {
-                        String svgClassName = f.getName().substring(0,
-                                f.getName().length() - 4);
-                        svgClassName = svgClassName.replace('-', '_');
-                        svgClassName = svgClassName.replace(' ', '_');
+                        String svgClassName = new DefaultNamingStrategy().getClassName(f);
 
                         svgCanvas.setURI(f.toURI().toURL().toString());
 

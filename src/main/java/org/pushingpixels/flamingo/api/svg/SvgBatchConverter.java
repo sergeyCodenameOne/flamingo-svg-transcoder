@@ -24,20 +24,18 @@ public class SvgBatchConverter {
         if (!dir.exists()) {
             return;
         }
-
+        
+        NamingStrategy namingStrategy = new DefaultNamingStrategy();                
+        
         for (File file : dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 return name.endsWith(".svg");
             }
         })) {
-            String svgClassName = file.getName().substring(0,
-                    file.getName().length() - 4);
-            svgClassName = svgClassName.replace('-', '_');
-            svgClassName = svgClassName.replace(' ', '_');
-            String javaClassFilename = dir + File.separator + svgClassName
-                    + ".java";
-
+            String svgClassName = namingStrategy.getClassName(file);
+            String javaClassFilename = dir + File.separator + svgClassName + ".java";
+            
             System.err.println("Processing " + file.getName());
 
             try {
