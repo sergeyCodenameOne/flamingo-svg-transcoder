@@ -223,7 +223,7 @@ public class SvgTranscoder {
         templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
 
         ByteArrayOutputStream paintingCodeStream = new ByteArrayOutputStream();
-        this.printWriter = new PrintWriter(paintingCodeStream);
+        this.printWriter = new IndentingPrintWriter(new PrintWriter(paintingCodeStream));
         transcodeGraphicsNode(gvtRoot, "");
         this.printWriter.close();
 
@@ -257,21 +257,20 @@ public class SvgTranscoder {
             int type = pathIterator.currentSegment(coords);
             switch (type) {
                 case PathIterator.SEG_CUBICTO:
-                    printWriter.println("((GeneralPath)shape).curveTo(" + coords[0] + ", " + coords[1] + ", " + coords[2] + ", " + coords[3] + ", " + coords[4] + ", " + coords[5] + ");");
+                    printWriter.println("((GeneralPath) shape).curveTo(" + coords[0] + ", " + coords[1] + ", " + coords[2] + ", " + coords[3] + ", " + coords[4] + ", " + coords[5] + ");");
                     break;
                 case PathIterator.SEG_QUADTO:
-                    printWriter.println("((GeneralPath)shape).quadTo(" + coords[0] + ", " + coords[1] + ", " + coords[2] + ", "
-                            + coords[3] + ");");
+                    printWriter.println("((GeneralPath) shape).quadTo(" + coords[0] + ", " + coords[1] + ", " + coords[2] + ", " + coords[3] + ");");
                     break;
                 case PathIterator.SEG_MOVETO:
-                    printWriter.println("((GeneralPath)shape).moveTo(" + coords[0] + ", " + coords[1] + ");");
+                    printWriter.println("((GeneralPath) shape).moveTo(" + coords[0] + ", " + coords[1] + ");");
                     break;
                 case PathIterator.SEG_LINETO:
-                    printWriter.println("((GeneralPath)shape).lineTo(" + coords[0] + ", " + coords[1] + ");");
+                    printWriter.println("((GeneralPath) shape).lineTo(" + coords[0] + ", " + coords[1] + ");");
                     break;
                 // through
                 case PathIterator.SEG_CLOSE:
-                    printWriter.println("((GeneralPath)shape).closePath();");
+                    printWriter.println("((GeneralPath) shape).closePath();");
                     break;
             }
         }
@@ -317,8 +316,7 @@ public class SvgTranscoder {
         }
         if (shape instanceof Line2D.Float) {
             Line2D.Float l2df = (Line2D.Float) shape;
-            printWriter.format("shape = new Line2D.Float(%ff,%ff,%ff,%ff);\n",
-                    l2df.x1, l2df.y1, l2df.x2, l2df.y2);
+            printWriter.format("shape = new Line2D.Float(%ff, %ff, %ff, %ff);\n", l2df.x1, l2df.y1, l2df.x2, l2df.y2);
             return;
         }
         throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
@@ -357,7 +355,7 @@ public class SvgTranscoder {
             fractionsRep.append("null");
         } else {
             String sep = "";
-            fractionsRep.append("new float[] {");
+            fractionsRep.append("new float[]{");
             previousFraction = -1.0f;
             for (float currentFraction : fractions) {
                 fractionsRep.append(sep);
@@ -365,7 +363,7 @@ public class SvgTranscoder {
                     currentFraction += 0.000000001f;
                 }
                 fractionsRep.append(currentFraction + "f");
-                sep = ",";
+                sep = ", ";
 
                 previousFraction = currentFraction;
             }
@@ -377,13 +375,13 @@ public class SvgTranscoder {
             colorsRep.append("null");
         } else {
             String sep = "";
-            colorsRep.append("new Color[] {");
+            colorsRep.append("new Color[]{");
             for (Color color : colors) {
                 colorsRep.append(sep);
                 colorsRep.append("new Color(" + color.getRed() + ", "
                         + color.getGreen() + ", " + color.getBlue() + ", "
                         + color.getAlpha() + ")");
-                sep = ",";
+                sep = ", ";
             }
             colorsRep.append("}");
         }
@@ -471,7 +469,7 @@ public class SvgTranscoder {
             fractionsRep.append("null");
         } else {
             String sep = "";
-            fractionsRep.append("new float[] {");
+            fractionsRep.append("new float[]{");
             previousFraction = -1.0f;
             for (float currentFraction : fractions) {
                 fractionsRep.append(sep);
@@ -479,7 +477,7 @@ public class SvgTranscoder {
                     currentFraction += 0.000000001f;
                 }
                 fractionsRep.append(currentFraction + "f");
-                sep = ",";
+                sep = ", ";
 
                 previousFraction = currentFraction;
             }
@@ -491,13 +489,13 @@ public class SvgTranscoder {
             colorsRep.append("null");
         } else {
             String sep = "";
-            colorsRep.append("new Color[] {");
+            colorsRep.append("new Color[]{");
             for (Color color : colors) {
                 colorsRep.append(sep);
                 colorsRep.append("new Color(" + color.getRed() + ", "
                         + color.getGreen() + ", " + color.getBlue() + ", "
                         + color.getAlpha() + ")");
-                sep = ",";
+                sep = ", ";
             }
             colorsRep.append("}");
         }
@@ -574,9 +572,7 @@ public class SvgTranscoder {
             // offset(offset);
             // printWriter.println((Color) paint);
             Color c = (Color) paint;
-            printWriter.println("paint = new Color(" + c.getRed() + ", "
-                    + c.getGreen() + ", " + c.getBlue() + ", " + c.getAlpha()
-                    + ");");
+            printWriter.println("paint = new Color(" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue() + ", " + c.getAlpha() + ");");
             return;
         }
         if (paint == null) {
@@ -692,17 +688,15 @@ public class SvgTranscoder {
                 dashRep.append("null");
             } else {
                 String sep = "";
-                dashRep.append("new float[] {");
+                dashRep.append("new float[]{");
                 for (float _dash : dash) {
                     dashRep.append(sep);
                     dashRep.append(_dash + "f");
-                    sep = ",";
+                    sep = ", ";
                 }
                 dashRep.append("}");
             }
-            printWriter.println("stroke = new BasicStroke(" + width + "f,"
-                    + cap + "," + join + "," + miterlimit + "f," + dashRep
-                    + "," + dash_phase + "f);");
+            printWriter.println("stroke = new BasicStroke(" + width + "f, " + cap + ", " + join + ", " + miterlimit + "f, " + dashRep + ", " + dash_phase + "f);");
         } catch (Exception exc) {
             exc.printStackTrace();
         }
