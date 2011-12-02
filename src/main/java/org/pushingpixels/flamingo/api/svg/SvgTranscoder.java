@@ -209,7 +209,7 @@ public class SvgTranscoder {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-
+        
         String templateString = templateBuffer.toString();
 
         if (javaPackageName != null) {
@@ -404,19 +404,13 @@ public class SvgTranscoder {
         if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
-
-        double[] transfMatrix = new double[6];
-        transform.getMatrix(transfMatrix);
-
+        
         this.printWriter.println("paint = new LinearGradientPaint(new Point2D.Double("
                 + startPoint.getX() + ", " + startPoint.getY()
                 + "), new Point2D.Double(" + endPoint.getX() + ", "
                 + endPoint.getY() + "), " + fractionsRep.toString()
                 + ", " + colorsRep.toString() + ", " + cycleMethodRep
-                + ", " + colorSpaceRep + ", new AffineTransform("
-                + transfMatrix[0] + "f, " + transfMatrix[1] + "f, "
-                + transfMatrix[2] + "f, " + transfMatrix[3] + "f, "
-                + transfMatrix[4] + "f, " + transfMatrix[5] + "f));");
+                + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ");");
 
         // offset(offset);
         // printWriter.println("LinearGradientPaint");
@@ -518,20 +512,14 @@ public class SvgTranscoder {
         if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
-
-        double[] transfMatrix = new double[6];
-        transform.getMatrix(transfMatrix);
-
+        
         this.printWriter.println("paint = new RadialGradientPaint(new Point2D.Double("
                 + centerPoint.getX() + ", " + centerPoint.getY()
                 + "), " + radius + "f, new Point2D.Double("
                 + focusPoint.getX() + ", " + focusPoint.getY() + "), "
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
-                + ", new AffineTransform(" + transfMatrix[0] + "f, "
-                + transfMatrix[1] + "f, " + transfMatrix[2] + "f, "
-                + transfMatrix[3] + "f, " + transfMatrix[4] + "f, "
-                + transfMatrix[5] + "f));");
+                + ", " + transcodeTransform(transform) + ");");
         //
         // printWriter.println("RadialGradientPaint");
         // // offset(offset + 1);
@@ -550,6 +538,21 @@ public class SvgTranscoder {
         // printWriter.println("COLOR_SPACE : " + paint.getColorSpace());
         // // offset(offset + 1);
         // printWriter.println("GRADIENT_TRANSFORM : " + paint.getTransform());
+    }
+
+    /**
+     * Transcodes the specified transform
+     * 
+     * @param transform
+     */
+    private String transcodeTransform(AffineTransform transform) {
+        double[] transfMatrix = new double[6];
+        transform.getMatrix(transfMatrix);
+        
+        return "new AffineTransform("
+                + transfMatrix[0] + "f, " + transfMatrix[1] + "f, "
+                + transfMatrix[2] + "f, " + transfMatrix[3] + "f, "
+                + transfMatrix[4] + "f, " + transfMatrix[5] + "f)";
     }
 
     /**
@@ -759,12 +762,7 @@ public class SvgTranscoder {
         AffineTransform transform = node.getTransform();
         printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
         if (transform != null && !transform.isIdentity()) {
-            double[] transfMatrix = new double[6];
-            transform.getMatrix(transfMatrix);
-            printWriter.println("g.transform(new AffineTransform("
-                    + transfMatrix[0] + "f, " + transfMatrix[1] + "f, "
-                    + transfMatrix[2] + "f, " + transfMatrix[3] + "f, "
-                    + transfMatrix[4] + "f, " + transfMatrix[5] + "f));");
+            printWriter.println("g.transform(" + transcodeTransform(transform) + ");");
         }
 
         try {
