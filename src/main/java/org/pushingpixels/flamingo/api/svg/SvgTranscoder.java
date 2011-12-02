@@ -27,6 +27,7 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
+
 package org.pushingpixels.flamingo.api.svg;
 
 import java.awt.AlphaComposite;
@@ -96,17 +97,11 @@ public class SvgTranscoder {
     protected boolean javaToImplementResizableIconInterface;
 
     protected final static String TOKEN_PACKAGE = "TOKEN_PACKAGE";
-
     protected final static String TOKEN_CLASSNAME = "TOKEN_CLASSNAME";
-
     protected final static String TOKEN_PAINTING_CODE = "TOKEN_PAINTING_CODE";
-
     protected final static String TOKEN_ORIG_X = "TOKEN_ORIG_X";
-
     protected final static String TOKEN_ORIG_Y = "TOKEN_ORIG_Y";
-
     protected final static String TOKEN_ORIG_WIDTH = "TOKEN_ORIG_WIDTH";
-
     protected final static String TOKEN_ORIG_HEIGHT = "TOKEN_ORIG_HEIGHT";
 
     /** URI of the SVG image. */
@@ -145,7 +140,6 @@ public class SvgTranscoder {
         Document svgDoc;
         try {
             svgDoc = loader.loadDocument(this.uri);
-            // System.out.println("Building: " + this.uri);
             GraphicsNode gvtRoot = builder.build(batikBridgeContext, svgDoc);
 
             this.transcode(gvtRoot);
@@ -165,8 +159,7 @@ public class SvgTranscoder {
         this.javaToImplementResizableIconInterface = false;
     }
 
-    public void setJavaToImplementResizableIconInterface(
-            boolean javaToImplementResizableIconInterface) {
+    public void setJavaToImplementResizableIconInterface(boolean javaToImplementResizableIconInterface) {
         this.javaToImplementResizableIconInterface = javaToImplementResizableIconInterface;
     }
 
@@ -192,40 +185,15 @@ public class SvgTranscoder {
      * Transcodes the SVG image into Java2D code.
      */
     public void transcode(GraphicsNode gvtRoot) {
-        String template = this.javaToImplementResizableIconInterface ? "SvgTranscoderTemplateResizable.templ" : "SvgTranscoderTemplatePlain.templ";
-        // load the template
-        InputStream templateStream = SvgTranscoder.class.getResourceAsStream(template);
-        StringBuilder templateBuffer = new StringBuilder();
-        BufferedReader templateReader = new BufferedReader(new InputStreamReader(templateStream));
-        try {
-            while (true) {
-                String line = templateReader.readLine();
-                if (line == null) {
-                    break;
-                }
-                templateBuffer.append(line + "\n");
-            }
-            templateReader.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-        
-        String templateString = templateBuffer.toString();
-
-        if (javaPackageName != null) {
-            templateString = templateString.replaceAll(TOKEN_PACKAGE, "package " + javaPackageName + ";");
-        } else {
-            templateString = templateString.replaceAll(TOKEN_PACKAGE, "");
-        }
-
-        templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
-        templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
-        templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
-
         ByteArrayOutputStream paintingCodeStream = new ByteArrayOutputStream();
         this.printWriter = new IndentingPrintWriter(new PrintWriter(paintingCodeStream));
         transcodeGraphicsNode(gvtRoot, "");
         this.printWriter.close();
+
+        String templateString = readTemplate("SvgTranscoderTemplate" + (javaToImplementResizableIconInterface ? "Resizable" : "Plain") + ".templ");
+        
+        templateString = templateString.replaceAll(TOKEN_PACKAGE, javaPackageName != null ? "package " + javaPackageName + ";" : "");
+        templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
 
         String paintingCode = new String(paintingCodeStream.toByteArray());
         templateString = templateString.replaceAll(TOKEN_PAINTING_CODE, paintingCode);
@@ -243,6 +211,26 @@ public class SvgTranscoder {
         if (listener != null) {
             listener.finished();
         }
+    }
+
+    private String readTemplate(String name) {
+        InputStream in = SvgTranscoder.class.getResourceAsStream(name);
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        try {
+            while (true) {
+                String line = reader.readLine();
+                if (line == null) {
+                    break;
+                }
+                buffer.append(line + "\n");
+            }
+            reader.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        
+        return buffer.toString();
     }
 
     /**
@@ -282,44 +270,35 @@ public class SvgTranscoder {
      * @param shape Shape.
      * @throws UnsupportedOperationException if the shape is unsupported.
      */
-    private void transcodeShape(Shape shape)
-            throws UnsupportedOperationException {
+    private void transcodeShape(Shape shape) throws UnsupportedOperationException {
         if (shape instanceof ExtendedGeneralPath) {
             transcodePathIterator(((ExtendedGeneralPath) shape).getPathIterator(null));
-            return;
-        }
-        if (shape instanceof GeneralPath) {
+            
+        } else if (shape instanceof GeneralPath) {
             transcodePathIterator(((GeneralPath) shape).getPathIterator(null));
-            return;
-        }
-        if (shape instanceof Rectangle2D) {
+            
+        } else if (shape instanceof Rectangle2D) {
             Rectangle2D rect = (Rectangle2D) shape;
-            printWriter.println("shape = new Rectangle2D.Double(" + rect.getX()
-                    + ", " + rect.getY() + ", " + rect.getWidth() + ", "
-                    + rect.getHeight() + ");");
-            return;
-        }
-        if (shape instanceof RoundRectangle2D) {
+            printWriter.println("shape = new Rectangle2D.Double(" + rect.getX() + ", " + rect.getY() + ", " + rect.getWidth() + ", " + rect.getHeight() + ");");
+            
+        } else if (shape instanceof RoundRectangle2D) {
             RoundRectangle2D rRect = (RoundRectangle2D) shape;
             printWriter.println("shape = new RoundRectangle2D.Double("
                     + rRect.getX() + ", " + rRect.getY() + ", "
                     + rRect.getWidth() + ", " + rRect.getHeight() + ", "
                     + rRect.getArcWidth() + ", " + rRect.getArcHeight() + ");");
-            return;
-        }
-        if (shape instanceof Ellipse2D) {
+            
+        } else if (shape instanceof Ellipse2D) {
             Ellipse2D ell = (Ellipse2D) shape;
-            printWriter.println("shape = new Ellipse2D.Double(" + ell.getX()
-                    + ", " + ell.getY() + ", " + ell.getWidth() + ", "
-                    + ell.getHeight() + ");");
-            return;
-        }
-        if (shape instanceof Line2D.Float) {
+            printWriter.println("shape = new Ellipse2D.Double(" + ell.getX() + ", " + ell.getY() + ", " + ell.getWidth() + ", " + ell.getHeight() + ");");
+            
+        } else if (shape instanceof Line2D.Float) {
             Line2D.Float l2df = (Line2D.Float) shape;
             printWriter.format("shape = new Line2D.Float(%ff, %ff, %ff, %ff);\n", l2df.x1, l2df.y1, l2df.x2, l2df.y2);
-            return;
+            
+        } else {
+            throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
         }
-        throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
     }
 
     /**
@@ -380,19 +359,16 @@ public class SvgTranscoder {
         String cycleMethodRep = null;
         if (cycleMethod == MultipleGradientPaint.NO_CYCLE) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.NO_CYCLE";
-        }
-        if (cycleMethod == MultipleGradientPaint.REFLECT) {
+        } else if (cycleMethod == MultipleGradientPaint.REFLECT) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.REFLECT";
-        }
-        if (cycleMethod == MultipleGradientPaint.REPEAT) {
+        } else if (cycleMethod == MultipleGradientPaint.REPEAT) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.REPEAT";
         }
 
         String colorSpaceRep = null;
         if (colorSpace == MultipleGradientPaint.SRGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.SRGB";
-        }
-        if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
+        } else if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
         
@@ -400,21 +376,6 @@ public class SvgTranscoder {
                 + transcodePoint(startPoint) + ", " + transcodePoint(endPoint) + ", " + fractionsRep.toString()
                 + ", " + colorsRep.toString() + ", " + cycleMethodRep
                 + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ");");
-
-        // offset(offset);
-        // printWriter.println("LinearGradientPaint");
-        // // offset(offset + 1);
-        // printWriter.println("START : " + paint.getStartPoint());
-        // // offset(offset + 1);
-        // printWriter.println("END : " + paint.getEndPoint());
-        // // offset(offset + 1);
-        // printWriter.println("FRACTIONS : " + paint.getFractions());
-        // // offset(offset + 1);
-        // printWriter.println("CYCLE_METHOD : " + paint.getCycleMethod());
-        // // offset(offset + 1);
-        // printWriter.println("COLOR_SPACE : " + paint.getColorSpace());
-        // // offset(offset + 1);
-        // printWriter.println("GRADIENT_TRANSFORM : " + paint.getTransform());
     }
 
     /**
@@ -424,7 +385,6 @@ public class SvgTranscoder {
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
     private void transcodeRadialGradientPaint(RadialGradientPaint paint) throws IllegalArgumentException {
-        // offset(offset);
         Point2D centerPoint = paint.getCenterPoint();
         float radius = paint.getRadius();
         Point2D focusPoint = paint.getFocusPoint();
@@ -477,19 +437,16 @@ public class SvgTranscoder {
         String cycleMethodRep = null;
         if (cycleMethod == MultipleGradientPaint.NO_CYCLE) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.NO_CYCLE";
-        }
-        if (cycleMethod == MultipleGradientPaint.REFLECT) {
+        } else if (cycleMethod == MultipleGradientPaint.REFLECT) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.REFLECT";
-        }
-        if (cycleMethod == MultipleGradientPaint.REPEAT) {
+        } else if (cycleMethod == MultipleGradientPaint.REPEAT) {
             cycleMethodRep = "MultipleGradientPaint.CycleMethod.REPEAT";
         }
 
         String colorSpaceRep = null;
         if (colorSpace == MultipleGradientPaint.SRGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.SRGB";
-        }
-        if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
+        } else if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
 
@@ -498,24 +455,6 @@ public class SvgTranscoder {
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
                 + ", " + transcodeTransform(transform) + ");");
-        //
-        // printWriter.println("RadialGradientPaint");
-        // // offset(offset + 1);
-        // printWriter.println("CENTER : " + paint.getCenterPoint());
-        // // offset(offset + 1);
-        // printWriter.println("RADIUS : " + paint.getRadius());
-        // // offset(offset + 1);
-        // printWriter.println("FOCUS : " + paint.getFocusPoint());
-        // // offset(offset + 1);
-        // printWriter.println("FRACTIONS : " + paint.getFractions());
-        // // offset(offset + 1);
-        // printWriter.println("COLORS : " + paint.getColors());
-        // // offset(offset + 1);
-        // printWriter.println("CYCLE_METHOD : " + paint.getCycleMethod());
-        // // offset(offset + 1);
-        // printWriter.println("COLOR_SPACE : " + paint.getColorSpace());
-        // // offset(offset + 1);
-        // printWriter.println("GRADIENT_TRANSFORM : " + paint.getTransform());
     }
 
     /**
@@ -576,27 +515,18 @@ public class SvgTranscoder {
      * @param paint Paint.
      * @throws UnsupportedOperationException if the paint is unsupported.
      */
-    private void transcodePaint(Paint paint)
-            throws UnsupportedOperationException {
+    private void transcodePaint(Paint paint) throws UnsupportedOperationException {
         if (paint instanceof RadialGradientPaint) {
             transcodeRadialGradientPaint((RadialGradientPaint) paint);
-            return;
-        }
-        if (paint instanceof LinearGradientPaint) {
+        } else if (paint instanceof LinearGradientPaint) {
             transcodeLinearGradientPaint((LinearGradientPaint) paint);
-            return;
-        }
-        if (paint instanceof Color) {
-            Color c = (Color) paint;
-            printWriter.println("paint = " + transcodeColor(c) + ";");
-            return;
-        }
-        if (paint == null) {
+        } else if (paint instanceof Color) {
+            printWriter.println("paint = " + transcodeColor((Color) paint) + ";");
+        } else if (paint == null) {
             printWriter.println("No paint");
-            return;
+        } else {
+            throw new UnsupportedOperationException(paint.getClass().getCanonicalName());
         }
-
-        throw new UnsupportedOperationException(paint.getClass().getCanonicalName());
     }
 
     /**
@@ -608,20 +538,15 @@ public class SvgTranscoder {
     private void transcodeShapePainter(ShapePainter painter) throws UnsupportedOperationException {
         if (painter == null) {
             return;
-        }
-        if (painter instanceof CompositeShapePainter) {
+        } else if (painter instanceof CompositeShapePainter) {
             transcodeCompositeShapePainter((CompositeShapePainter) painter);
-            return;
-        }
-        if (painter instanceof FillShapePainter) {
+        } else if (painter instanceof FillShapePainter) {
             transcodeFillShapePainter((FillShapePainter) painter);
-            return;
-        }
-        if (painter instanceof StrokeShapePainter) {
+        } else if (painter instanceof StrokeShapePainter) {
             transcodeStrokeShapePainter((StrokeShapePainter) painter);
-            return;
+        } else {
+            throw new UnsupportedOperationException(painter.getClass().getCanonicalName());
         }
-        throw new UnsupportedOperationException(painter.getClass().getCanonicalName());
     }
 
     /**
@@ -630,8 +555,6 @@ public class SvgTranscoder {
      * @param painter Composite shape painter.
      */
     private void transcodeCompositeShapePainter(CompositeShapePainter painter) {
-        // offset(offset);
-        // printWriter.println("CompositeShapePainter");
         for (int i = 0; i < painter.getShapePainterCount(); i++) {
             transcodeShapePainter(painter.getShapePainter(i));
         }
@@ -654,10 +577,8 @@ public class SvgTranscoder {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        Shape shape = painter.getShape();
-        // offset(offset);
-        // printWriter.println("FillShapePainter");
-        transcodeShape(shape);
+        
+        transcodeShape(painter.getShape());
         printWriter.println("g.setPaint(paint);");
         printWriter.println("g.fill(shape);");
     }
@@ -669,8 +590,6 @@ public class SvgTranscoder {
      */
     private void transcodeStrokeShapePainter(StrokeShapePainter painter) {
         Shape shape = painter.getShape();
-        // offset(offset);
-        // printWriter.println("StrokeShapePainter");
         try {
             Field paintFld = StrokeShapePainter.class.getDeclaredField("paint");
             paintFld.setAccessible(true);
@@ -679,16 +598,14 @@ public class SvgTranscoder {
                 return;
             }
             transcodePaint(paint);
-            // offset(offset + 1);
-            // printWriter.println(paint);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+        
         try {
             Field strokeFld = StrokeShapePainter.class.getDeclaredField("stroke");
             strokeFld.setAccessible(true);
             Stroke stroke = (Stroke) strokeFld.get(painter);
-            // offset(offset + 1);
 
             BasicStroke bStroke = (BasicStroke) stroke;
             float width = bStroke.getLineWidth();
@@ -730,12 +647,8 @@ public class SvgTranscoder {
      *                corresponding SVG section).
      */
     private void transcodeShapeNode(ShapeNode node, String comment) {
-        // offset(offset);
-        // printWriter.println("ShapeNode");
-
         printWriter.println("// " + comment);
-        ShapePainter sPainter = node.getShapePainter();
-        transcodeShapePainter(sPainter);
+        transcodeShapePainter(node.getShapePainter());
     }
 
     /**
@@ -747,8 +660,6 @@ public class SvgTranscoder {
      */
     private void transcodeCompositeGraphicsNode(CompositeGraphicsNode node, String comment) {
         printWriter.println("// " + comment);
-        // offset(offset);
-        // printWriter.println("CompositeGraphicsNode");
         int count = 0;
         for (Object obj : node.getChildren()) {
             transcodeGraphicsNode((GraphicsNode) obj, comment + "_" + count);
@@ -771,6 +682,7 @@ public class SvgTranscoder {
             float alpha = composite.getAlpha();
             printWriter.println("g.setComposite(AlphaComposite.getInstance(" + rule + ", " + alpha + "f * origAlpha));");
         }
+        
         AffineTransform transform = node.getTransform();
         printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
         if (transform != null && !transform.isIdentity()) {
@@ -780,13 +692,11 @@ public class SvgTranscoder {
         try {
             if (node instanceof ShapeNode) {
                 transcodeShapeNode((ShapeNode) node, comment);
-                return;
-            }
-            if (node instanceof CompositeGraphicsNode) {
+            } else if (node instanceof CompositeGraphicsNode) {
                 transcodeCompositeGraphicsNode((CompositeGraphicsNode) node, comment);
-                return;
+            } else {
+                throw new UnsupportedOperationException(node.getClass().getCanonicalName());
             }
-            throw new UnsupportedOperationException(node.getClass().getCanonicalName());
         } finally {
             printWriter.println("g.setTransform(defaultTransform_" + comment + ");");
         }
