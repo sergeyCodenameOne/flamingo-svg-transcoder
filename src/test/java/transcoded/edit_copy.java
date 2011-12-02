@@ -7,8 +7,7 @@ import java.awt.geom.*;
  * This class has been automatically generated using <a
  * href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
  */
-public class edit_copy implements
-        org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
+public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
     /**
      * Paints the transcoded SVG image on the specified graphics context. You
      * can install a custom transformation on the graphics context to scale the
@@ -25,8 +24,7 @@ public class edit_copy implements
         float origAlpha = 1.0f;
         Composite origComposite = ((Graphics2D)g).getComposite();
         if (origComposite instanceof AlphaComposite) {
-            AlphaComposite origAlphaComposite = 
-                (AlphaComposite)origComposite;
+            AlphaComposite origAlphaComposite = (AlphaComposite)origComposite;
             if (origAlphaComposite.getRule() == AlphaComposite.SRC_OVER) {
                 origAlpha = origAlphaComposite.getAlpha();
             }
@@ -262,6 +260,24 @@ g.setTransform(defaultTransform_);
     }
 
     /**
+     * Returns the X of the bounding box of the original SVG image.
+     * 
+     * @return The X of the bounding box of the original SVG image.
+     */
+    public static int getOrigX() {
+        return 2;
+    }
+
+    /**
+     * Returns the Y of the bounding box of the original SVG image.
+     * 
+     * @return The Y of the bounding box of the original SVG image.
+     */
+    public static int getOrigY() {
+        return 2;
+    }
+
+    /**
      * Returns the width of the bounding box of the original SVG image.
      * 
      * @return The width of the bounding box of the original SVG image.
@@ -304,7 +320,7 @@ g.setTransform(defaultTransform_);
      */
     @Override
     public int getIconHeight() {
-        return width;
+        return height;
     }
 
     /*
@@ -314,7 +330,7 @@ g.setTransform(defaultTransform_);
      */
     @Override
     public int getIconWidth() {
-        return height;
+        return width;
     }
 
     /*
@@ -339,8 +355,7 @@ g.setTransform(defaultTransform_);
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.translate(x, y);
 
         double coef1 = (double) this.width / (double) getOrigWidth();
