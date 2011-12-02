@@ -195,7 +195,7 @@ public class SvgTranscoder {
         String template = this.javaToImplementResizableIconInterface ? "SvgTranscoderTemplateResizable.templ" : "SvgTranscoderTemplatePlain.templ";
         // load the template
         InputStream templateStream = SvgTranscoder.class.getResourceAsStream(template);
-        StringBuffer templateBuffer = new StringBuffer();
+        StringBuilder templateBuffer = new StringBuilder();
         BufferedReader templateReader = new BufferedReader(new InputStreamReader(templateStream));
         try {
             while (true) {
@@ -352,7 +352,7 @@ public class SvgTranscoder {
             previousFraction = currentFraction;
         }
 
-        StringBuffer fractionsRep = new StringBuffer();
+        StringBuilder fractionsRep = new StringBuilder();
         if (fractions == null) {
             fractionsRep.append("null");
         } else {
@@ -372,7 +372,7 @@ public class SvgTranscoder {
             fractionsRep.append("}");
         }
 
-        StringBuffer colorsRep = new StringBuffer();
+        StringBuilder colorsRep = new StringBuilder();
         if (fractions == null) {
             colorsRep.append("null");
         } else {
@@ -466,7 +466,7 @@ public class SvgTranscoder {
             previousFraction = currentFraction;
         }
 
-        StringBuffer fractionsRep = new StringBuffer();
+        StringBuilder fractionsRep = new StringBuilder();
         if (fractions == null) {
             fractionsRep.append("null");
         } else {
@@ -486,7 +486,7 @@ public class SvgTranscoder {
             fractionsRep.append("}");
         }
 
-        StringBuffer colorsRep = new StringBuffer();
+        StringBuilder colorsRep = new StringBuilder();
         if (fractions == null) {
             colorsRep.append("null");
         } else {
@@ -687,7 +687,7 @@ public class SvgTranscoder {
             float[] dash = bStroke.getDashArray();
             float dash_phase = bStroke.getDashPhase();
 
-            StringBuffer dashRep = new StringBuffer();
+            StringBuilder dashRep = new StringBuilder();
             if (dash == null) {
                 dashRep.append("null");
             } else {
