@@ -35,11 +35,9 @@ public class font_x_generic implements
         // 
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_0 = g.getTransform();
@@ -47,7 +45,6 @@ public class font_x_generic implements
         // _0_0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.40206185f * origAlpha));
         AffineTransform defaultTransform__0_0_0_0 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_0_0
         paint = new LinearGradientPaint(new Point2D.Double(302.8571472167969, 366.64788818359375), new Point2D.Double(302.8571472167969, 609.5050659179688), new float[]{0.0f, 0.5f, 1.0f}, new Color[]{new Color(0, 0, 0, 0), new Color(0, 0, 0, 255), new Color(0, 0, 0, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(2.7743890285491943f, 0.0f, 0.0f, 1.9697060585021973f, -1892.178955078125f, -872.8853759765625f));
         shape = new Rectangle2D.Double(-1559.2523193359375, -150.6968536376953, 1339.633544921875, 478.357177734375);
@@ -56,7 +53,6 @@ public class font_x_generic implements
         g.setTransform(defaultTransform__0_0_0_0);
         g.setComposite(AlphaComposite.getInstance(3, 0.40206185f * origAlpha));
         AffineTransform defaultTransform__0_0_0_1 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_0_1
         paint = new RadialGradientPaint(new Point2D.Double(605.7142944335938, 486.64788818359375), 117.14286f, new Point2D.Double(605.7142944335938, 486.64788818359375), new float[]{0.0f, 1.0f}, new Color[]{new Color(0, 0, 0, 255), new Color(0, 0, 0, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(2.7743890285491943f, 0.0f, 0.0f, 1.9697060585021973f, -1891.633056640625f, -872.8853759765625f));
         shape = new GeneralPath();
@@ -70,7 +66,6 @@ public class font_x_generic implements
         g.setTransform(defaultTransform__0_0_0_1);
         g.setComposite(AlphaComposite.getInstance(3, 0.40206185f * origAlpha));
         AffineTransform defaultTransform__0_0_0_2 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_0_2
         paint = new RadialGradientPaint(new Point2D.Double(605.7142944335938, 486.64788818359375), 117.14286f, new Point2D.Double(605.7142944335938, 486.64788818359375), new float[]{0.0f, 1.0f}, new Color[]{new Color(0, 0, 0, 255), new Color(0, 0, 0, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(-2.7743890285491943f, 0.0f, 0.0f, 1.9697060585021973f, 112.76229858398438f, -872.8853759765625f));
         shape = new GeneralPath();
@@ -85,7 +80,6 @@ public class font_x_generic implements
         g.setTransform(defaultTransform__0_0_0);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_1 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_1
         paint = new LinearGradientPaint(new Point2D.Double(36.66853713989258, 36.38324737548828), new Point2D.Double(10.30355453491211, 7.492883205413818), new float[]{0.0f, 1.0f}, new Color[]{new Color(238, 238, 236, 255), new Color(255, 255, 255, 255)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         shape = new RoundRectangle2D.Double(3.488370418548584, 2.512193202972412, 41.011470794677734, 42.987239837646484, 1.9981215000152588, 1.9982975721359253);
@@ -100,7 +94,6 @@ public class font_x_generic implements
         g.setTransform(defaultTransform__0_0_1);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_2 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_2
         paint = new LinearGradientPaint(new Point2D.Double(18.561553955078125, 12.998213768005371), new Point2D.Double(30.93592071533203, 33.68109130859375), new float[]{0.0f, 1.0f}, new Color[]{new Color(114, 159, 207, 255), new Color(52, 101, 164, 255)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, -1.0f, -1.0f));
         shape = new GeneralPath();
@@ -672,7 +665,6 @@ public class font_x_generic implements
         g.setTransform(defaultTransform__0_0_38);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_39 = g.getTransform();
-        g.transform(new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f));
         // _0_0_39
         paint = new Color(255, 255, 255, 255);
         stroke = new BasicStroke(1.0249996f, 0, 0, 4.0f, null, 0.0f);

@@ -758,9 +758,7 @@ public class SvgTranscoder {
         }
         AffineTransform transform = node.getTransform();
         printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
-        if (transform != null) {
-            // printWriter.println("g.transform(new AffineTransform());");
-            // } else {
+        if (transform != null && !transform.isIdentity()) {
             double[] transfMatrix = new double[6];
             transform.getMatrix(transfMatrix);
             printWriter.println("g.transform(new AffineTransform("
