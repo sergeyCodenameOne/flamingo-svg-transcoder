@@ -1,4 +1,4 @@
-package test.svg;
+package org.pushingpixels.flamingo.api.svg;
 
 import java.io.*;
 import java.util.concurrent.CountDownLatch;

@@ -1,4 +1,4 @@
-package test.svg;
+package org.pushingpixels.flamingo.api.svg;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,8 +19,6 @@ import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
 import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
 import org.apache.batik.swing.svg.*;
-import org.pushingpixels.flamingo.api.svg.SvgTranscoder;
-import org.pushingpixels.flamingo.api.svg.TranscoderListener;
 
 public class SVGApplication {
 
