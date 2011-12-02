@@ -374,16 +374,7 @@ public class SvgTranscoder {
         if (fractions == null) {
             colorsRep.append("null");
         } else {
-            String sep = "";
-            colorsRep.append("new Color[]{");
-            for (Color color : colors) {
-                colorsRep.append(sep);
-                colorsRep.append("new Color(" + color.getRed() + ", "
-                        + color.getGreen() + ", " + color.getBlue() + ", "
-                        + color.getAlpha() + ")");
-                sep = ", ";
-            }
-            colorsRep.append("}");
+            colorsRep.append(transcodeArray(colors));
         }
 
         String cycleMethodRep = null;
@@ -405,10 +396,8 @@ public class SvgTranscoder {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
         
-        this.printWriter.println("paint = new LinearGradientPaint(new Point2D.Double("
-                + startPoint.getX() + ", " + startPoint.getY()
-                + "), new Point2D.Double(" + endPoint.getX() + ", "
-                + endPoint.getY() + "), " + fractionsRep.toString()
+        this.printWriter.println("paint = new LinearGradientPaint("
+                + transcodePoint(startPoint) + ", " + transcodePoint(endPoint) + ", " + fractionsRep.toString()
                 + ", " + colorsRep.toString() + ", " + cycleMethodRep
                 + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ");");
 
@@ -482,16 +471,7 @@ public class SvgTranscoder {
         if (fractions == null) {
             colorsRep.append("null");
         } else {
-            String sep = "";
-            colorsRep.append("new Color[]{");
-            for (Color color : colors) {
-                colorsRep.append(sep);
-                colorsRep.append("new Color(" + color.getRed() + ", "
-                        + color.getGreen() + ", " + color.getBlue() + ", "
-                        + color.getAlpha() + ")");
-                sep = ", ";
-            }
-            colorsRep.append("}");
+            colorsRep.append(transcodeArray(colors));
         }
 
         String cycleMethodRep = null;
@@ -512,11 +492,9 @@ public class SvgTranscoder {
         if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
-        
-        this.printWriter.println("paint = new RadialGradientPaint(new Point2D.Double("
-                + centerPoint.getX() + ", " + centerPoint.getY()
-                + "), " + radius + "f, new Point2D.Double("
-                + focusPoint.getX() + ", " + focusPoint.getY() + "), "
+
+        this.printWriter.println("paint = new RadialGradientPaint("
+                + transcodePoint(centerPoint) + ", " + radius + "f, " + transcodePoint(focusPoint) + ", "
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
                 + ", " + transcodeTransform(transform) + ");");
@@ -541,18 +519,55 @@ public class SvgTranscoder {
     }
 
     /**
-     * Transcodes the specified transform
+     * Transcodes the specified point.
+     * 
+     * @param point
+     */
+    private String transcodePoint(Point2D point) {
+        return "new Point2D.Double(" + point.getX() + ", " + point.getY() + ")";
+    }
+
+    /**
+     * Transcodes the specified transform.
      * 
      * @param transform
      */
     private String transcodeTransform(AffineTransform transform) {
-        double[] transfMatrix = new double[6];
-        transform.getMatrix(transfMatrix);
+        double[] matrix = new double[6];
+        transform.getMatrix(matrix);
         
         return "new AffineTransform("
-                + transfMatrix[0] + "f, " + transfMatrix[1] + "f, "
-                + transfMatrix[2] + "f, " + transfMatrix[3] + "f, "
-                + transfMatrix[4] + "f, " + transfMatrix[5] + "f)";
+                + matrix[0] + "f, " + matrix[1] + "f, "
+                + matrix[2] + "f, " + matrix[3] + "f, "
+                + matrix[4] + "f, " + matrix[5] + "f)";
+    }
+
+    /**
+     * Transcodes the specified color.
+     * 
+     * @param color
+     */
+    private String transcodeColor(Color color) {
+        return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ", " + color.getAlpha() + ")";
+    }
+
+    /**
+     * Transcodes the specified array.
+     * 
+     * @param array
+     */
+    private String transcodeArray(Color[] colors) {
+        String sep = "";
+        StringBuilder builder = new StringBuilder();
+        builder.append("new Color[]{");
+        for (Color color : colors) {
+            builder.append(sep);
+            builder.append(transcodeColor(color));
+            sep = ", ";
+        }
+        builder.append("}");
+
+        return builder.toString();
     }
 
     /**
@@ -572,14 +587,11 @@ public class SvgTranscoder {
             return;
         }
         if (paint instanceof Color) {
-            // offset(offset);
-            // printWriter.println((Color) paint);
             Color c = (Color) paint;
-            printWriter.println("paint = new Color(" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue() + ", " + c.getAlpha() + ");");
+            printWriter.println("paint = " + transcodeColor(c) + ";");
             return;
         }
         if (paint == null) {
-            // offset(offset);
             printWriter.println("No paint");
             return;
         }
