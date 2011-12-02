@@ -1,11 +1,10 @@
 package org.pushingpixels.flamingo.api.svg;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
@@ -25,27 +25,21 @@ import org.apache.batik.swing.svg.GVTTreeBuilderAdapter;
 import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
+import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.painter.CheckerboardPainter;
 
 public class SVGApplication {
 
-    /**
-     * Main method for testing.
-     *
-     * @param args Ignored.
-     */
-    public static void main(String[] args) {
-        JFrame f = new JFrame("Batik");
-        SVGApplication app = new SVGApplication(f);
-        f.getContentPane().add(app.createComponents());
-
-        f.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
-        f.setSize(400, 400);
-        f.setVisible(true);
+    public static void main(String[] args) throws Exception {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        
+        JFrame frame = new JFrame("Flamingo SVG Transcoder");
+        SVGApplication app = new SVGApplication(frame);
+        frame.getContentPane().add(app.createComponents());
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+        frame.setLocation(200, 200);
+        frame.setVisible(true);
     }
 
     JFrame frame;
@@ -63,12 +57,15 @@ public class SVGApplication {
     }
 
     public JComponent createComponents() {
-        final JPanel panel = new JPanel(new BorderLayout());
-
+        final JXPanel panel = new JXPanel(new BorderLayout());
+        panel.setBackgroundPainter(new CheckerboardPainter(Color.WHITE, new Color(0xF0F0F0), 15));
+        
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
         p.add(button);
         p.add(label);
-
+        
+        svgCanvas.setBackground(new Color(0, 0, 0, 0));
+        
         panel.add("North", p);
         panel.add("Center", svgCanvas);
 
