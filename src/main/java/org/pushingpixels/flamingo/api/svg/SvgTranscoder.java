@@ -35,7 +35,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.Stroke;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.GeneralPath;
@@ -50,7 +50,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -307,7 +306,7 @@ public class SvgTranscoder {
      * @param paint Linear gradient paint.
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
-    private void transcodeLinearGradientPaint(LinearGradientPaint paint) throws IllegalArgumentException {
+    private String transcodeLinearGradientPaint(LinearGradientPaint paint) throws IllegalArgumentException {
         Point2D startPoint = paint.getStartPoint();
         Point2D endPoint = paint.getEndPoint();
         float[] fractions = paint.getFractions();
@@ -372,10 +371,10 @@ public class SvgTranscoder {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
         
-        this.printWriter.println("paint = new LinearGradientPaint("
+        return "new LinearGradientPaint("
                 + transcodePoint(startPoint) + ", " + transcodePoint(endPoint) + ", " + fractionsRep.toString()
                 + ", " + colorsRep.toString() + ", " + cycleMethodRep
-                + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ");");
+                + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ")";
     }
 
     /**
@@ -384,7 +383,7 @@ public class SvgTranscoder {
      * @param paint Radial gradient paint.
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
-    private void transcodeRadialGradientPaint(RadialGradientPaint paint) throws IllegalArgumentException {
+    private String transcodeRadialGradientPaint(RadialGradientPaint paint) throws IllegalArgumentException {
         Point2D centerPoint = paint.getCenterPoint();
         float radius = paint.getRadius();
         Point2D focusPoint = paint.getFocusPoint();
@@ -449,12 +448,12 @@ public class SvgTranscoder {
         } else if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
-
-        this.printWriter.println("paint = new RadialGradientPaint("
+        
+        return "new RadialGradientPaint("
                 + transcodePoint(centerPoint) + ", " + radius + "f, " + transcodePoint(focusPoint) + ", "
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
-                + ", " + transcodeTransform(transform) + ");");
+                + ", " + transcodeTransform(transform) + ")";
     }
 
     /**
@@ -487,13 +486,39 @@ public class SvgTranscoder {
      * @param color
      */
     private String transcodeColor(Color color) {
-        return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ", " + color.getAlpha() + ")";
+        if (color.equals(Color.WHITE)) {
+            return "Color.WHITE";
+        } else if (color.equals(Color.BLACK)) {
+            return "Color.BLACK";
+        } else if (color.equals(Color.RED)) {
+            return "Color.RED";
+        } else if (color.equals(Color.GREEN)) {
+            return "Color.GREEN";
+        } else if (color.equals(Color.BLUE)) {
+            return "Color.BLUE";
+        } else if (color.equals(Color.LIGHT_GRAY)) {
+            return "Color.LIGHT_GRAY";
+        } else if (color.equals(Color.GRAY)) {
+            return "Color.GRAY";
+        } else if (color.equals(Color.DARK_GRAY)) {
+            return "Color.DARK_GRAY";
+        } else if (color.equals(Color.YELLOW)) {
+            return "Color.YELLOW";
+        } else if (color.equals(Color.CYAN)) {
+            return "Color.CYAN";
+        } else if (color.equals(Color.MAGENTA)) {
+            return "Color.MAGENTA";
+        } else if (color.getTransparency() == Transparency.OPAQUE) {
+            return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ")";
+        } else {
+            return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ", " + color.getAlpha() + ")";
+        }
     }
 
     /**
      * Transcodes the specified array.
      * 
-     * @param array
+     * @param colors
      */
     private String transcodeArray(Color[] colors) {
         String sep = "";
@@ -515,18 +540,45 @@ public class SvgTranscoder {
      * @param paint Paint.
      * @throws UnsupportedOperationException if the paint is unsupported.
      */
-    private void transcodePaint(Paint paint) throws UnsupportedOperationException {
+    private String transcodePaint(Paint paint) throws UnsupportedOperationException {
         if (paint instanceof RadialGradientPaint) {
-            transcodeRadialGradientPaint((RadialGradientPaint) paint);
+            return transcodeRadialGradientPaint((RadialGradientPaint) paint);
         } else if (paint instanceof LinearGradientPaint) {
-            transcodeLinearGradientPaint((LinearGradientPaint) paint);
+            return transcodeLinearGradientPaint((LinearGradientPaint) paint);
         } else if (paint instanceof Color) {
-            printWriter.println("paint = " + transcodeColor((Color) paint) + ";");
-        } else if (paint == null) {
-            printWriter.println("No paint");
+            return transcodeColor((Color) paint);
         } else {
             throw new UnsupportedOperationException(paint.getClass().getCanonicalName());
         }
+    }
+
+    /**
+     * Transcodes the specified stroke.
+     * 
+     * @param stroke
+     */
+    private String transcodeStroke(BasicStroke stroke) {
+        float width = stroke.getLineWidth();
+        int cap = stroke.getEndCap();
+        int join = stroke.getLineJoin();
+        float miterlimit = stroke.getMiterLimit();
+        float[] dash = stroke.getDashArray();
+        float dash_phase = stroke.getDashPhase();
+        
+        StringBuilder dashRep = new StringBuilder();
+        if (dash == null) {
+            dashRep.append("null");
+        } else {
+            String sep = "";
+            dashRep.append("new float[]{");
+            for (float _dash : dash) {
+                dashRep.append(sep);
+                dashRep.append(_dash + "f");
+                sep = ", ";
+            }
+            dashRep.append("}");
+        }
+        return "new BasicStroke(" + width + "f, " + cap + ", " + join + ", " + miterlimit + "f, " + dashRep + ", " + dash_phase + "f)";
     }
 
     /**
@@ -536,15 +588,13 @@ public class SvgTranscoder {
      * @throws UnsupportedOperationException if the shape painter is unsupported.
      */
     private void transcodeShapePainter(ShapePainter painter) throws UnsupportedOperationException {
-        if (painter == null) {
-            return;
-        } else if (painter instanceof CompositeShapePainter) {
+        if (painter instanceof CompositeShapePainter) {
             transcodeCompositeShapePainter((CompositeShapePainter) painter);
         } else if (painter instanceof FillShapePainter) {
             transcodeFillShapePainter((FillShapePainter) painter);
         } else if (painter instanceof StrokeShapePainter) {
             transcodeStrokeShapePainter((StrokeShapePainter) painter);
-        } else {
+        } else if (painter != null) {
             throw new UnsupportedOperationException(painter.getClass().getCanonicalName());
         }
     }
@@ -566,20 +616,13 @@ public class SvgTranscoder {
      * @param painter Fill shape painter.
      */
     private void transcodeFillShapePainter(FillShapePainter painter) {
-        try {
-            Field paintFld = FillShapePainter.class.getDeclaredField("paint");
-            paintFld.setAccessible(true);
-            Paint paint = (Paint) paintFld.get(painter);
-            if (paint == null) {
-                return;
-            }
-            transcodePaint(paint);
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        Paint paint = (Paint) painter.getPaint();
+        if (paint == null) {
+            return;
         }
         
         transcodeShape(painter.getShape());
-        printWriter.println("g.setPaint(paint);");
+        printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
         printWriter.println("g.fill(shape);");
     }
 
@@ -590,52 +633,15 @@ public class SvgTranscoder {
      */
     private void transcodeStrokeShapePainter(StrokeShapePainter painter) {
         Shape shape = painter.getShape();
-        try {
-            Field paintFld = StrokeShapePainter.class.getDeclaredField("paint");
-            paintFld.setAccessible(true);
-            Paint paint = (Paint) paintFld.get(painter);
-            if (paint == null) {
-                return;
-            }
-            transcodePaint(paint);
-        } catch (Exception exc) {
-            exc.printStackTrace();
+        Paint paint = (Paint) painter.getPaint();
+        if (paint == null) {
+            return;
         }
         
-        try {
-            Field strokeFld = StrokeShapePainter.class.getDeclaredField("stroke");
-            strokeFld.setAccessible(true);
-            Stroke stroke = (Stroke) strokeFld.get(painter);
-
-            BasicStroke bStroke = (BasicStroke) stroke;
-            float width = bStroke.getLineWidth();
-            int cap = bStroke.getEndCap();
-            int join = bStroke.getLineJoin();
-            float miterlimit = bStroke.getMiterLimit();
-            float[] dash = bStroke.getDashArray();
-            float dash_phase = bStroke.getDashPhase();
-
-            StringBuilder dashRep = new StringBuilder();
-            if (dash == null) {
-                dashRep.append("null");
-            } else {
-                String sep = "";
-                dashRep.append("new float[]{");
-                for (float _dash : dash) {
-                    dashRep.append(sep);
-                    dashRep.append(_dash + "f");
-                    sep = ", ";
-                }
-                dashRep.append("}");
-            }
-            printWriter.println("stroke = new BasicStroke(" + width + "f, " + cap + ", " + join + ", " + miterlimit + "f, " + dashRep + ", " + dash_phase + "f);");
-        } catch (Exception exc) {
-            exc.printStackTrace();
-        }
-
         transcodeShape(shape);
-        printWriter.println("g.setPaint(paint);");
-        printWriter.println("g.setStroke(stroke);");
+        
+        printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        printWriter.println("g.setStroke(" + transcodeStroke((BasicStroke) painter.getStroke()) + ");");
         printWriter.println("g.draw(shape);");
     }
 
@@ -643,11 +649,9 @@ public class SvgTranscoder {
      * Transcodes the specified shape node.
      *
      * @param node    Shape node.
-     * @param comment Comment (for associating the Java2D section with the
-     *                corresponding SVG section).
+     * @param comment Comment (for associating the Java2D section with the corresponding SVG section).
      */
     private void transcodeShapeNode(ShapeNode node, String comment) {
-        printWriter.println("// " + comment);
         transcodeShapePainter(node.getShapePainter());
     }
 
@@ -655,11 +659,9 @@ public class SvgTranscoder {
      * Transcodes the specified composite graphics node.
      *
      * @param node    Composite graphics node.
-     * @param comment Comment (for associating the Java2D section with the
-     *                corresponding SVG section).
+     * @param comment Comment (for associating the Java2D section with the corresponding SVG section).
      */
     private void transcodeCompositeGraphicsNode(CompositeGraphicsNode node, String comment) {
-        printWriter.println("// " + comment);
         int count = 0;
         for (Object obj : node.getChildren()) {
             transcodeGraphicsNode((GraphicsNode) obj, comment + "_" + count);
@@ -671,8 +673,7 @@ public class SvgTranscoder {
      * Transcodes the specified graphics node.
      *
      * @param node    Graphics node.
-     * @param comment Comment (for associating the Java2D section with the
-     *                corresponding SVG section).
+     * @param comment Comment (for associating the Java2D section with the corresponding SVG section).
      * @throws UnsupportedOperationException if the graphics node is unsupported.
      */
     private void transcodeGraphicsNode(GraphicsNode node, String comment) throws UnsupportedOperationException {
@@ -690,6 +691,8 @@ public class SvgTranscoder {
         }
 
         try {
+            printWriter.println("");
+            printWriter.println("// " + comment);
             if (node instanceof ShapeNode) {
                 transcodeShapeNode((ShapeNode) node, comment);
             } else if (node instanceof CompositeGraphicsNode) {
