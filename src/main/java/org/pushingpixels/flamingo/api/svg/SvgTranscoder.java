@@ -109,6 +109,9 @@ public class SvgTranscoder {
     /** Batik bridge context. */
     private BridgeContext batikBridgeContext;
 
+    /** The current composite. */
+    private AlphaComposite currentComposite;
+
     /**
      * Creates a new transcoder.
      *
@@ -678,10 +681,9 @@ public class SvgTranscoder {
      */
     private void transcodeGraphicsNode(GraphicsNode node, String comment) throws UnsupportedOperationException {
         AlphaComposite composite = (AlphaComposite) node.getComposite();
-        if (composite != null) {
-            int rule = composite.getRule();
-            float alpha = composite.getAlpha();
-            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + rule + ", " + alpha + "f * origAlpha));");
+        if (composite != null && !composite.equals(currentComposite)) {
+            currentComposite = composite;
+            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + composite.getAlpha() + "f * origAlpha));");
         }
         
         AffineTransform transform = node.getTransform();

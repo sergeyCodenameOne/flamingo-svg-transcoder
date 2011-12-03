@@ -34,7 +34,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         AffineTransform defaultTransform__0 = g.getTransform();
         
         // _0
-        g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0 = g.getTransform();
         
         // _0_0
@@ -63,7 +62,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setStroke(new BasicStroke(0.99893934f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
         g.setTransform(defaultTransform__0_0_0_1);
-        g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_0_2 = g.getTransform();
         
         // _0_0_0_2
@@ -80,7 +78,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_0_3);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_0_4 = g.getTransform();
         
         // _0_0_0_4
@@ -88,7 +85,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_0_4);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_0_5 = g.getTransform();
         
         // _0_0_0_5
@@ -96,7 +92,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_0_5);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_0_6 = g.getTransform();
         
         // _0_0_0_6
@@ -104,7 +99,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_0_6);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_0_7 = g.getTransform();
         
         // _0_0_0_7
@@ -117,7 +111,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         AffineTransform defaultTransform__0_0_1 = g.getTransform();
         
         // _0_0_1
-        g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_1_0 = g.getTransform();
         
         // _0_0_1_0
@@ -149,7 +142,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setStroke(new BasicStroke(1.0000002f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
         g.setTransform(defaultTransform__0_0_1_0);
-        g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_1_1 = g.getTransform();
         
         // _0_0_1_1
@@ -158,7 +150,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setStroke(new BasicStroke(1.0000008f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
         g.setTransform(defaultTransform__0_0_1_1);
-        g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
         AffineTransform defaultTransform__0_0_1_2 = g.getTransform();
         
         // _0_0_1_2
@@ -202,7 +193,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_1_4);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_1_5 = g.getTransform();
         
         // _0_0_1_5
@@ -210,7 +200,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_1_5);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_1_6 = g.getTransform();
         
         // _0_0_1_6
@@ -218,7 +207,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_1_6);
-        g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         AffineTransform defaultTransform__0_0_1_7 = g.getTransform();
         
         // _0_0_1_7
