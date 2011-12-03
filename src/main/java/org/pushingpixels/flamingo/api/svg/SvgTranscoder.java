@@ -375,18 +375,18 @@ public class SvgTranscoder {
 
         String cycleMethodRep = null;
         if (cycleMethod == MultipleGradientPaint.NO_CYCLE) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.NO_CYCLE";
+            cycleMethodRep = "NO_CYCLE";
         } else if (cycleMethod == MultipleGradientPaint.REFLECT) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.REFLECT";
+            cycleMethodRep = "REFLECT";
         } else if (cycleMethod == MultipleGradientPaint.REPEAT) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.REPEAT";
+            cycleMethodRep = "REPEAT";
         }
 
         String colorSpaceRep = null;
         if (colorSpace == MultipleGradientPaint.SRGB) {
-            colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.SRGB";
+            colorSpaceRep = "SRGB";
         } else if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
-            colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
+            colorSpaceRep = "LINEAR_RGB";
         }
         
         return new Formatter().format("new LinearGradientPaint(%s, %s, %s, %s, %s, %s, %s)", 
@@ -451,18 +451,18 @@ public class SvgTranscoder {
 
         String cycleMethodRep = null;
         if (cycleMethod == MultipleGradientPaint.NO_CYCLE) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.NO_CYCLE";
+            cycleMethodRep = "NO_CYCLE";
         } else if (cycleMethod == MultipleGradientPaint.REFLECT) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.REFLECT";
+            cycleMethodRep = "REFLECT";
         } else if (cycleMethod == MultipleGradientPaint.REPEAT) {
-            cycleMethodRep = "MultipleGradientPaint.CycleMethod.REPEAT";
+            cycleMethodRep = "REPEAT";
         }
 
         String colorSpaceRep = null;
         if (colorSpace == MultipleGradientPaint.SRGB) {
-            colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.SRGB";
+            colorSpaceRep = "SRGB";
         } else if (colorSpace == MultipleGradientPaint.LINEAR_RGB) {
-            colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
+            colorSpaceRep = "LINEAR_RGB";
         }
         
         return "new RadialGradientPaint("
@@ -503,27 +503,27 @@ public class SvgTranscoder {
      */
     private String transcodeColor(Color color) {
         if (color.equals(Color.WHITE)) {
-            return "Color.WHITE";
+            return "WHITE";
         } else if (color.equals(Color.BLACK)) {
-            return "Color.BLACK";
+            return "BLACK";
         } else if (color.equals(Color.RED)) {
-            return "Color.RED";
+            return "RED";
         } else if (color.equals(Color.GREEN)) {
-            return "Color.GREEN";
+            return "GREEN";
         } else if (color.equals(Color.BLUE)) {
-            return "Color.BLUE";
+            return "BLUE";
         } else if (color.equals(Color.LIGHT_GRAY)) {
-            return "Color.LIGHT_GRAY";
+            return "LIGHT_GRAY";
         } else if (color.equals(Color.GRAY)) {
-            return "Color.GRAY";
+            return "GRAY";
         } else if (color.equals(Color.DARK_GRAY)) {
-            return "Color.DARK_GRAY";
+            return "DARK_GRAY";
         } else if (color.equals(Color.YELLOW)) {
-            return "Color.YELLOW";
+            return "YELLOW";
         } else if (color.equals(Color.CYAN)) {
-            return "Color.CYAN";
+            return "CYAN";
         } else if (color.equals(Color.MAGENTA)) {
-            return "Color.MAGENTA";
+            return "MAGENTA";
         } else if (color.getTransparency() == Transparency.OPAQUE) {
             return "new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase().substring(2) + ")";
         } else {
