@@ -297,14 +297,16 @@ public class SvgTranscoder {
             
         } else if (shape instanceof Rectangle2D) {
             Rectangle2D rect = (Rectangle2D) shape;
-            printWriter.println("shape = new Rectangle2D.Double(" + rect.getX() + ", " + rect.getY() + ", " + rect.getWidth() + ", " + rect.getHeight() + ");");
+            printWriter.println("shape = new Rectangle2D.Double("
+                    + transcodeDouble(rect.getX()) + ", " + transcodeDouble(rect.getY())+ ", "
+                    + transcodeDouble(rect.getWidth()) + ", " + transcodeDouble(rect.getHeight()) + ");");
             
         } else if (shape instanceof RoundRectangle2D) {
             RoundRectangle2D rRect = (RoundRectangle2D) shape;
             printWriter.println("shape = new RoundRectangle2D.Double("
-                    + rRect.getX() + ", " + rRect.getY() + ", "
-                    + rRect.getWidth() + ", " + rRect.getHeight() + ", "
-                    + rRect.getArcWidth() + ", " + rRect.getArcHeight() + ");");
+                    + transcodeDouble(rRect.getX()) + ", " + transcodeDouble(rRect.getY()) + ", "
+                    + transcodeDouble(rRect.getWidth()) + ", " + transcodeDouble(rRect.getHeight()) + ", "
+                    + transcodeDouble(rRect.getArcWidth()) + ", " + transcodeDouble(rRect.getArcHeight()) + ");");
             
         } else if (shape instanceof Ellipse2D) {
             Ellipse2D ell = (Ellipse2D) shape;
@@ -491,9 +493,9 @@ public class SvgTranscoder {
         transform.getMatrix(matrix);
         
         return "new AffineTransform("
-                + matrix[0] + "f, " + matrix[1] + "f, "
-                + matrix[2] + "f, " + matrix[3] + "f, "
-                + matrix[4] + "f, " + matrix[5] + "f)";
+                + transcodeFloat((float) matrix[0]) + ", " + transcodeFloat((float) matrix[1]) + ", "
+                + transcodeFloat((float) matrix[2]) + ", " + transcodeFloat((float) matrix[3]) + ", "
+                + transcodeFloat((float) matrix[4]) + ", " + transcodeFloat((float) matrix[5]) + ")";
     }
 
     /**
@@ -603,6 +605,19 @@ public class SvgTranscoder {
             return String.valueOf(Math.round(f));
         } else {
             return String.valueOf(f) + "f";
+        }
+    }
+
+    /**
+     * Transcode the specified float value.
+     * 
+     * @return
+     */
+    private String transcodeDouble(double d) {
+        if (Math.abs(Math.round(d) - d) < 0.000001) {
+            return String.valueOf(Math.round(d));
+        } else {
+            return String.valueOf(d);
         }
     }
 
