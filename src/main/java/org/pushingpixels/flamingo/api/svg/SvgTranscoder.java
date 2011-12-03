@@ -310,10 +310,7 @@ public class SvgTranscoder {
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
     private String transcodeLinearGradientPaint(LinearGradientPaint paint) throws IllegalArgumentException {
-        Point2D startPoint = paint.getStartPoint();
-        Point2D endPoint = paint.getEndPoint();
         float[] fractions = paint.getFractions();
-        Color[] colors = paint.getColors();
         CycleMethodEnum cycleMethod = paint.getCycleMethod();
         ColorSpaceEnum colorSpace = paint.getColorSpace();
         AffineTransform transform = paint.getTransform();
@@ -355,7 +352,7 @@ public class SvgTranscoder {
         if (fractions == null) {
             colorsRep.append("null");
         } else {
-            colorsRep.append(transcodeArray(colors));
+            colorsRep.append(transcodeArray(paint.getColors()));
         }
 
         String cycleMethodRep = null;
@@ -375,7 +372,7 @@ public class SvgTranscoder {
         }
         
         return "new LinearGradientPaint("
-                + transcodePoint(startPoint) + ", " + transcodePoint(endPoint) + ", " + fractionsRep.toString()
+                + transcodePoint(paint.getStartPoint()) + ", " + transcodePoint(paint.getEndPoint()) + ", " + fractionsRep.toString()
                 + ", " + colorsRep.toString() + ", " + cycleMethodRep
                 + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ")";
     }
@@ -387,15 +384,10 @@ public class SvgTranscoder {
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
     private String transcodeRadialGradientPaint(RadialGradientPaint paint) throws IllegalArgumentException {
-        Point2D centerPoint = paint.getCenterPoint();
-        float radius = paint.getRadius();
-        Point2D focusPoint = paint.getFocusPoint();
         float[] fractions = paint.getFractions();
-        Color[] colors = paint.getColors();
         CycleMethodEnum cycleMethod = paint.getCycleMethod();
         ColorSpaceEnum colorSpace = paint.getColorSpace();
-        AffineTransform transform = paint.getTransform();
-
+        
         float previousFraction = -1.0f;
         for (float currentFraction : fractions) {
             if (currentFraction < 0f || currentFraction > 1f) {
@@ -433,7 +425,7 @@ public class SvgTranscoder {
         if (fractions == null) {
             colorsRep.append("null");
         } else {
-            colorsRep.append(transcodeArray(colors));
+            colorsRep.append(transcodeArray(paint.getColors()));
         }
 
         String cycleMethodRep = null;
@@ -453,10 +445,10 @@ public class SvgTranscoder {
         }
         
         return "new RadialGradientPaint("
-                + transcodePoint(centerPoint) + ", " + radius + "f, " + transcodePoint(focusPoint) + ", "
+                + transcodePoint(paint.getCenterPoint()) + ", " + paint.getRadius() + "f, " + transcodePoint(paint.getFocusPoint()) + ", "
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
-                + ", " + transcodeTransform(transform) + ")";
+                + ", " + transcodeTransform(paint.getTransform()) + ")";
     }
 
     /**
@@ -561,27 +553,23 @@ public class SvgTranscoder {
      * @param stroke
      */
     private String transcodeStroke(BasicStroke stroke) {
-        float width = stroke.getLineWidth();
-        int cap = stroke.getEndCap();
-        int join = stroke.getLineJoin();
-        float miterlimit = stroke.getMiterLimit();
-        float[] dash = stroke.getDashArray();
-        float dash_phase = stroke.getDashPhase();
-        
         StringBuilder dashRep = new StringBuilder();
-        if (dash == null) {
+        if (stroke.getDashArray() == null) {
             dashRep.append("null");
         } else {
             String sep = "";
             dashRep.append("new float[]{");
-            for (float _dash : dash) {
+            for (float dash : stroke.getDashArray()) {
                 dashRep.append(sep);
-                dashRep.append(_dash + "f");
+                dashRep.append(dash + "f");
                 sep = ", ";
             }
             dashRep.append("}");
         }
-        return "new BasicStroke(" + width + "f, " + cap + ", " + join + ", " + miterlimit + "f, " + dashRep + ", " + dash_phase + "f)";
+        
+        return "new BasicStroke(" + stroke.getLineWidth() + "f, " + stroke.getEndCap() + ", " 
+                + stroke.getLineJoin() + ", " + stroke.getMiterLimit() + "f, "
+                + dashRep + ", " + stroke.getDashPhase() + "f)";
     }
 
     /**
@@ -687,11 +675,11 @@ public class SvgTranscoder {
         }
         
         AffineTransform transform = node.getTransform();
-        printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
         if (transform != null && !transform.isIdentity()) {
+            printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
             printWriter.println("g.transform(" + transcodeTransform(transform) + ");");
         }
-
+        
         try {
             printWriter.println("");
             printWriter.println("// " + comment);
@@ -703,7 +691,9 @@ public class SvgTranscoder {
                 throw new UnsupportedOperationException(node.getClass().getCanonicalName());
             }
         } finally {
-            printWriter.println("g.setTransform(defaultTransform_" + comment + ");");
+            if (transform != null && !transform.isIdentity()) {
+                printWriter.println("g.setTransform(defaultTransform_" + comment + ");");
+            }
         }
     }
 }

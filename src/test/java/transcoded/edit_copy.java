@@ -27,14 +27,11 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
             }
         }
         
-        AffineTransform defaultTransform_ = g.getTransform();
         
         // 
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
-        AffineTransform defaultTransform__0 = g.getTransform();
         
         // _0
-        AffineTransform defaultTransform__0_0 = g.getTransform();
         
         // _0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.49999997f * origAlpha));
@@ -43,15 +40,12 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         // _0_0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        AffineTransform defaultTransform__0_0_0_0 = g.getTransform();
         
         // _0_0_0_0
         shape = new Rectangle2D.Double(20.161836624145508, 34.03341293334961, 13.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_0);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
-        AffineTransform defaultTransform__0_0_0_1 = g.getTransform();
         
         // _0_0_0_1
         shape = new RoundRectangle2D.Double(1.5484408140182495, 1.5629303455352783, 30.95155906677246, 35.976688385009766, 1.131310224533081, 1.1323192119598389);
@@ -61,57 +55,42 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(136, 138, 133));
         g.setStroke(new BasicStroke(0.99893934f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_0_1);
-        AffineTransform defaultTransform__0_0_0_2 = g.getTransform();
         
         // _0_0_0_2
         shape = new Rectangle2D.Double(2.532512903213501, 2.5605955123901367, 28.970741271972656, 33.981056213378906);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, new Color(255, 255, 255, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(0.9985039830207825f, 0.0f, 0.0f, 0.9982460141181946f, -6.970390796661377f, -4.8929009437561035f)));
         g.setStroke(new BasicStroke(0.99893963f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_0_2);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        AffineTransform defaultTransform__0_0_0_3 = g.getTransform();
         
         // _0_0_0_3
         shape = new Rectangle2D.Double(7.016119003295898, 10.033413887023926, 21.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_3);
-        AffineTransform defaultTransform__0_0_0_4 = g.getTransform();
         
         // _0_0_0_4
         shape = new Rectangle2D.Double(7.016119003295898, 14.033413887023926, 20.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_4);
-        AffineTransform defaultTransform__0_0_0_5 = g.getTransform();
         
         // _0_0_0_5
         shape = new Rectangle2D.Double(7.016119003295898, 18.033414840698242, 18.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_5);
-        AffineTransform defaultTransform__0_0_0_6 = g.getTransform();
         
         // _0_0_0_6
         shape = new Rectangle2D.Double(7.016119003295898, 22.033414840698242, 21.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_6);
-        AffineTransform defaultTransform__0_0_0_7 = g.getTransform();
         
         // _0_0_0_7
         shape = new Rectangle2D.Double(7.016119003295898, 26.03341293334961, 13.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0_7);
         g.setTransform(defaultTransform__0_0_0);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
-        AffineTransform defaultTransform__0_0_1 = g.getTransform();
         
         // _0_0_1
-        AffineTransform defaultTransform__0_0_1_0 = g.getTransform();
         
         // _0_0_1_0
         shape = new GeneralPath();
@@ -141,16 +120,12 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(136, 138, 133));
         g.setStroke(new BasicStroke(1.0000002f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_1_0);
-        AffineTransform defaultTransform__0_0_1_1 = g.getTransform();
         
         // _0_0_1_1
         shape = new Rectangle2D.Double(15.502950668334961, 11.5, 28.99734878540039, 34.04076385498047);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, new Color(255, 255, 255, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(0.9994210004806519f, 0.0f, 0.0f, 1.0f, 5.991319179534912f, 4.033411026000977f)));
         g.setStroke(new BasicStroke(1.0000008f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_1_1);
-        AffineTransform defaultTransform__0_0_1_2 = g.getTransform();
         
         // _0_0_1_2
         shape = new GeneralPath();
@@ -170,9 +145,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(134, 138, 132));
         g.setStroke(new BasicStroke(1.0000002f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_1_2);
         g.setComposite(AlphaComposite.getInstance(3, 0.36931816f * origAlpha));
-        AffineTransform defaultTransform__0_0_1_3 = g.getTransform();
         
         // _0_0_1_3
         shape = new GeneralPath();
@@ -184,40 +157,27 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new LinearGradientPaint(new Point2D.Double(33.39600372314453, 36.92133331298828), new Point2D.Double(34.170047760009766, 38.07038116455078), new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, new Color(255, 255, 255, 0)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 6.16183614730835f, 3.6584110260009766f)));
         g.setStroke(new BasicStroke(0.9999998f, 0, 0, 4.0f, null, 0.0f));
         g.draw(shape);
-        g.setTransform(defaultTransform__0_0_1_3);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        AffineTransform defaultTransform__0_0_1_4 = g.getTransform();
         
         // _0_0_1_4
         shape = new Rectangle2D.Double(20.0, 19.033414840698242, 21.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_1_4);
-        AffineTransform defaultTransform__0_0_1_5 = g.getTransform();
         
         // _0_0_1_5
         shape = new Rectangle2D.Double(20.0, 23.033414840698242, 19.992233276367188, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_1_5);
-        AffineTransform defaultTransform__0_0_1_6 = g.getTransform();
         
         // _0_0_1_6
         shape = new Rectangle2D.Double(20.0, 27.033414840698242, 17.976701736450195, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_1_6);
-        AffineTransform defaultTransform__0_0_1_7 = g.getTransform();
         
         // _0_0_1_7
         shape = new Rectangle2D.Double(20.0, 31.033414840698242, 21.0, 2.0);
         g.setPaint(Color.BLACK);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_1_7);
-        g.setTransform(defaultTransform__0_0_1);
-        g.setTransform(defaultTransform__0_0);
-        g.setTransform(defaultTransform__0);
-        g.setTransform(defaultTransform_);
 
     }
 
