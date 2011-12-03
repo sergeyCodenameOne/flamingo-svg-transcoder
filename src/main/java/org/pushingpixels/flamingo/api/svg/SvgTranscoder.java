@@ -121,6 +121,9 @@ public class SvgTranscoder {
     /** The current stroke, as a Java declaraction. */
     private String currentStroke;
 
+    /** The current shape. */
+    private Shape currentShape;
+    
     /**
      * Creates a new transcoder.
      *
@@ -282,6 +285,10 @@ public class SvgTranscoder {
      * @throws UnsupportedOperationException if the shape is unsupported.
      */
     private void transcodeShape(Shape shape) throws UnsupportedOperationException {
+        if (shape == currentShape) {
+            return;
+        }
+        
         if (shape instanceof ExtendedGeneralPath) {
             transcodePathIterator(((ExtendedGeneralPath) shape).getPathIterator(null));
             
@@ -310,6 +317,8 @@ public class SvgTranscoder {
         } else {
             throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
         }
+        
+        currentShape = shape;
     }
 
     /**
