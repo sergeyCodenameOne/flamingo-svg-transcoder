@@ -55,13 +55,13 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new LinearGradientPaint(new Point2D.Double(22.308330535888672, 18.99213981628418), new Point2D.Double(35.78529357910156, 39.49823760986328), new float[]{0, 0.59928656f, 0.82758623f, 1}, new Color[]{new Color(0xF0F0EF), new Color(0xE8E8E8), WHITE, new Color(0xD8D8D3)}, NO_CYCLE, SRGB, new AffineTransform(1.065698f, 0, 0, 0.987595f, -8.54832f, -4.891713f)));
         g.fill(shape);
         g.setPaint(new Color(0x888A85));
-        g.setStroke(new BasicStroke(0.99893934f, 0, 0, 4, null, 0));
+        g.setStroke(new BasicStroke(0.99893934f, 0, 0, 4));
         g.draw(shape);
         
         // _0_0_0_2
         shape = new Rectangle2D.Double(2.532512903213501, 2.5605955123901367, 28.970741271972656, 33.981056213378906);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0, 1}, new Color[]{WHITE, new Color(0xFFFFFF, true)}, NO_CYCLE, SRGB, new AffineTransform(0.998504f, 0, 0, 0.998246f, -6.970391f, -4.892901f)));
-        g.setStroke(new BasicStroke(0.99893963f, 0, 0, 4, null, 0));
+        g.setStroke(new BasicStroke(0.99893963f, 0, 0, 4));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         
@@ -105,7 +105,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new LinearGradientPaint(new Point2D.Double(22.308330535888672, 18.99213981628418), new Point2D.Double(35.78529357910156, 39.49823760986328), new float[]{0, 0.59928656f, 0.82758623f, 1}, new Color[]{new Color(0xF0F0EF), new Color(0xE8E8E8), WHITE, new Color(0xD8D8D3)}, NO_CYCLE, SRGB, new AffineTransform(1.067236f, 0, 0, 0.989276f, 4.391684f, 4.035227f)));
         g.fill(shape);
         g.setPaint(new Color(0x888A85));
-        g.setStroke(new BasicStroke(1, 0, 0, 4, null, 0));
+        g.setStroke(new BasicStroke(1, 0, 0, 4));
         g.draw(shape);
         
         // _0_0_1_1

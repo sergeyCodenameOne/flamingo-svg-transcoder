@@ -546,23 +546,29 @@ public class SvgTranscoder {
      * @param stroke
      */
     private String transcodeStroke(BasicStroke stroke) {
-        StringBuilder dashRep = new StringBuilder();
         if (stroke.getDashArray() == null) {
-            dashRep.append("null");
+            return "new BasicStroke(" + transcodeFloat(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
+                    + stroke.getLineJoin() + ", " + transcodeFloat(stroke.getMiterLimit()) + ")";
         } else {
-            String sep = "";
-            dashRep.append("new float[]{");
-            for (float dash : stroke.getDashArray()) {
-                dashRep.append(sep);
-                dashRep.append(transcodeFloat(dash));
-                sep = ", ";
+            StringBuilder dashRep = new StringBuilder();
+            if (stroke.getDashArray() == null) {
+                dashRep.append("null");
+            } else {
+                String sep = "";
+                dashRep.append("new float[]{");
+                for (float dash : stroke.getDashArray()) {
+                    dashRep.append(sep);
+                    dashRep.append(transcodeFloat(dash));
+                    sep = ", ";
+                }
+                dashRep.append("}");
             }
-            dashRep.append("}");
+            
+            return "new BasicStroke(" + transcodeFloat(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
+                    + stroke.getLineJoin() + ", " + transcodeFloat(stroke.getMiterLimit()) + ", "
+                    + dashRep + ", " + transcodeFloat(stroke.getDashPhase()) + ")";
         }
         
-        return "new BasicStroke(" + transcodeFloat(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", " 
-                + stroke.getLineJoin() + ", " + transcodeFloat(stroke.getMiterLimit()) + ", "
-                + dashRep + ", " + transcodeFloat(stroke.getDashPhase()) + ")";
     }
 
     /**
