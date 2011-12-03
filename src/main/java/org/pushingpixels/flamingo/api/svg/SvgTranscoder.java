@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -374,10 +375,13 @@ public class SvgTranscoder {
             colorSpaceRep = "MultipleGradientPaint.ColorSpaceType.LINEAR_RGB";
         }
         
-        return "new LinearGradientPaint("
-                + transcodePoint(paint.getStartPoint()) + ", " + transcodePoint(paint.getEndPoint()) + ", " + fractionsRep.toString()
-                + ", " + colorsRep.toString() + ", " + cycleMethodRep
-                + ", " + colorSpaceRep + ", " + transcodeTransform(transform) + ")";
+        return new Formatter().format("new LinearGradientPaint(%s, %s, %s, %s, %s, %s, %s)", 
+                transcodePoint(paint.getStartPoint()),
+                transcodePoint(paint.getEndPoint()),
+                fractionsRep.toString(),
+                colorsRep.toString(),
+                cycleMethodRep, colorSpaceRep,
+                transcodeTransform(transform)).toString();
     }
 
     /**
@@ -507,9 +511,9 @@ public class SvgTranscoder {
         } else if (color.equals(Color.MAGENTA)) {
             return "Color.MAGENTA";
         } else if (color.getTransparency() == Transparency.OPAQUE) {
-            return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ")";
+            return "new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase().substring(2) + ")";
         } else {
-            return "new Color(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + ", " + color.getAlpha() + ")";
+            return "new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase() + ", true)";
         }
     }
 
