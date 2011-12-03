@@ -35,6 +35,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -116,6 +117,9 @@ public class SvgTranscoder {
 
     /** The current paint. */
     private Paint currentPaint;
+    
+    /** The current stroke, as a Java declaraction. */
+    private String currentStroke;
 
     /**
      * Creates a new transcoder.
@@ -660,7 +664,12 @@ public class SvgTranscoder {
             currentPaint = paint;
             printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
         }
-        printWriter.println("g.setStroke(" + transcodeStroke((BasicStroke) painter.getStroke()) + ");");
+        
+        String stroke = transcodeStroke((BasicStroke) painter.getStroke());
+        if (stroke == null && currentStroke != null || stroke != null && !stroke.equals(currentStroke)) {
+            currentStroke = stroke;
+            printWriter.println("g.setStroke(" + stroke + ");");
+        }
         printWriter.println("g.draw(shape);");
     }
 

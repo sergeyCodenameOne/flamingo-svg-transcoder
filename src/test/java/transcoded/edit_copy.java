@@ -120,7 +120,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         // _0_0_1_1
         shape = new Rectangle2D.Double(15.502950668334961, 11.5, 28.99734878540039, 34.04076385498047);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0, 1}, new Color[]{Color.WHITE, new Color(0xFFFFFF, true)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(0.9994210004806519f, 0.0f, 0.0f, 1.0f, 5.991319179534912f, 4.033411026000977f)));
-        g.setStroke(new BasicStroke(1, 0, 0, 4, null, 0));
         g.draw(shape);
         
         // _0_0_1_2
@@ -139,7 +138,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         ((GeneralPath) shape).curveTo(36.63805, 39.48487, 37.033417, 46.036964, 36.220917, 46.536964);
         ((GeneralPath) shape).closePath();
         g.setPaint(new Color(0x868A84));
-        g.setStroke(new BasicStroke(1, 0, 0, 4, null, 0));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.36931816f * origAlpha));
         
@@ -150,8 +148,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         ((GeneralPath) shape).curveTo(41.80289, 40.99805, 40.451176, 40.527493, 37.69665, 40.5084);
         ((GeneralPath) shape).curveTo(37.69665, 40.5084, 37.858974, 43.570496, 37.671356, 44.345463);
         ((GeneralPath) shape).closePath();
-        g.setPaint(new LinearGradientPaint(new Point2D.Double(33.39600372314453, 36.92133331298828), new Point2D.Double(34.170047760009766, 38.07038116455078), new float[]{0.0f, 1.0f}, new Color[]{Color.WHITE, new Color(0xFFFFFF, true)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 6.16183614730835f, 3.6584110260009766f)));
-        g.setStroke(new BasicStroke(0.9999998f, 0, 0, 4.0f, null, 0.0f));
+        g.setPaint(new LinearGradientPaint(new Point2D.Double(33.39600372314453, 36.92133331298828), new Point2D.Double(34.170047760009766, 38.07038116455078), new float[]{0, 1}, new Color[]{Color.WHITE, new Color(0xFFFFFF, true)}, MultipleGradientPaint.CycleMethod.NO_CYCLE, MultipleGradientPaint.ColorSpaceType.SRGB, new AffineTransform(1.0f, 0.0f, 0.0f, 1.0f, 6.16183614730835f, 3.6584110260009766f)));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
         
