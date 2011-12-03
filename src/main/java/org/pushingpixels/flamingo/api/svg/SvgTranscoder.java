@@ -51,6 +51,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Formatter;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -344,7 +345,7 @@ public class SvgTranscoder {
                 if (currentFraction == previousFraction) {
                     currentFraction += 0.000000001f;
                 }
-                fractionsRep.append(currentFraction + "f");
+                fractionsRep.append(transcodeFloat(currentFraction));
                 sep = ", ";
 
                 previousFraction = currentFraction;
@@ -420,7 +421,7 @@ public class SvgTranscoder {
                 if (currentFraction == previousFraction) {
                     currentFraction += 0.000000001f;
                 }
-                fractionsRep.append(currentFraction + "f");
+                fractionsRep.append(transcodeFloat(currentFraction));
                 sep = ", ";
 
                 previousFraction = currentFraction;
@@ -452,7 +453,7 @@ public class SvgTranscoder {
         }
         
         return "new RadialGradientPaint("
-                + transcodePoint(paint.getCenterPoint()) + ", " + paint.getRadius() + "f, " + transcodePoint(paint.getFocusPoint()) + ", "
+                + transcodePoint(paint.getCenterPoint()) + ", " + transcodeFloat(paint.getRadius()) + ", " + transcodePoint(paint.getFocusPoint()) + ", "
                 + fractionsRep.toString() + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
                 + ", " + transcodeTransform(paint.getTransform()) + ")";
@@ -568,15 +569,28 @@ public class SvgTranscoder {
             dashRep.append("new float[]{");
             for (float dash : stroke.getDashArray()) {
                 dashRep.append(sep);
-                dashRep.append(dash + "f");
+                dashRep.append(transcodeFloat(dash));
                 sep = ", ";
             }
             dashRep.append("}");
         }
         
-        return "new BasicStroke(" + stroke.getLineWidth() + "f, " + stroke.getEndCap() + ", " 
-                + stroke.getLineJoin() + ", " + stroke.getMiterLimit() + "f, "
-                + dashRep + ", " + stroke.getDashPhase() + "f)";
+        return "new BasicStroke(" + transcodeFloat(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", " 
+                + stroke.getLineJoin() + ", " + transcodeFloat(stroke.getMiterLimit()) + ", "
+                + dashRep + ", " + transcodeFloat(stroke.getDashPhase()) + ")";
+    }
+
+    /**
+     * Transcode the specified float value.
+     * 
+     * @return
+     */
+    private String transcodeFloat(float f) {
+        if (Math.abs(Math.round(f) - f) < 0.000001) {
+            return String.valueOf(Math.round(f));
+        } else {
+            return String.valueOf(f) + "f";
+        }
     }
 
     /**
@@ -685,7 +699,7 @@ public class SvgTranscoder {
         AlphaComposite composite = (AlphaComposite) node.getComposite();
         if (composite != null && !composite.equals(currentComposite)) {
             currentComposite = composite;
-            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + composite.getAlpha() + "f * origAlpha));");
+            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + transcodeFloat(composite.getAlpha()) + " * origAlpha));");
         }
         
         AffineTransform transform = node.getTransform();
