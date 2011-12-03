@@ -112,6 +112,9 @@ public class SvgTranscoder {
     /** The current composite. */
     private AlphaComposite currentComposite;
 
+    /** The current paint. */
+    private Paint currentPaint;
+
     /**
      * Creates a new transcoder.
      *
@@ -613,7 +616,11 @@ public class SvgTranscoder {
         }
         
         transcodeShape(painter.getShape());
-        printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        
+        if (!paint.equals(currentPaint)) {
+            currentPaint = paint;
+            printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        }
         printWriter.println("g.fill(shape);");
     }
 
@@ -631,7 +638,10 @@ public class SvgTranscoder {
         
         transcodeShape(shape);
         
-        printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        if (!paint.equals(currentPaint)) {
+            currentPaint = paint;
+            printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        }
         printWriter.println("g.setStroke(" + transcodeStroke((BasicStroke) painter.getStroke()) + ");");
         printWriter.println("g.draw(shape);");
     }

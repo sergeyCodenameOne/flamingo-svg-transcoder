@@ -70,22 +70,18 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         // _0_0_0_4
         shape = new Rectangle2D.Double(7.016119003295898, 14.033413887023926, 20.0, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         
         // _0_0_0_5
         shape = new Rectangle2D.Double(7.016119003295898, 18.033414840698242, 18.0, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         
         // _0_0_0_6
         shape = new Rectangle2D.Double(7.016119003295898, 22.033414840698242, 21.0, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         
         // _0_0_0_7
         shape = new Rectangle2D.Double(7.016119003295898, 26.03341293334961, 13.0, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         g.setTransform(defaultTransform__0_0_0);
         g.setComposite(AlphaComposite.getInstance(3, 1.0f * origAlpha));
@@ -166,17 +162,14 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         // _0_0_1_5
         shape = new Rectangle2D.Double(20.0, 23.033414840698242, 19.992233276367188, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         
         // _0_0_1_6
         shape = new Rectangle2D.Double(20.0, 27.033414840698242, 17.976701736450195, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
         
         // _0_0_1_7
         shape = new Rectangle2D.Double(20.0, 31.033414840698242, 21.0, 2.0);
-        g.setPaint(Color.BLACK);
         g.fill(shape);
 
     }
