@@ -35,7 +35,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Paint;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -52,7 +51,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Formatter;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -330,46 +328,11 @@ public class SvgTranscoder {
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
     private String transcodeLinearGradientPaint(LinearGradientPaint paint) throws IllegalArgumentException {
-        float[] fractions = paint.getFractions();
         CycleMethodEnum cycleMethod = paint.getCycleMethod();
         ColorSpaceEnum colorSpace = paint.getColorSpace();
-        AffineTransform transform = paint.getTransform();
-
-        float previousFraction = -1.0f;
-        for (float currentFraction : fractions) {
-            if (currentFraction < 0f || currentFraction > 1f) {
-                throw new IllegalArgumentException("Fraction values must " + "be in the range 0 to 1: " + currentFraction);
-            }
-
-            if (currentFraction < previousFraction) {
-                throw new IllegalArgumentException("Keyframe fractions " + "must be non-decreasing: " + currentFraction);
-            }
-
-            previousFraction = currentFraction;
-        }
-
-        StringBuilder fractionsRep = new StringBuilder();
-        if (fractions == null) {
-            fractionsRep.append("null");
-        } else {
-            String sep = "";
-            fractionsRep.append("new float[]{");
-            previousFraction = -1.0f;
-            for (float currentFraction : fractions) {
-                fractionsRep.append(sep);
-                if (currentFraction == previousFraction) {
-                    currentFraction += 0.000000001f;
-                }
-                fractionsRep.append(transcodeFloat(currentFraction));
-                sep = ", ";
-
-                previousFraction = currentFraction;
-            }
-            fractionsRep.append("}");
-        }
-
+        
         StringBuilder colorsRep = new StringBuilder();
-        if (fractions == null) {
+        if (paint.getFractions() == null) {
             colorsRep.append("null");
         } else {
             colorsRep.append(transcodeArray(paint.getColors()));
@@ -394,10 +357,10 @@ public class SvgTranscoder {
         return new Formatter().format("new LinearGradientPaint(%s, %s, %s, %s, %s, %s, %s)", 
                 transcodePoint(paint.getStartPoint()),
                 transcodePoint(paint.getEndPoint()),
-                fractionsRep.toString(),
+                transcodeGradientFractions(paint.getFractions()),
                 colorsRep.toString(),
                 cycleMethodRep, colorSpaceRep,
-                transcodeTransform(transform)).toString();
+                transcodeTransform(paint.getTransform())).toString();
     }
 
     /**
@@ -407,50 +370,16 @@ public class SvgTranscoder {
      * @throws IllegalArgumentException if the fractions are not strictly increasing.
      */
     private String transcodeRadialGradientPaint(RadialGradientPaint paint) throws IllegalArgumentException {
-        float[] fractions = paint.getFractions();
         CycleMethodEnum cycleMethod = paint.getCycleMethod();
         ColorSpaceEnum colorSpace = paint.getColorSpace();
         
-        float previousFraction = -1.0f;
-        for (float currentFraction : fractions) {
-            if (currentFraction < 0f || currentFraction > 1f) {
-                throw new IllegalArgumentException("Fraction values must " + "be in the range 0 to 1: " + currentFraction);
-            }
-
-            if (currentFraction < previousFraction) {
-                throw new IllegalArgumentException("Keyframe fractions " + "must be non-decreasing: " + currentFraction);
-            }
-
-            previousFraction = currentFraction;
-        }
-
-        StringBuilder fractionsRep = new StringBuilder();
-        if (fractions == null) {
-            fractionsRep.append("null");
-        } else {
-            String sep = "";
-            fractionsRep.append("new float[]{");
-            previousFraction = -1.0f;
-            for (float currentFraction : fractions) {
-                fractionsRep.append(sep);
-                if (currentFraction == previousFraction) {
-                    currentFraction += 0.000000001f;
-                }
-                fractionsRep.append(transcodeFloat(currentFraction));
-                sep = ", ";
-
-                previousFraction = currentFraction;
-            }
-            fractionsRep.append("}");
-        }
-
         StringBuilder colorsRep = new StringBuilder();
-        if (fractions == null) {
+        if (paint.getFractions() == null) {
             colorsRep.append("null");
         } else {
             colorsRep.append(transcodeArray(paint.getColors()));
         }
-
+        
         String cycleMethodRep = null;
         if (cycleMethod == MultipleGradientPaint.NO_CYCLE) {
             cycleMethodRep = "NO_CYCLE";
@@ -469,9 +398,50 @@ public class SvgTranscoder {
         
         return "new RadialGradientPaint("
                 + transcodePoint(paint.getCenterPoint()) + ", " + transcodeFloat(paint.getRadius()) + ", " + transcodePoint(paint.getFocusPoint()) + ", "
-                + fractionsRep.toString() + ", " + colorsRep.toString()
+                + transcodeGradientFractions(paint.getFractions()) + ", " + colorsRep.toString()
                 + ", " + cycleMethodRep + ", " + colorSpaceRep
                 + ", " + transcodeTransform(paint.getTransform()) + ")";
+    }
+
+    private String transcodeGradientFractions(float[] fractions) {
+        float previousFraction = -1.0f;
+        for (float currentFraction : fractions) {
+            if (currentFraction < 0f || currentFraction > 1f) {
+                throw new IllegalArgumentException("Fraction values must be in the range 0 to 1: " + currentFraction);
+            }
+
+            if (currentFraction < previousFraction) {
+                throw new IllegalArgumentException("Keyframe fractions must be non-decreasing: " + currentFraction);
+            }
+
+            previousFraction = currentFraction;
+        }
+        
+        StringBuilder builder = new StringBuilder();
+        if (fractions == null) {
+            builder.append("null");
+        } else {
+            String sep = "";
+            builder.append("new float[]{");
+            previousFraction = -1.0f;
+            for (float fraction : fractions) {
+                builder.append(sep);
+                if (fraction == previousFraction) {
+                    fraction += 0.000000001f;
+                }
+                if (fraction == 0 || fraction == 1) {
+                    builder.append((int) fraction);
+                } else {
+                    builder.append(fraction).append("f");
+                }
+                sep = ", ";
+
+                previousFraction = fraction;
+            }
+            builder.append("}");
+        }
+        
+        return builder.toString();
     }
 
     /**
@@ -480,7 +450,7 @@ public class SvgTranscoder {
      * @param point
      */
     private String transcodePoint(Point2D point) {
-        return "new Point2D.Double(" + point.getX() + ", " + point.getY() + ")";
+        return "new Point2D.Double(" + transcodeDouble(point.getX()) + ", " + transcodeDouble(point.getY()) + ")";
     }
 
     /**
