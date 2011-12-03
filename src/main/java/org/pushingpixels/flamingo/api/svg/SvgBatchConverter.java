@@ -30,7 +30,7 @@ public class SvgBatchConverter {
         for (File file : dir.listFiles(new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(".svg");
+                return name.endsWith(".svg") || name.endsWith(".svgz");
             }
         })) {
             String svgClassName = namingStrategy.getClassName(file);
