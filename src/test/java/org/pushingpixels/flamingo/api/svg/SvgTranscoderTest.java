@@ -20,7 +20,7 @@ public class SvgTranscoderTest extends TestCase {
         File transcoded = new File(svg.getParentFile(), "edit_copy.java");
         final PrintWriter out = new PrintWriter(transcoded);
 
-        SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL().toString(), "edit_copy");
+        SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "edit_copy");
         transcoder.setJavaPackageName("test.svg.transcoded");
         transcoder.setJavaToImplementResizableIconInterface(true);
         transcoder.setListener(new TranscoderListener() {

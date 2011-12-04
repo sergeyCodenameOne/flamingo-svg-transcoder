@@ -50,6 +50,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -104,11 +105,8 @@ public class SvgTranscoder {
     protected final static String TOKEN_ORIG_WIDTH = "TOKEN_ORIG_WIDTH";
     protected final static String TOKEN_ORIG_HEIGHT = "TOKEN_ORIG_HEIGHT";
 
-    /** URI of the SVG image. */
-    protected String uri;
-
-    /** Batik bridge context. */
-    private BridgeContext batikBridgeContext;
+    /** URL of the SVG image. */
+    protected URL url;
 
     /** The current composite. */
     private AlphaComposite currentComposite;
@@ -125,12 +123,22 @@ public class SvgTranscoder {
     /**
      * Creates a new transcoder.
      *
-     * @param uri           URI of the SVG image.
+     * @param url           URL of the SVG image.
      * @param javaClassname Classname for the generated Java2D code.
      */
-    public SvgTranscoder(String uri, String javaClassname) {
+    public SvgTranscoder(URL url, String javaClassname) {
         this(javaClassname);
-        this.uri = uri;
+        this.url = url;
+    }
+
+    /**
+     * Creates a new transcoder.
+     *
+     * @param javaClassname Classname for the generated Java2D code.
+     */
+    public SvgTranscoder(String javaClassname) {
+        this.javaClassName = javaClassname;
+        this.javaToImplementResizableIconInterface = false;
     }
 
     /**
@@ -138,37 +146,26 @@ public class SvgTranscoder {
      * {@link #listener} is <code>null</code>.
      */
     public void transcode() {
-        if (this.listener == null) {
+        if (listener == null) {
             return;
         }
 
         UserAgentAdapter ua = new UserAgentAdapter();
         DocumentLoader loader = new DocumentLoader(ua);
-        batikBridgeContext = new BridgeContext(ua, loader);
+        BridgeContext batikBridgeContext = new BridgeContext(ua, loader);
         batikBridgeContext.setDynamicState(BridgeContext.DYNAMIC);
         ua.setBridgeContext(batikBridgeContext);
 
         GVTBuilder builder = new GVTBuilder();
         Document svgDoc;
         try {
-            svgDoc = loader.loadDocument(this.uri);
+            svgDoc = loader.loadDocument(url.toString());
             GraphicsNode gvtRoot = builder.build(batikBridgeContext, svgDoc);
-
-            this.transcode(gvtRoot);
+            
+            transcode(gvtRoot);
         } catch (IOException ex) {
-            Logger.getLogger(SvgTranscoder.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
         }
-    }
-    
-    /**
-     * Creates a new transcoder.
-     *
-     * @param uri           URI of the SVG image.
-     * @param javaClassname Classname for the generated Java2D code.
-     */
-    public SvgTranscoder(String javaClassname) {
-        this.javaClassName = javaClassname;
-        this.javaToImplementResizableIconInterface = false;
     }
 
     public void setJavaToImplementResizableIconInterface(boolean javaToImplementResizableIconInterface) {
@@ -226,7 +223,7 @@ public class SvgTranscoder {
     }
 
     private String readTemplate(String name) {
-        InputStream in = SvgTranscoder.class.getResourceAsStream(name);
+        InputStream in = getClass().getResourceAsStream(name);
         StringBuilder buffer = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {

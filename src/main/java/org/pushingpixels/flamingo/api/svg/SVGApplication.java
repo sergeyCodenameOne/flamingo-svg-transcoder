@@ -86,7 +86,7 @@ public class SVGApplication {
 
                         final PrintWriter pw = new PrintWriter(javaClassFilename);
 
-                        SvgTranscoder transcoder = new SvgTranscoder(f.toURI().toURL().toString(), svgClassName);
+                        SvgTranscoder transcoder = new SvgTranscoder(f.toURI().toURL(), svgClassName);
                         transcoder.setJavaToImplementResizableIconInterface(true);
                         transcoder.setListener(new TranscoderListener() {
                             public Writer getWriter() {

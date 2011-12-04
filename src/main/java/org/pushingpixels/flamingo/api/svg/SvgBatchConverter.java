@@ -42,7 +42,7 @@ public class SvgBatchConverter {
                 final CountDownLatch latch = new CountDownLatch(1);
                 final PrintWriter pw = new PrintWriter(javaClassFilename);
 
-                SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL().toString(), svgClassName);
+                SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), svgClassName);
                 transcoder.setJavaToImplementResizableIconInterface(false);
                 transcoder.setJavaPackageName(args[1]);
                 transcoder.setListener(new TranscoderListener() {
