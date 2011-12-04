@@ -7,10 +7,11 @@ import static java.awt.MultipleGradientPaint.CycleMethod.*;
 import static java.awt.MultipleGradientPaint.ColorSpaceType.*;
 
 /**
- * This class has been automatically generated using <a
- * href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
+ * This class has been automatically generated using
+ * <a href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
  */
 public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
+
     /**
      * Paints the transcoded SVG image on the specified graphics context. You
      * can install a custom transformation on the graphics context to scale the
@@ -210,21 +211,11 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         this.height = getOrigHeight();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.swing.Icon#getIconHeight()
-     */
     @Override
     public int getIconHeight() {
         return height;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.swing.Icon#getIconWidth()
-     */
     @Override
     public int getIconWidth() {
         return width;
@@ -233,22 +224,14 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
     /*
      * (non-Javadoc)
      * 
-     * @see
-     * org.jvnet.flamingo.common.icon.ResizableIcon#setDimension(java.awt.Dimension
-     * )
+     * @see org.pushingpixels.flamingo.api.common.icon.ResizableIcon#setDimension(java.awt.Dimension)
      */
     @Override
-    public void setDimension(Dimension newDimension) {
-        this.width = newDimension.width;
-        this.height = newDimension.height;
+    public void setDimension(Dimension dimension) {
+        this.width = dimension.width;
+        this.height = dimension.height;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.swing.Icon#paintIcon(java.awt.Component, java.awt.Graphics,
-     * int, int)
-     */
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
         Graphics2D g2d = (Graphics2D) g.create();
