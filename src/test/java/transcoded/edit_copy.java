@@ -33,7 +33,6 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         
         // 
-        g.setComposite(AlphaComposite.getInstance(3, 1 * origAlpha));
         
         // _0
         

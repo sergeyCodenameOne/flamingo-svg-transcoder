@@ -706,7 +706,7 @@ public class SvgTranscoder {
      */
     private void transcodeGraphicsNode(GraphicsNode node, String comment) throws UnsupportedOperationException {
         AlphaComposite composite = (AlphaComposite) node.getComposite();
-        if (composite != null && !composite.equals(currentComposite)) {
+        if (composite != null && !composite.equals(currentComposite) && !(currentComposite == null && composite.getAlpha() == 1)) {
             currentComposite = composite;
             printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + transcodeFloat(composite.getAlpha()) + " * origAlpha));");
         }
