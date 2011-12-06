@@ -35,6 +35,9 @@ public class DefaultNamingStrategy implements NamingStrategy {
         if (isKeyword(name)) {
             name = name + "_";
         }
+        if (Character.isDigit(name.charAt(0))) {
+            name = "_" + name;
+        }
         return name;
     }
 
