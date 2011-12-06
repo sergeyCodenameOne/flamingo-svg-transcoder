@@ -17,6 +17,7 @@
 package org.pushingpixels.flamingo.api.svg;
 
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * Keeps the name of the image file and replaces illegal characters in Java class names.
@@ -30,6 +31,19 @@ public class DefaultNamingStrategy implements NamingStrategy {
 
     public String getClassName(File file) {
         String name = file.getName().substring(0, file.getName().lastIndexOf("."));
-        return name.replaceAll("[- ]", "_");
+        name = name.replaceAll("[-+ .]", "_");
+        if (isKeyword(name)) {
+            name = name + "_";
+        }
+        return name;
+    }
+
+    private boolean isKeyword(String s) {
+        return Arrays.asList("abstract",
+                "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const","continue", "default",
+                "do", "double", "else", "enum", "extends", "final","finally", "float","for", "goto", "if", "implements",
+                "import", "instanceof", "int", "interface", "long", "native", "new", "package", "private", "protected",
+                "public", "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this", "throw",
+                "throws", "transient", "try", "void", "volatile", "while").contains(s);
     }
 }

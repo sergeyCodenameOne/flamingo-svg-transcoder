@@ -15,5 +15,8 @@ public class DefaultNamingStrategyTest extends TestCase {
                 
         assertEquals("edit_copy", strategy.getClassName(new File("edit-copy.svg")));
         assertEquals("edit_paste", strategy.getClassName(new File("edit paste.svgz")));
+        assertEquals("edit_find", strategy.getClassName(new File("edit.find.svgz")));
+        assertEquals("application_rss_xml", strategy.getClassName(new File("application-rss+xml.svg")));
+        assertEquals("int_", strategy.getClassName(new File("int.svg")));
     }   
 }
