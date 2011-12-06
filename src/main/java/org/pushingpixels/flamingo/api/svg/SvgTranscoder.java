@@ -152,19 +152,17 @@ public class SvgTranscoder {
 
         UserAgentAdapter ua = new UserAgentAdapter();
         DocumentLoader loader = new DocumentLoader(ua);
-        BridgeContext batikBridgeContext = new BridgeContext(ua, loader);
-        batikBridgeContext.setDynamicState(BridgeContext.DYNAMIC);
-        ua.setBridgeContext(batikBridgeContext);
-
-        GVTBuilder builder = new GVTBuilder();
-        Document svgDoc;
+        BridgeContext context = new BridgeContext(ua, loader);
+        context.setDynamicState(BridgeContext.DYNAMIC);
+        ua.setBridgeContext(context);
+        
         try {
-            svgDoc = loader.loadDocument(url.toString());
-            GraphicsNode gvtRoot = builder.build(batikBridgeContext, svgDoc);
+            Document svgDoc = loader.loadDocument(url.toString());
+            new GVTBuilder().build(context, svgDoc);
             
-            transcode(gvtRoot);
-        } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
+            transcode(context);
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to transcode " + url, e);
         }
     }
 
@@ -193,10 +191,12 @@ public class SvgTranscoder {
     /**
      * Transcodes the SVG image into Java2D code.
      */
-    public void transcode(GraphicsNode gvtRoot) {
+    public void transcode(BridgeContext context) {
+        GraphicsNode root = context.getGraphicsNode(context.getDocument());
+        
         ByteArrayOutputStream paintingCodeStream = new ByteArrayOutputStream();
         this.printWriter = new IndentingPrintWriter(new PrintWriter(paintingCodeStream));
-        transcodeGraphicsNode(gvtRoot, "");
+        transcodeGraphicsNode(root, "");
         this.printWriter.close();
 
         String templateString = readTemplate("SvgTranscoderTemplate" + (javaToImplementResizableIconInterface ? "Resizable" : "Plain") + ".templ");
@@ -206,9 +206,12 @@ public class SvgTranscoder {
 
         String paintingCode = new String(paintingCodeStream.toByteArray());
         templateString = templateString.replaceAll(TOKEN_PAINTING_CODE, paintingCode);
-
-        Rectangle2D bounds = gvtRoot.getBounds();
-
+        
+        Rectangle2D bounds = root.getBounds();
+        if (bounds == null) {
+            bounds = new Rectangle2D.Double(0, 0, context.getDocumentSize().getWidth(), context.getDocumentSize().getHeight());
+        }
+        
         templateString = templateString.replaceAll(TOKEN_ORIG_X, "" + (int) Math.ceil(bounds.getX()));
         templateString = templateString.replaceAll(TOKEN_ORIG_Y, "" + (int) Math.ceil(bounds.getY()));
         templateString = templateString.replaceAll(TOKEN_ORIG_WIDTH, "" + (int) Math.ceil(bounds.getWidth()));

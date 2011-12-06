@@ -52,4 +52,28 @@ public class SvgTranscoderTest extends TestCase {
             assertEquals("Line " + in1.getLineNumber(), line1, line2);
         }
     }
+
+    public void testTranscodeEmpty() throws Exception {
+        File svg = new File("target/test-classes/svg/empty.svg");
+        File transcoded = new File(svg.getParentFile(), "empty.java");
+        final PrintWriter out = new PrintWriter(transcoded);
+
+        SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "empty");
+        transcoder.setJavaPackageName("test.svg.transcoded");
+        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setListener(new TranscoderListener() {
+            public Writer getWriter() {
+                return out;
+            }
+
+            public void finished() { }
+        });
+
+        transcoder.transcode();
+        
+        out.flush();
+        out.close();
+        
+        assertTrue(transcoded.exists());
+    }
 }
