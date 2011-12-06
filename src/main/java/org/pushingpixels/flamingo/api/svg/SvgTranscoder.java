@@ -54,6 +54,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Formatter;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.SAXParser;
@@ -358,7 +359,7 @@ public class SvgTranscoder {
             
         } else if (shape instanceof Line2D.Float) {
             Line2D.Float l2df = (Line2D.Float) shape;
-            printWriter.format("shape = new Line2D.Float(%ff, %ff, %ff, %ff);\n", l2df.x1, l2df.y1, l2df.x2, l2df.y2);
+            printWriter.format(Locale.ENGLISH, "shape = new Line2D.Float(%ff, %ff, %ff, %ff);\n", l2df.x1, l2df.y1, l2df.x2, l2df.y2);
             
         } else {
             throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
