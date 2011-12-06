@@ -45,15 +45,25 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.URL;
 import java.util.Formatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.batik.bridge.BridgeContext;
 import org.apache.batik.bridge.DocumentLoader;
@@ -73,6 +83,10 @@ import org.apache.batik.gvt.ShapeNode;
 import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
 import org.w3c.dom.Document;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 
 /**
  * SVG to Java2D transcoder.
@@ -142,6 +156,38 @@ public class SvgTranscoder {
     }
 
     /**
+     * Returns the filtered image content. The metadata are removed from
+     * the document to prevent illegal elements from breaking the parsing.
+     * (For example several KDE icons have unrecognized RDF elements)
+     */
+    private InputStream getInputStream() throws Exception {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        SAXParser parser = factory.newSAXParser();
+        XMLReader reader = parser.getXMLReader();
+        reader.setEntityResolver(new EntityResolver() {
+            public InputSource resolveEntity(String pid, String sid) throws SAXException {
+                return new InputSource(new StringReader(""));
+            }
+        });
+        
+        SAXSource source = new SAXSource(reader, new InputSource(url.openStream()));
+        
+        Result result = new StreamResult(buffer);
+        
+        StreamSource stylesheet = new StreamSource(getClass().getResourceAsStream("/svg-cleanup.xsl"));
+        
+        Transformer transformer = TransformerFactory.newInstance().newTransformer(stylesheet);
+        transformer.transform(source, result);
+        
+        stylesheet.getInputStream().close();
+        
+        return new ByteArrayInputStream(buffer.toByteArray());
+    }
+
+    /**
      * Transcodes the SVG image into Java2D code. Does nothing if the
      * {@link #listener} is <code>null</code>.
      */
@@ -157,11 +203,11 @@ public class SvgTranscoder {
         ua.setBridgeContext(context);
         
         try {
-            Document svgDoc = loader.loadDocument(url.toString());
+            Document svgDoc = loader.loadDocument(url.toString(), getInputStream());
             new GVTBuilder().build(context, svgDoc);
             
             transcode(context);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "Unable to transcode " + url, e);
         }
     }
