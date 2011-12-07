@@ -31,6 +31,8 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
             }
         }
         
+        java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();
+        
         
         // 
         
@@ -38,7 +40,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         // _0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.49999997f * origAlpha));
-        AffineTransform defaultTransform__0_0_0 = g.getTransform();
+        transformations.offer(g.getTransform());
         g.transform(new AffineTransform(1.001508f, 0, 0, 1.000616f, -0.05002205f, -0.06304895f));
         
         // _0_0_0
@@ -85,7 +87,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         // _0_0_0_7
         shape = new Rectangle2D.Double(7.016119003295898, 26.03341293334961, 13, 2);
         g.fill(shape);
-        g.setTransform(defaultTransform__0_0_0);
+        g.setTransform(transformations.poll());
         g.setComposite(AlphaComposite.getInstance(3, 1 * origAlpha));
         
         // _0_0_1

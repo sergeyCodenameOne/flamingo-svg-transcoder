@@ -762,7 +762,7 @@ public class SvgTranscoder {
         
         AffineTransform transform = node.getTransform();
         if (transform != null && !transform.isIdentity()) {
-            printWriter.println("AffineTransform defaultTransform_" + comment + " = g.getTransform();");
+            printWriter.println("transformations.offer(g.getTransform());");
             printWriter.println("g.transform(" + transcodeTransform(transform) + ");");
         }
         
@@ -778,7 +778,7 @@ public class SvgTranscoder {
             }
         } finally {
             if (transform != null && !transform.isIdentity()) {
-                printWriter.println("g.setTransform(defaultTransform_" + comment + ");");
+                printWriter.println("g.setTransform(transformations.poll());");
             }
         }
     }
