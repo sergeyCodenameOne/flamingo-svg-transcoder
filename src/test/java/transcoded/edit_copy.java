@@ -33,25 +33,25 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         
         java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();
         
-        
+
         // 
-        
+
         // _0
-        
+
         // _0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.49999997f * origAlpha));
         transformations.offer(g.getTransform());
         g.transform(new AffineTransform(1.001508f, 0, 0, 1.000616f, -0.05002205f, -0.06304895f));
-        
+
         // _0_0_0
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        
+
         // _0_0_0_0
         shape = new Rectangle2D.Double(20.161836624145508, 34.03341293334961, 13, 2);
         g.setPaint(BLACK);
         g.fill(shape);
         g.setComposite(AlphaComposite.getInstance(3, 1 * origAlpha));
-        
+
         // _0_0_0_1
         shape = new RoundRectangle2D.Double(1.5484408140182495, 1.5629303455352783, 30.95155906677246, 35.976688385009766, 1.131310224533081, 1.1323192119598389);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(22.308330535888672, 18.99213981628418), new Point2D.Double(35.78529357910156, 39.49823760986328), new float[]{0, 0.59928656f, 0.82758623f, 1}, new Color[]{new Color(0xF0F0EF), new Color(0xE8E8E8), WHITE, new Color(0xD8D8D3)}, NO_CYCLE, SRGB, new AffineTransform(1.065698f, 0, 0, 0.987595f, -8.54832f, -4.891713f)));
@@ -59,39 +59,39 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(0x888A85));
         g.setStroke(new BasicStroke(0.99893934f, 0, 0, 4));
         g.draw(shape);
-        
+
         // _0_0_0_2
         shape = new Rectangle2D.Double(2.532512903213501, 2.5605955123901367, 28.970741271972656, 33.981056213378906);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0, 1}, new Color[]{WHITE, new Color(0xFFFFFF, true)}, NO_CYCLE, SRGB, new AffineTransform(0.998504f, 0, 0, 0.998246f, -6.970391f, -4.892901f)));
         g.setStroke(new BasicStroke(0.99893963f, 0, 0, 4));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        
+
         // _0_0_0_3
         shape = new Rectangle2D.Double(7.016119003295898, 10.033413887023926, 21, 2);
         g.setPaint(BLACK);
         g.fill(shape);
-        
+
         // _0_0_0_4
         shape = new Rectangle2D.Double(7.016119003295898, 14.033413887023926, 20, 2);
         g.fill(shape);
-        
+
         // _0_0_0_5
         shape = new Rectangle2D.Double(7.016119003295898, 18.033414840698242, 18, 2);
         g.fill(shape);
-        
+
         // _0_0_0_6
         shape = new Rectangle2D.Double(7.016119003295898, 22.033414840698242, 21, 2);
         g.fill(shape);
-        
+
         // _0_0_0_7
         shape = new Rectangle2D.Double(7.016119003295898, 26.03341293334961, 13, 2);
         g.fill(shape);
         g.setTransform(transformations.poll());
         g.setComposite(AlphaComposite.getInstance(3, 1 * origAlpha));
-        
+
         // _0_0_1
-        
+
         // _0_0_1_0
         shape = new GeneralPath();
         ((GeneralPath) shape).moveTo(15.072946, 10.500852);
@@ -109,12 +109,12 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(0x888A85));
         g.setStroke(new BasicStroke(1, 0, 0, 4));
         g.draw(shape);
-        
+
         // _0_0_1_1
         shape = new Rectangle2D.Double(15.502950668334961, 11.5, 28.99734878540039, 34.04076385498047);
         g.setPaint(new LinearGradientPaint(new Point2D.Double(26.076091766357422, 26.69667625427246), new Point2D.Double(30.811172485351562, 42.00735092163086), new float[]{0, 1}, new Color[]{WHITE, new Color(0xFFFFFF, true)}, NO_CYCLE, SRGB, new AffineTransform(0.999421f, 0, 0, 1, 5.991319f, 4.033411f)));
         g.draw(shape);
-        
+
         // _0_0_1_2
         shape = new GeneralPath();
         ((GeneralPath) shape).moveTo(36.220917, 46.536964);
@@ -127,7 +127,7 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new Color(0x868A84));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.36931816f * origAlpha));
-        
+
         // _0_0_1_3
         shape = new GeneralPath();
         ((GeneralPath) shape).moveTo(37.671356, 44.345463);
@@ -138,20 +138,20 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         g.setPaint(new LinearGradientPaint(new Point2D.Double(33.39600372314453, 36.92133331298828), new Point2D.Double(34.170047760009766, 38.07038116455078), new float[]{0, 1}, new Color[]{WHITE, new Color(0xFFFFFF, true)}, NO_CYCLE, SRGB, new AffineTransform(1, 0, 0, 1, 6.161836f, 3.658411f)));
         g.draw(shape);
         g.setComposite(AlphaComposite.getInstance(3, 0.17045452f * origAlpha));
-        
+
         // _0_0_1_4
         shape = new Rectangle2D.Double(20, 19.033414840698242, 21, 2);
         g.setPaint(BLACK);
         g.fill(shape);
-        
+
         // _0_0_1_5
         shape = new Rectangle2D.Double(20, 23.033414840698242, 19.992233276367188, 2);
         g.fill(shape);
-        
+
         // _0_0_1_6
         shape = new Rectangle2D.Double(20, 27.033414840698242, 17.976701736450195, 2);
         g.fill(shape);
-        
+
         // _0_0_1_7
         shape = new Rectangle2D.Double(20, 31.033414840698242, 21, 2);
         g.fill(shape);

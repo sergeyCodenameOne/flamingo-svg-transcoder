@@ -250,9 +250,15 @@ public class SvgTranscoder {
         
         templateString = templateString.replaceAll(TOKEN_PACKAGE, javaPackageName != null ? "package " + javaPackageName + ";" : "");
         templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
-
+        
+        String separator = 
+                  "        paint${count}(g, origAlpha, transformations);\n"
+                + "    }\n\n"
+                + "    private static void paint${count}(Graphics2D g, float origAlpha, java.util.LinkedList<AffineTransform> transformations) {\n"
+                + "        Shape shape = null;\n";
+        
         String paintingCode = new String(paintingCodeStream.toByteArray());
-        templateString = templateString.replaceAll(TOKEN_PAINTING_CODE, paintingCode);
+        templateString = templateString.replaceAll(TOKEN_PAINTING_CODE, TextSplitter.insert(paintingCode, separator, 3000));
         
         Rectangle2D bounds = root.getBounds();
         if (bounds == null) {
