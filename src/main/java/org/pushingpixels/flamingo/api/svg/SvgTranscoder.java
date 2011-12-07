@@ -126,10 +126,10 @@ public class SvgTranscoder {
     /** The current composite. */
     private AlphaComposite currentComposite;
 
-    /** The current paint. */
-    private Paint currentPaint;
+    /** The current paint, as a Java declaration. */
+    private String currentPaint;
     
-    /** The current stroke, as a Java declaraction. */
+    /** The current stroke, as a Java declaration. */
     private String currentStroke;
 
     /** The current shape. */
@@ -686,9 +686,10 @@ public class SvgTranscoder {
         
         transcodeShape(painter.getShape());
         
-        if (!paint.equals(currentPaint)) {
-            currentPaint = paint;
-            printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+        String p = transcodePaint(paint);
+        if (!p.equals(currentPaint)) {
+            currentPaint = p;
+            printWriter.println("g.setPaint(" + currentPaint + ");");
         }
         printWriter.println("g.fill(shape);");
     }
@@ -706,10 +707,11 @@ public class SvgTranscoder {
         }
         
         transcodeShape(shape);
-        
-        if (!paint.equals(currentPaint)) {
-            currentPaint = paint;
-            printWriter.println("g.setPaint(" + transcodePaint(paint) + ");");
+
+        String p = transcodePaint(paint);
+        if (!p.equals(currentPaint)) {
+            currentPaint = p;
+            printWriter.println("g.setPaint(" + currentPaint + ");");
         }
         
         String stroke = transcodeStroke((BasicStroke) painter.getStroke());
