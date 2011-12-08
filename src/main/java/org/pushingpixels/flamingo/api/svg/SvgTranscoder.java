@@ -512,13 +512,17 @@ public class SvgTranscoder {
      * @param transform
      */
     private String transcodeTransform(AffineTransform transform) {
-        double[] matrix = new double[6];
-        transform.getMatrix(matrix);
-        
-        return "new AffineTransform("
-                + transcodeFloat((float) matrix[0]) + ", " + transcodeFloat((float) matrix[1]) + ", "
-                + transcodeFloat((float) matrix[2]) + ", " + transcodeFloat((float) matrix[3]) + ", "
-                + transcodeFloat((float) matrix[4]) + ", " + transcodeFloat((float) matrix[5]) + ")";
+        if (transform.isIdentity()) {
+            return "new AffineTransform()";
+        } else {
+            double[] matrix = new double[6];
+            transform.getMatrix(matrix);
+
+            return "new AffineTransform("
+                    + transcodeFloat((float) matrix[0]) + ", " + transcodeFloat((float) matrix[1]) + ", "
+                    + transcodeFloat((float) matrix[2]) + ", " + transcodeFloat((float) matrix[3]) + ", "
+                    + transcodeFloat((float) matrix[4]) + ", " + transcodeFloat((float) matrix[5]) + ")";
+        }
     }
 
     /**
@@ -784,7 +788,8 @@ public class SvgTranscoder {
             }
         } finally {
             if (transform != null && !transform.isIdentity()) {
-                printWriter.println("g.setTransform(transformations.poll());");
+                printWriter.println("");
+                printWriter.println("g.setTransform(transformations.poll()); // " + comment);
             }
         }
     }
