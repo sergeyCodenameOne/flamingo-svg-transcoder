@@ -87,7 +87,8 @@ public class edit_copy implements org.pushingpixels.flamingo.api.common.icon.Res
         // _0_0_0_7
         shape = new Rectangle2D.Double(7.016119003295898, 26.03341293334961, 13, 2);
         g.fill(shape);
-        g.setTransform(transformations.poll());
+
+        g.setTransform(transformations.poll()); // _0_0_0
         g.setComposite(AlphaComposite.getInstance(3, 1 * origAlpha));
 
         // _0_0_1

@@ -33,8 +33,12 @@ package org.pushingpixels.flamingo.api.svg;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Composite;
+import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -54,6 +58,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Formatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,11 +88,18 @@ import org.apache.batik.gvt.GraphicsNode;
 import org.apache.batik.gvt.ShapeNode;
 import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
+import org.apache.batik.gvt.TextNode;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * SVG to Java2D transcoder.
@@ -695,13 +707,16 @@ public class SvgTranscoder {
         }
         
         transcodeShape(painter.getShape());
-        
+        transcodePaintChange(paint);
+        printWriter.println("g.fill(shape);");
+    }
+
+    private void transcodePaintChange(Paint paint) {
         String p = transcodePaint(paint);
         if (!p.equals(currentPaint)) {
             currentPaint = p;
             printWriter.println("g.setPaint(" + currentPaint + ");");
         }
-        printWriter.println("g.fill(shape);");
     }
 
     /**
@@ -710,49 +725,29 @@ public class SvgTranscoder {
      * @param painter Stroke shape painter.
      */
     private void transcodeStrokeShapePainter(StrokeShapePainter painter) {
-        Shape shape = painter.getShape();
         Paint paint = (Paint) painter.getPaint();
         if (paint == null) {
             return;
         }
         
-        transcodeShape(shape);
-
-        String p = transcodePaint(paint);
-        if (!p.equals(currentPaint)) {
-            currentPaint = p;
-            printWriter.println("g.setPaint(" + currentPaint + ");");
-        }
-        
-        String stroke = transcodeStroke((BasicStroke) painter.getStroke());
-        if (stroke == null && currentStroke != null || stroke != null && !stroke.equals(currentStroke)) {
-            currentStroke = stroke;
-            printWriter.println("g.setStroke(" + stroke + ");");
-        }
+        transcodeShape(painter.getShape());
+        transcodePaintChange(paint);
+        transcodeStrokeChange(painter.getStroke());
         printWriter.println("g.draw(shape);");
     }
 
-    /**
-     * Transcodes the specified shape node.
-     *
-     * @param node    Shape node.
-     * @param comment Comment (for associating the Java2D section with the corresponding SVG section).
-     */
-    private void transcodeShapeNode(ShapeNode node, String comment) {
-        transcodeShapePainter(node.getShapePainter());
+    private void transcodeStrokeChange(Stroke stroke) {
+        String s = transcodeStroke((BasicStroke) stroke);
+        if (s == null && currentStroke != null || s != null && !s.equals(currentStroke)) {
+            currentStroke = s;
+            printWriter.println("g.setStroke(" + s + ");");
+        }
     }
 
-    /**
-     * Transcodes the specified composite graphics node.
-     *
-     * @param node    Composite graphics node.
-     * @param comment Comment (for associating the Java2D section with the corresponding SVG section).
-     */
-    private void transcodeCompositeGraphicsNode(CompositeGraphicsNode node, String comment) {
-        int count = 0;
-        for (Object obj : node.getChildren()) {
-            transcodeGraphicsNode((GraphicsNode) obj, comment + "_" + count);
-            count++;
+    private void transcodeCompositeChange(AlphaComposite composite) {
+        if (composite != null && !composite.equals(currentComposite) && !(currentComposite == null && composite.getAlpha() == 1)) {
+            currentComposite = composite;
+            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + transcodeFloat(composite.getAlpha()) + " * origAlpha));");
         }
     }
 
@@ -764,11 +759,7 @@ public class SvgTranscoder {
      * @throws UnsupportedOperationException if the graphics node is unsupported.
      */
     private void transcodeGraphicsNode(GraphicsNode node, String comment) throws UnsupportedOperationException {
-        AlphaComposite composite = (AlphaComposite) node.getComposite();
-        if (composite != null && !composite.equals(currentComposite) && !(currentComposite == null && composite.getAlpha() == 1)) {
-            currentComposite = composite;
-            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + transcodeFloat(composite.getAlpha()) + " * origAlpha));");
-        }
+        transcodeCompositeChange((AlphaComposite) node.getComposite());
         
         AffineTransform transform = node.getTransform();
         if (transform != null && !transform.isIdentity()) {
@@ -780,9 +771,14 @@ public class SvgTranscoder {
             printWriter.println("");
             printWriter.println("// " + comment);
             if (node instanceof ShapeNode) {
-                transcodeShapeNode((ShapeNode) node, comment);
+                transcodeShapePainter(((ShapeNode) node).getShapePainter());
             } else if (node instanceof CompositeGraphicsNode) {
-                transcodeCompositeGraphicsNode((CompositeGraphicsNode) node, comment);
+                List children = ((CompositeGraphicsNode) node).getChildren();
+                for (int i = 0; i < children.size(); i++) {
+                    transcodeGraphicsNode((GraphicsNode) children.get(i), comment + "_" + i);
+                }
+            } else if (node instanceof TextNode) {
+                transcodeTextNode((TextNode) node);
             } else {
                 throw new UnsupportedOperationException(node.getClass().getCanonicalName());
             }
@@ -792,5 +788,72 @@ public class SvgTranscoder {
                 printWriter.println("g.setTransform(transformations.poll()); // " + comment);
             }
         }
+    }
+
+    /**
+     * Transcode the specified text node.
+     * 
+     * @param text
+     */
+    private void transcodeTextNode(TextNode text) {
+        if (text.getText() == null) {
+            return;
+        }
+        
+        printWriter.println("// " + text.getText().replaceAll("[\\r\\n]]", " "));
+        
+        Graphics2D g = mock(Graphics2D.class, Mockito.CALLS_REAL_METHODS);
+        
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                transcodeShape((Shape) invocation.getArguments()[0]);
+                printWriter.println("g.draw(shape);");
+                return null;
+            }
+        }).when(g).draw(any(Shape.class));
+        
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                transcodeShape((Shape) invocation.getArguments()[0]);
+                printWriter.println("g.fill(shape);");
+                return null;
+            }
+        }).when(g).fill(any(Shape.class));
+        
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                transcodeCompositeChange((AlphaComposite) invocation.getArguments()[0]);
+                return null;
+            }
+        }).when(g).setComposite(any(Composite.class));
+        
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                transcodePaintChange((Paint) invocation.getArguments()[0]);
+                return null;
+            }
+        }).when(g).setPaint(any(Paint.class));
+        
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                transcodeStrokeChange((Stroke) invocation.getArguments()[0]);
+                return null;
+            }
+        }).when(g).setStroke(any(Stroke.class));
+
+        doAnswer(new Answer() {
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                RenderingHints.Key key = (RenderingHints.Key) invocation.getArguments()[0];
+                if (key.equals(RenderingHints.KEY_TEXT_ANTIALIASING)) {
+                    return RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
+                } else if (key.equals(RenderingHints.KEY_STROKE_CONTROL)) {
+                    return RenderingHints.VALUE_STROKE_PURE;
+                } else {
+                    throw new UnsupportedOperationException("Unhandled hint: " + key.toString());
+                }
+            }
+        }).when(g).getRenderingHint(any(RenderingHints.Key.class));
+
+        text.getTextPainter().paint(text, g);
     }
 }

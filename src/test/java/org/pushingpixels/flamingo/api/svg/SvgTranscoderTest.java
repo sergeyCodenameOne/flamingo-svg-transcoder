@@ -110,7 +110,32 @@ public class SvgTranscoderTest extends TestCase {
         assertTrue(transcoded.exists());
         assertCompile(transcoded);
     }
-    
+
+    public void testTranscodeText() throws Exception {
+        File svg = new File("target/test-classes/svg/text.svg");
+        File transcoded = new File(svg.getParentFile(), "text.java");
+        final PrintWriter out = new PrintWriter(transcoded);
+
+        SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "text");
+        transcoder.setJavaPackageName("test.svg.transcoded");
+        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setListener(new TranscoderListener() {
+            public Writer getWriter() {
+                return out;
+            }
+
+            public void finished() { }
+        });
+
+        transcoder.transcode();
+
+        out.flush();
+        out.close();
+
+        assertTrue(transcoded.exists());
+        assertCompile(transcoded);
+    }
+
     private void assertCompile(File file) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
