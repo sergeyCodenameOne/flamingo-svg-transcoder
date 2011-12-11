@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.pushingpixels</groupId>
+    <artifactId>flamingo-svg-transcoder</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>flamingo-svg-transcoder-ant</artifactId>
+  <name>Transcoder Ant Task</name>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <description>Transform SVG images into Java2D icons for your Swing applications</description>
+  <url>https://github.com/ebourg/flamingo-svg-transcoder</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.pushingpixels</groupId>
+      <artifactId>flamingo-svg-transcoder-core</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.8.2</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
