@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -71,7 +70,7 @@ public class SVGApplication {
 
         // Set the button action.
         button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+            public void actionPerformed(ActionEvent event) {
                 JFileChooser fc = new JFileChooser(lastDir);
                 int choice = fc.showOpenDialog(panel);
                 if (choice == JFileChooser.APPROVE_OPTION) {
@@ -88,19 +87,13 @@ public class SVGApplication {
 
                         SvgTranscoder transcoder = new SvgTranscoder(f.toURI().toURL(), svgClassName);
                         transcoder.setJavaToImplementResizableIconInterface(true);
-                        transcoder.setListener(new TranscoderListener() {
-                            public Writer getWriter() {
-                                return pw;
-                            }
-
-                            public void finished() {
-                                JOptionPane.showMessageDialog(null, "Finished");
-                            }
-                        });
+                        transcoder.setPrintWriter(pw);
                         transcoder.transcode();
+                        JOptionPane.showMessageDialog(null, "Finished");
+                        
 
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }

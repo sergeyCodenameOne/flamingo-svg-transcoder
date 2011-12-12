@@ -5,9 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Arrays;
-
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
@@ -24,18 +22,12 @@ public class SvgTranscoderTest extends TestCase {
     public void testTranscode() throws Exception {
         File svg = new File("target/test-classes/svg/edit-copy.svg");
         File transcoded = new File(svg.getParentFile(), "edit_copy.java");
-        final PrintWriter out = new PrintWriter(transcoded);
+        PrintWriter out = new PrintWriter(transcoded);
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "edit_copy");
         transcoder.setJavaPackageName("test.svg.transcoded");
         transcoder.setJavaToImplementResizableIconInterface(true);
-        transcoder.setListener(new TranscoderListener() {
-            public Writer getWriter() {
-                return out;
-            }
-
-            public void finished() { }
-        });
+        transcoder.setPrintWriter(out);
 
         transcoder.transcode();
         
@@ -63,18 +55,12 @@ public class SvgTranscoderTest extends TestCase {
     public void testTranscodeEmpty() throws Exception {
         File svg = new File("target/test-classes/svg/empty.svg");
         File transcoded = new File(svg.getParentFile(), "empty.java");
-        final PrintWriter out = new PrintWriter(transcoded);
+        PrintWriter out = new PrintWriter(transcoded);
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "empty");
         transcoder.setJavaPackageName("test.svg.transcoded");
         transcoder.setJavaToImplementResizableIconInterface(true);
-        transcoder.setListener(new TranscoderListener() {
-            public Writer getWriter() {
-                return out;
-            }
-
-            public void finished() { }
-        });
+        transcoder.setPrintWriter(out);
 
         transcoder.transcode();
         
@@ -88,18 +74,12 @@ public class SvgTranscoderTest extends TestCase {
     public void testTranscodeLarge() throws Exception {
         File svg = new File("target/test-classes/svg/apache-feather.svg");
         File transcoded = new File(svg.getParentFile(), "apache_feather.java");
-        final PrintWriter out = new PrintWriter(transcoded);
+        PrintWriter out = new PrintWriter(transcoded);
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "apache_feather");
         transcoder.setJavaPackageName("test.svg.transcoded");
         transcoder.setJavaToImplementResizableIconInterface(true);
-        transcoder.setListener(new TranscoderListener() {
-            public Writer getWriter() {
-                return out;
-            }
-
-            public void finished() { }
-        });
+        transcoder.setPrintWriter(out);
 
         transcoder.transcode();
 
@@ -113,18 +93,12 @@ public class SvgTranscoderTest extends TestCase {
     public void testTranscodeText() throws Exception {
         File svg = new File("target/test-classes/svg/text.svg");
         File transcoded = new File(svg.getParentFile(), "text.java");
-        final PrintWriter out = new PrintWriter(transcoded);
+        PrintWriter out = new PrintWriter(transcoded);
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "text");
         transcoder.setJavaPackageName("test.svg.transcoded");
         transcoder.setJavaToImplementResizableIconInterface(true);
-        transcoder.setListener(new TranscoderListener() {
-            public Writer getWriter() {
-                return out;
-            }
-
-            public void finished() { }
-        });
+        transcoder.setPrintWriter(out);
 
         transcoder.transcode();
 

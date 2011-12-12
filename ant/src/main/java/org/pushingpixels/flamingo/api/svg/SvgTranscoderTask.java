@@ -19,7 +19,6 @@ package org.pushingpixels.flamingo.api.svg;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Enumeration;
 
 import org.apache.tools.ant.BuildException;
@@ -117,19 +116,14 @@ public class SvgTranscoderTask extends Copy {
 
     private void transcode(File file, File target) throws IOException {
         target.getParentFile().mkdirs();
-        final PrintWriter pw = new PrintWriter(target);
+        PrintWriter pw = new PrintWriter(target);
         
         SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), namingStrategy.getClassName(file));
         transcoder.setJavaToImplementResizableIconInterface("icon".equals(template));
         transcoder.setJavaPackageName(targetPackage);
-        transcoder.setListener(new TranscoderListener() {
-            public Writer getWriter() {
-                return pw;
-            }
-
-            public void finished() {
-            }
-        });
+        transcoder.setPrintWriter(pw);
         transcoder.transcode();
+        
+        pw.close();
     }
 }

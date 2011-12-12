@@ -101,13 +101,11 @@ import org.xml.sax.XMLReader;
  * @author Kirill Grouchnikov.
  */
 public class SvgTranscoder {
-    /** Listener. */
-    protected TranscoderListener listener;
 
-    /** Print writer that wraps the {@link TranscoderListener#getWriter()} of the registered {@link #listener}. */
+    /** The output writer receiving the generated class. */
     protected PrintWriter externalPrintWriter;
 
-    /** Print writer that wraps the {@link TranscoderListener#getWriter()} of the registered {@link #listener}. */
+    /** Temporary buffer holding the code being generated. */
     protected PrintWriter printWriter;
 
     /** Class name for the generated Java2D code. */
@@ -199,7 +197,7 @@ public class SvgTranscoder {
      * {@link #listener} is <code>null</code>.
      */
     public void transcode() {
-        if (listener == null) {
+        if (externalPrintWriter == null) {
             return;
         }
 
@@ -225,16 +223,6 @@ public class SvgTranscoder {
 
     public void setJavaPackageName(String javaPackageName) {
         this.javaPackageName = javaPackageName;
-    }
-
-    /**
-     * Sets the listener.
-     *
-     * @param listener Listener.
-     */
-    public void setListener(TranscoderListener listener) {
-        this.listener = listener;
-        this.setPrintWriter(new PrintWriter(this.listener.getWriter()));
     }
 
     public void setPrintWriter(PrintWriter printWriter) {
@@ -278,10 +266,6 @@ public class SvgTranscoder {
 
         this.externalPrintWriter.println(templateString);
         this.externalPrintWriter.close();
-
-        if (listener != null) {
-            listener.finished();
-        }
     }
 
     private String readTemplate(String name) {
