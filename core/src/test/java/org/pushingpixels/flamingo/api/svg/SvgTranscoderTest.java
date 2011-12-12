@@ -26,7 +26,7 @@ public class SvgTranscoderTest extends TestCase {
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "edit_copy");
         transcoder.setJavaPackageName("test.svg.transcoded");
-        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setTemplate(new Template("SvgTranscoderTemplateResizable.templ"));
         transcoder.setPrintWriter(out);
 
         transcoder.transcode();
@@ -59,7 +59,7 @@ public class SvgTranscoderTest extends TestCase {
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "empty");
         transcoder.setJavaPackageName("test.svg.transcoded");
-        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setTemplate(new Template("SvgTranscoderTemplateResizable.templ"));
         transcoder.setPrintWriter(out);
 
         transcoder.transcode();
@@ -78,7 +78,7 @@ public class SvgTranscoderTest extends TestCase {
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "apache_feather");
         transcoder.setJavaPackageName("test.svg.transcoded");
-        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setTemplate(new Template("SvgTranscoderTemplateResizable.templ"));
         transcoder.setPrintWriter(out);
 
         transcoder.transcode();
@@ -97,7 +97,7 @@ public class SvgTranscoderTest extends TestCase {
 
         SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "text");
         transcoder.setJavaPackageName("test.svg.transcoded");
-        transcoder.setJavaToImplementResizableIconInterface(true);
+        transcoder.setTemplate(new Template("SvgTranscoderTemplateResizable.templ"));
         transcoder.setPrintWriter(out);
 
         transcoder.transcode();

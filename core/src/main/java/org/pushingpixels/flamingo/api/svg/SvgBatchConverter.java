@@ -40,7 +40,6 @@ public class SvgBatchConverter {
                 PrintWriter pw = new PrintWriter(javaClassFilename);
 
                 SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), svgClassName);
-                transcoder.setJavaToImplementResizableIconInterface(false);
                 transcoder.setJavaPackageName(args[1]);
                 transcoder.setPrintWriter(pw);
                 transcoder.transcode();

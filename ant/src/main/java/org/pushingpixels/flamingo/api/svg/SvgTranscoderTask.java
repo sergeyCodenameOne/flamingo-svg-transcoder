@@ -38,15 +38,16 @@ public class SvgTranscoderTask extends Copy {
     
     private String targetPackage;
     
-    /** The template to use for the generated classes ("icon" or "plain") */
-    private String template = "icon";
+    /** The template to use for the generated classes. */
+    private Template template = Template.getDefault();
 
     public void setPackage(String targetPackage) {
         this.targetPackage = targetPackage;
     }
 
-    public void setTemplate(String template) {
-        this.template = template;
+    public void setTemplate(String template) throws IOException {
+        template = template.substring(0, 1).toUpperCase() + template.substring(1).toLowerCase();
+        this.template = new Template("SvgTranscoderTemplate" + template + ".templ");
     }
 
     /**
@@ -119,7 +120,7 @@ public class SvgTranscoderTask extends Copy {
         PrintWriter pw = new PrintWriter(target);
         
         SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), namingStrategy.getClassName(file));
-        transcoder.setJavaToImplementResizableIconInterface("icon".equals(template));
+        transcoder.setTemplate(template);
         transcoder.setJavaPackageName(targetPackage);
         transcoder.setPrintWriter(pw);
         transcoder.transcode();

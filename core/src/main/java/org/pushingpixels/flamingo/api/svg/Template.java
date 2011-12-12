@@ -30,7 +30,7 @@ import java.util.Map;
  * @author Emmanuel Bourg
  * @version $Revision$, $Date$
  */
-class Template {
+public class Template {
 
     public static enum Token {
         PACKAGE, CLASSNAME, PAINTING_CODE, X, Y, WIDTH, HEIGHT;
@@ -75,5 +75,13 @@ class Template {
         
         out.println(template);
         out.close();
+    }
+
+    public static Template getDefault() {
+        try {
+            return new Template("SvgTranscoderTemplatePlain.templ");
+        } catch (IOException e) {
+            throw new RuntimeException("Could not create default template", e);
+        }
     }
 }

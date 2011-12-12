@@ -114,10 +114,11 @@ public class SvgTranscoder {
     /** Package name for the generated Java2D code. */
     protected String javaPackageName;
 
-    protected boolean javaToImplementResizableIconInterface;
+    /** The template of the generated classes */
+    private Template template = Template.getDefault();
 
     /** URL of the SVG image. */
-    protected URL url;
+    private URL url;
 
     /** The current composite. */
     private AlphaComposite currentComposite;
@@ -149,7 +150,6 @@ public class SvgTranscoder {
      */
     public SvgTranscoder(String javaClassname) {
         this.javaClassName = javaClassname;
-        this.javaToImplementResizableIconInterface = false;
     }
 
     /**
@@ -208,8 +208,8 @@ public class SvgTranscoder {
         }
     }
 
-    public void setJavaToImplementResizableIconInterface(boolean javaToImplementResizableIconInterface) {
-        this.javaToImplementResizableIconInterface = javaToImplementResizableIconInterface;
+    public void setTemplate(Template template) {
+        this.template = template;
     }
 
     public void setJavaPackageName(String javaPackageName) {
@@ -253,8 +253,7 @@ public class SvgTranscoder {
         params.put(Template.Token.WIDTH,  (int) Math.ceil(bounds.getWidth()));
         params.put(Template.Token.HEIGHT, (int) Math.ceil(bounds.getHeight()));
         params.put(Template.Token.PAINTING_CODE, paintingCode);
-        
-        Template template = new Template("SvgTranscoderTemplate" + (javaToImplementResizableIconInterface ? "Resizable" : "Plain") + ".templ");
+
         template.apply(externalPrintWriter, params);
     }
 
