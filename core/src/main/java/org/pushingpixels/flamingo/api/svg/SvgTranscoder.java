@@ -89,17 +89,11 @@ import org.apache.batik.gvt.ShapeNode;
 import org.apache.batik.gvt.ShapePainter;
 import org.apache.batik.gvt.StrokeShapePainter;
 import org.apache.batik.gvt.TextNode;
-import org.mockito.Mockito;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
-
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
 
 /**
  * SVG to Java2D transcoder.
@@ -802,48 +796,30 @@ public class SvgTranscoder {
         
         printWriter.println("// " + text.getText().replaceAll("[\\r\\n]]", " "));
         
-        Graphics2D g = mock(Graphics2D.class, Mockito.CALLS_REAL_METHODS);
-        
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                transcodeShape((Shape) invocation.getArguments()[0]);
+        Graphics2D g = new NoOpGraphics2D() {
+            public void draw(Shape shape) {
+                transcodeShape(shape);
                 printWriter.println("g.draw(shape);");
-                return null;
             }
-        }).when(g).draw(any(Shape.class));
-        
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                transcodeShape((Shape) invocation.getArguments()[0]);
-                printWriter.println("g.fill(shape);");
-                return null;
-            }
-        }).when(g).fill(any(Shape.class));
-        
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                transcodeCompositeChange((AlphaComposite) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(g).setComposite(any(Composite.class));
-        
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                transcodePaintChange((Paint) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(g).setPaint(any(Paint.class));
-        
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                transcodeStrokeChange((Stroke) invocation.getArguments()[0]);
-                return null;
-            }
-        }).when(g).setStroke(any(Stroke.class));
 
-        doAnswer(new Answer() {
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                RenderingHints.Key key = (RenderingHints.Key) invocation.getArguments()[0];
+            public void fill(Shape shape) {
+                transcodeShape(shape);
+                printWriter.println("g.fill(shape);");
+            }
+
+            public void setComposite(Composite composite) {
+                transcodeCompositeChange((AlphaComposite) composite);
+            }
+
+            public void setPaint(Paint paint) {
+                transcodePaintChange(paint);
+            }
+
+            public void setStroke(Stroke stroke) {
+                transcodeStrokeChange(stroke);
+            }
+
+            public Object getRenderingHint(RenderingHints.Key key) {
                 if (key.equals(RenderingHints.KEY_TEXT_ANTIALIASING)) {
                     return RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
                 } else if (key.equals(RenderingHints.KEY_STROKE_CONTROL)) {
@@ -852,8 +828,8 @@ public class SvgTranscoder {
                     throw new UnsupportedOperationException("Unhandled hint: " + key.toString());
                 }
             }
-        }).when(g).getRenderingHint(any(RenderingHints.Key.class));
-
+        };
+        
         text.getTextPainter().paint(text, g);
     }
 }
