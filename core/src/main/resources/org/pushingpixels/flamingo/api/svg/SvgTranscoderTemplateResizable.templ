@@ -1,4 +1,4 @@
-TOKEN_PACKAGE
+${PACKAGE}
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -10,7 +10,7 @@ import static java.awt.MultipleGradientPaint.ColorSpaceType.*;
  * This class has been automatically generated using
  * <a href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
  */
-public class TOKEN_CLASSNAME implements org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
+public class ${CLASSNAME} implements org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
 
     /**
      * Paints the transcoded SVG image on the specified graphics context. You
@@ -33,7 +33,7 @@ public class TOKEN_CLASSNAME implements org.pushingpixels.flamingo.api.common.ic
         
         java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();
         
-TOKEN_PAINTING_CODE
+${PAINTING_CODE}
     }
 
     /**
@@ -42,7 +42,7 @@ TOKEN_PAINTING_CODE
      * @return The X of the bounding box of the original SVG image.
      */
     public static int getOrigX() {
-        return TOKEN_ORIG_X;
+        return ${X};
     }
 
     /**
@@ -51,7 +51,7 @@ TOKEN_PAINTING_CODE
      * @return The Y of the bounding box of the original SVG image.
      */
     public static int getOrigY() {
-        return TOKEN_ORIG_Y;
+        return ${Y};
     }
 
     /**
@@ -60,7 +60,7 @@ TOKEN_PAINTING_CODE
      * @return The width of the bounding box of the original SVG image.
      */
     public static int getOrigWidth() {
-        return TOKEN_ORIG_WIDTH;
+        return ${WIDTH};
     }
 
     /**
@@ -69,7 +69,7 @@ TOKEN_PAINTING_CODE
      * @return The height of the bounding box of the original SVG image.
      */
     public static int getOrigHeight() {
-        return TOKEN_ORIG_HEIGHT;
+        return ${HEIGHT};
     }
 
     /**
@@ -85,7 +85,7 @@ TOKEN_PAINTING_CODE
     /**
      * Creates a new transcoded SVG image.
      */
-    public TOKEN_CLASSNAME() {
+    public ${CLASSNAME}() {
         this.width = getOrigWidth();
         this.height = getOrigHeight();
     }

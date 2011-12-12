@@ -48,18 +48,18 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.SAXParser;
@@ -115,14 +115,6 @@ public class SvgTranscoder {
     protected String javaPackageName;
 
     protected boolean javaToImplementResizableIconInterface;
-
-    protected final static String TOKEN_PACKAGE = "TOKEN_PACKAGE";
-    protected final static String TOKEN_CLASSNAME = "TOKEN_CLASSNAME";
-    protected final static String TOKEN_PAINTING_CODE = "TOKEN_PAINTING_CODE";
-    protected final static String TOKEN_ORIG_X = "TOKEN_ORIG_X";
-    protected final static String TOKEN_ORIG_Y = "TOKEN_ORIG_Y";
-    protected final static String TOKEN_ORIG_WIDTH = "TOKEN_ORIG_WIDTH";
-    protected final static String TOKEN_ORIG_HEIGHT = "TOKEN_ORIG_HEIGHT";
 
     /** URL of the SVG image. */
     protected URL url;
@@ -193,8 +185,7 @@ public class SvgTranscoder {
     }
 
     /**
-     * Transcodes the SVG image into Java2D code. Does nothing if the
-     * {@link #listener} is <code>null</code>.
+     * Transcodes the SVG image into Java2D code.
      */
     public void transcode() {
         if (externalPrintWriter == null) {
@@ -232,18 +223,13 @@ public class SvgTranscoder {
     /**
      * Transcodes the SVG image into Java2D code.
      */
-    public void transcode(BridgeContext context) {
+    public void transcode(BridgeContext context) throws IOException {
         GraphicsNode root = context.getGraphicsNode(context.getDocument());
         
         ByteArrayOutputStream paintingCodeStream = new ByteArrayOutputStream();
         this.printWriter = new IndentingPrintWriter(new PrintWriter(paintingCodeStream));
         transcodeGraphicsNode(root, "");
         this.printWriter.close();
-
-        String templateString = readTemplate("SvgTranscoderTemplate" + (javaToImplementResizableIconInterface ? "Resizable" : "Plain") + ".templ");
-        
-        templateString = templateString.replaceAll(TOKEN_PACKAGE, javaPackageName != null ? "package " + javaPackageName + ";" : "");
-        templateString = templateString.replaceAll(TOKEN_CLASSNAME, javaClassName);
         
         String separator = 
                   "        paint${count}(g, origAlpha, transformations);\n"
@@ -252,40 +238,24 @@ public class SvgTranscoder {
                 + "        Shape shape = null;\n";
         
         String paintingCode = new String(paintingCodeStream.toByteArray());
-        templateString = templateString.replaceAll(TOKEN_PAINTING_CODE, TextSplitter.insert(paintingCode, separator, 3000));
+        paintingCode = TextSplitter.insert(paintingCode, separator, 3000);
         
         Rectangle2D bounds = root.getBounds();
         if (bounds == null) {
             bounds = new Rectangle2D.Double(0, 0, context.getDocumentSize().getWidth(), context.getDocumentSize().getHeight());
         }
         
-        templateString = templateString.replaceAll(TOKEN_ORIG_X, "" + (int) Math.ceil(bounds.getX()));
-        templateString = templateString.replaceAll(TOKEN_ORIG_Y, "" + (int) Math.ceil(bounds.getY()));
-        templateString = templateString.replaceAll(TOKEN_ORIG_WIDTH, "" + (int) Math.ceil(bounds.getWidth()));
-        templateString = templateString.replaceAll(TOKEN_ORIG_HEIGHT, "" + (int) Math.ceil(bounds.getHeight()));
-
-        this.externalPrintWriter.println(templateString);
-        this.externalPrintWriter.close();
-    }
-
-    private String readTemplate(String name) {
-        InputStream in = getClass().getResourceAsStream(name);
-        StringBuilder buffer = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        try {
-            while (true) {
-                String line = reader.readLine();
-                if (line == null) {
-                    break;
-                }
-                buffer.append(line + "\n");
-            }
-            reader.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        Map<Template.Token, Object> params = new HashMap<Template.Token, Object>();
+        params.put(Template.Token.PACKAGE, javaPackageName != null ? "package " + javaPackageName + ";" : "");
+        params.put(Template.Token.CLASSNAME, javaClassName);
+        params.put(Template.Token.X, (int) Math.ceil(bounds.getX()));
+        params.put(Template.Token.Y, (int) Math.ceil(bounds.getY()));
+        params.put(Template.Token.WIDTH,  (int) Math.ceil(bounds.getWidth()));
+        params.put(Template.Token.HEIGHT, (int) Math.ceil(bounds.getHeight()));
+        params.put(Template.Token.PAINTING_CODE, paintingCode);
         
-        return buffer.toString();
+        Template template = new Template("SvgTranscoderTemplate" + (javaToImplementResizableIconInterface ? "Resizable" : "Plain") + ".templ");
+        template.apply(externalPrintWriter, params);
     }
 
     /**
