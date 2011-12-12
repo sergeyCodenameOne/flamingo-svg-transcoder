@@ -79,7 +79,7 @@ public class Template {
 
     public static Template getDefault() {
         try {
-            return new Template("SvgTranscoderTemplatePlain.templ");
+            return new Template("plain.template");
         } catch (IOException e) {
             throw new RuntimeException("Could not create default template", e);
         }

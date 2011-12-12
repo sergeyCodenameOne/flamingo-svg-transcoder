@@ -46,8 +46,7 @@ public class SvgTranscoderTask extends Copy {
     }
 
     public void setTemplate(String template) throws IOException {
-        template = template.substring(0, 1).toUpperCase() + template.substring(1).toLowerCase();
-        this.template = new Template("SvgTranscoderTemplate" + template + ".templ");
+        this.template = new Template(template.toLowerCase() + ".template");
     }
 
     /**

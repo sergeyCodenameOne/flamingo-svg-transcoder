@@ -86,7 +86,7 @@ public class SVGApplication {
                         final PrintWriter pw = new PrintWriter(javaClassFilename);
 
                         SvgTranscoder transcoder = new SvgTranscoder(f.toURI().toURL(), svgClassName);
-                        transcoder.setTemplate(new Template("SvgTranscoderTemplateResizable.templ"));
+                        transcoder.setTemplate(new Template("resizable.template"));
                         transcoder.setPrintWriter(pw);
                         transcoder.transcode();
                         JOptionPane.showMessageDialog(null, "Finished");
