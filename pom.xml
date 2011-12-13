@@ -8,8 +8,36 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <description>Transform SVG images into Java2D icons for your Swing applications</description>
+  <description>Transform SVG images into pure Java2D icons for your Swing applications</description>
   <url>https://github.com/ebourg/flamingo-svg-transcoder</url>
+
+  <licenses>
+    <license>
+      <name>The BSD License</name>
+      <url>http://www.opensource.org/licenses/bsd-license.php</url>
+      <distribution></distribution>
+    </license>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:git@github.com:ebourg/flamingo-svg-transcoder.git</connection>
+    <url>https://github.com/ebourg/flamingo-svg-transcoder</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Kirill Grouchnikov</name>
+      <email>kirillcool@yahoo.com</email>
+    </developer>
+    <developer>
+      <name>Emmanuel Bourg</name>
+      <email>ebourg@apache.org</email>
+    </developer>
+  </developers>
 
   <modules>
     <module>core</module>
