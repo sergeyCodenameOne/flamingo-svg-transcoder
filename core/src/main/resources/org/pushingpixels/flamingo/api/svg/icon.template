@@ -2,6 +2,7 @@ ${PACKAGE}
 
 import java.awt.*;
 import java.awt.geom.*;
+import java.awt.image.*;
 import static java.awt.Color.*;
 import static java.awt.MultipleGradientPaint.CycleMethod.*;
 import static java.awt.MultipleGradientPaint.ColorSpaceType.*;
@@ -17,6 +18,9 @@ public class ${CLASSNAME} implements javax.swing.Icon {
 
     /** The height of this icon. */
     private int height;
+
+    /** The rendered image. */
+    private BufferedImage image;
 
     /**
      * Creates a new transcoded SVG image.
@@ -45,16 +49,18 @@ public class ${CLASSNAME} implements javax.swing.Icon {
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.translate(x, y);
-
-        double coef1 = (double) this.width / (double) ${WIDTH};
-        double coef2 = (double) this.height / (double) ${HEIGHT};
-        double coef = Math.min(coef1, coef2);
-        g2d.scale(coef, coef);
-        paint(g2d);
-        g2d.dispose();
+        if (image == null) {
+            image = new BufferedImage(getIconWidth(), getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+            double coef = Math.min((double) width / (double) ${WIDTH}, (double) height / (double) ${HEIGHT});
+            
+            Graphics2D g2d = image.createGraphics();
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2d.scale(coef, coef);
+            paint(g2d);
+            g2d.dispose();
+        }
+        
+        g.drawImage(image, x, y, null);
     }
 
     /**
