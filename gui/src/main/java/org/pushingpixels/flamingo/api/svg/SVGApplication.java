@@ -2,6 +2,7 @@ package org.pushingpixels.flamingo.api.svg;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,12 +11,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -32,6 +36,7 @@ import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.CheckerboardPainter;
+import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 public class SVGApplication {
 
@@ -63,6 +68,7 @@ public class SVGApplication {
     private JLabel label = new JLabel();
     private JSVGCanvas svgCanvas = new JSVGCanvas();
     private String lastDir;
+    private JComboBox comboTemplates = new JComboBox();
 
     public SVGApplication(JFrame frame) {
         this.frame = frame;
@@ -77,9 +83,41 @@ public class SVGApplication {
     }
 
     public JComponent createToolbar() {
-        JPanel toolbar = new JPanel(new MigLayout("ins 1r"));
+        JPanel toolbar = new JPanel(new MigLayout("ins 1r, fill"));
+
+        try {
+            Template[] templates = {
+                new Template("icon.template"),
+                new Template("plain.template"),
+                new Template("resizable.template")
+            };
+            comboTemplates.setModel(new DefaultComboBoxModel(templates));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        comboTemplates.setRenderer(new DefaultListRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                String url = ((Template) value).getURL().toString();
+                String label = null;
+                if (url.contains("icon.template")) {
+                    label = "Swing Icon";
+                } else if (url.contains("plain.template")) {
+                    label = "Plain Java2D";
+                } else if (url.contains("resizable.template")) {
+                    label = "Flamingo Resizable Icon";
+                } else {
+                    label = url.substring(url.lastIndexOf("/") + 1);
+                }
+                
+                return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
+            }
+        });
+
+        toolbar.add(new JLabel("Template:"), "right");
+        toolbar.add(comboTemplates);
+        toolbar.add(label, "growx, push");
         toolbar.add(button, "width button");
-        toolbar.add(label);
         
         // Set the button action.
         button.addActionListener(new ActionListener() {
@@ -107,7 +145,7 @@ public class SVGApplication {
                                 PrintWriter out = new PrintWriter(javaClassFilename);
                                 
                                 SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), svgClassName);
-                                transcoder.setTemplate(new Template("resizable.template"));
+                                transcoder.setTemplate((Template) comboTemplates.getSelectedItem());
                                 transcoder.setPrintWriter(out);
                                 transcoder.transcode();
                                 

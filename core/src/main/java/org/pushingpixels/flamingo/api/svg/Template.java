@@ -36,6 +36,7 @@ public class Template {
         PACKAGE, CLASSNAME, PAINTING_CODE, X, Y, WIDTH, HEIGHT;
     }
 
+    private URL url;
     private String template;
 
     public Template(String resource) throws IOException {
@@ -49,6 +50,7 @@ public class Template {
 
     private void load(URL url) throws IOException {
         InputStream in = url.openStream();
+        this.url = url;
 
         try {
             in = url.openStream();
@@ -75,6 +77,10 @@ public class Template {
         
         out.println(template);
         out.close();
+    }
+
+    public URL getURL() {
+        return url;
     }
 
     public static Template getDefault() {
