@@ -90,6 +90,25 @@ public class SvgTranscoderTest extends TestCase {
         assertCompile(transcoded);
     }
 
+    public void testTranscodeCompressed() throws Exception {
+        File svg = new File("target/test-classes/svg/apache-feather.svgz");
+        File transcoded = new File(svg.getParentFile(), "apache_feather2.java");
+        PrintWriter out = new PrintWriter(transcoded);
+
+        SvgTranscoder transcoder = new SvgTranscoder(svg.toURI().toURL(), "apache_feather2");
+        transcoder.setJavaPackageName("test.svg.transcoded");
+        transcoder.setTemplate(new Template("icon.template"));
+        transcoder.setPrintWriter(out);
+
+        transcoder.transcode();
+
+        out.flush();
+        out.close();
+
+        assertTrue(transcoded.exists());
+        assertCompile(transcoded);
+    }
+
     public void testTranscodeText() throws Exception {
         File svg = new File("target/test-classes/svg/text.svg");
         File transcoded = new File(svg.getParentFile(), "text.java");

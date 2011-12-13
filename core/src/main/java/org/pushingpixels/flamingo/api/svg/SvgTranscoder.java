@@ -62,6 +62,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.GZIPInputStream;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
@@ -170,7 +171,13 @@ public class SvgTranscoder {
             }
         });
         
-        SAXSource source = new SAXSource(reader, new InputSource(url.openStream()));
+        InputSource input;
+        if (url.toString().endsWith(".svgz")) {
+            input = new InputSource(new GZIPInputStream(url.openStream()));
+        } else {
+            input = new InputSource(url.openStream());
+        }
+        SAXSource source = new SAXSource(reader, input);
         
         Result result = new StreamResult(buffer);
         
