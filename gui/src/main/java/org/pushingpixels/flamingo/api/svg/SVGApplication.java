@@ -3,7 +3,9 @@ package org.pushingpixels.flamingo.api.svg;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -28,8 +30,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
 import org.apache.batik.swing.JSVGCanvas;
-import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
-import org.apache.batik.swing.gvt.GVTTreeRendererEvent;
 import org.apache.batik.swing.svg.GVTTreeBuilderAdapter;
 import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
@@ -49,8 +49,9 @@ public class SVGApplication {
         SVGApplication app = new SVGApplication(frame);
         frame.getContentPane().add(app.createComponents());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400);
-        frame.setLocation(200, 200);
+        frame.setSize(640, 480);
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation((int) (screen.getWidth() - frame.getWidth()) / 2, (int) (screen.getHeight() - frame.getHeight()) / 2);
         frame.setVisible(true);
         
         List<Image> images = new ArrayList<Image>();
@@ -69,6 +70,7 @@ public class SVGApplication {
     private JSVGCanvas svgCanvas = new JSVGCanvas();
     private String lastDir;
     private JComboBox comboTemplates = new JComboBox();
+    private JComboBox comboNaming = new JComboBox();
 
     public SVGApplication(JFrame frame) {
         this.frame = frame;
@@ -83,7 +85,7 @@ public class SVGApplication {
     }
 
     public JComponent createToolbar() {
-        JPanel toolbar = new JPanel(new MigLayout("ins 1r, fill"));
+        JPanel toolbar = new JPanel(new MigLayout("ins 1r, fill", "[][]2u[][]2u[]"));
 
         try {
             Template[] templates = {
@@ -96,7 +98,6 @@ public class SVGApplication {
             e.printStackTrace();
         }
         comboTemplates.setRenderer(new DefaultListRenderer() {
-            @Override
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 String url = ((Template) value).getURL().toString();
                 String label = null;
@@ -113,9 +114,30 @@ public class SVGApplication {
                 return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
             }
         });
+        
+        comboNaming.setModel(new DefaultComboBoxModel(new NamingStrategy[] {
+                new CamelCaseNamingStrategy(),
+                new IconSuffixNamingStrategy(new CamelCaseNamingStrategy()),
+                new DefaultNamingStrategy()
+        }));
+        comboNaming.setRenderer(new DefaultListRenderer() {
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                String label = null;
+                if (value instanceof CamelCaseNamingStrategy) {
+                    label = "Camel Case";
+                } else if (value instanceof IconSuffixNamingStrategy) {
+                    label = "Camel Case + 'Icon' suffix";
+                } else if (value instanceof DefaultNamingStrategy) {
+                    label = "Same as input file";
+                }
+                return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);    //To change body of overridden methods use File | Settings | File Templates.
+            }
+        });
 
         toolbar.add(new JLabel("Template:"), "right");
         toolbar.add(comboTemplates);
+        toolbar.add(new JLabel("Naming:"), "right");
+        toolbar.add(comboNaming);
         toolbar.add(label, "growx, push");
         toolbar.add(button, "width button");
         
@@ -138,7 +160,9 @@ public class SVGApplication {
                             protected Object doInBackground() throws Exception {
                                 setMessage("Transcoding...");
                                 
-                                String svgClassName = new IconSuffixNamingStrategy(new CamelCaseNamingStrategy()).getClassName(file);
+                                NamingStrategy namingStrategy = (NamingStrategy) comboNaming.getSelectedItem();
+                                        
+                                String svgClassName = namingStrategy.getClassName(file);
                                 
                                 String javaClassFilename = file.getParent() + File.separator + svgClassName + ".java";
 
@@ -178,7 +202,7 @@ public class SVGApplication {
         svgCanvas.addSVGDocumentLoaderListener(new SVGDocumentLoaderAdapter() {
             @Override
             public void documentLoadingStarted(SVGDocumentLoaderEvent e) {
-                setMessage("Document Loading...");
+                setMessage("Loading Document...");
             }
 
             @Override
@@ -196,19 +220,6 @@ public class SVGApplication {
             @Override
             public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
                 setMessage("Build Done.");
-                frame.pack();
-            }
-        });
-
-        svgCanvas.addGVTTreeRendererListener(new GVTTreeRendererAdapter() {
-            @Override
-            public void gvtRenderingPrepare(GVTTreeRendererEvent e) {
-                setMessage("Rendering Started...");
-            }
-
-            @Override
-            public void gvtRenderingCompleted(GVTTreeRendererEvent e) {
-                setMessage("");
             }
         });
 
