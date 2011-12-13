@@ -8,18 +8,28 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <artifactId>flamingo-svg-transcoder-gui</artifactId>
-  <name>Transcoder GUI</name>
+  <name>SVG Transcoder GUI</name>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <description>Transform SVG images into Java2D icons for your Swing applications</description>
   <url>https://github.com/ebourg/flamingo-svg-transcoder</url>
 
+  <organization>
+    <name>SVG Transcoder Project</name>
+  </organization>
+  
   <dependencies>
     <dependency>
       <groupId>org.pushingpixels</groupId>
       <artifactId>flamingo-svg-transcoder-core</artifactId>
       <version>1.0-SNAPSHOT</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.xmlgraphics</groupId>
+      <artifactId>batik-gui-util</artifactId>
+      <version>1.7</version>
     </dependency>
 
     <dependency>
@@ -56,15 +66,6 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>keytool-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <goals>
-              <goal>clean</goal>
-              <goal>genkey</goal>
-            </goals>
-            <phase>package</phase>
-          </execution>
-        </executions>
         <configuration>
           <keystore>target/maven.keystore</keystore>
           <dname>cn=SVG Transcoder</dname>
@@ -91,7 +92,7 @@
             <mainClass>org.pushingpixels.flamingo.api.svg.SVGApplication</mainClass>
           </jnlp>
           <sign>
-            <keystore>${basedir}/target/maven.keystore</keystore>
+            <keystore>${basedir}/src/main/config/maven.keystore</keystore>
             <keypass>secret</keypass>
             <storepass>secret</storepass>
             <storetype>jks</storetype>
