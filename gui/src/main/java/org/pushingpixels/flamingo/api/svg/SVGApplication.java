@@ -6,12 +6,20 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -144,47 +152,12 @@ public class SVGApplication {
         // Set the button action.
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                JFileChooser fc = new JFileChooser(lastDir);
-                fc.setMultiSelectionEnabled(false);
-                fc.setFileFilter(new FileNameExtensionFilter("SVG images", "svg", "svgz"));
-                int choice = fc.showOpenDialog(button.getTopLevelAncestor());
-                if (choice == JFileChooser.APPROVE_OPTION && fc.getSelectedFile().exists()) {
-                    final File file = fc.getSelectedFile();
-                    lastDir = file.getParent();
-                    try {
-                        svgCanvas.setURI(file.toURI().toURL().toString());
-                        frame.setTitle(APPNAME + " - [" + file.getAbsolutePath() + "]");
-
-                        new SwingWorker() {
-                            @Override
-                            protected Object doInBackground() throws Exception {
-                                setMessage("Transcoding...");
-                                
-                                NamingStrategy namingStrategy = (NamingStrategy) comboNaming.getSelectedItem();
-                                        
-                                String svgClassName = namingStrategy.getClassName(file);
-                                
-                                String javaClassFilename = file.getParent() + File.separator + svgClassName + ".java";
-
-                                PrintWriter out = new PrintWriter(javaClassFilename);
-                                
-                                SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), svgClassName);
-                                transcoder.setTemplate((Template) comboTemplates.getSelectedItem());
-                                transcoder.setPrintWriter(out);
-                                transcoder.transcode();
-                                
-                                return null;
-                            }
-
-                            @Override
-                            protected void done() {
-                                setMessage("Transcoding completed");
-                            }
-                        }.execute();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                JFileChooser chooser = new JFileChooser(lastDir);
+                chooser.setMultiSelectionEnabled(false);
+                chooser.setFileFilter(new FileNameExtensionFilter("SVG images", "svg", "svgz"));
+                int choice = chooser.showOpenDialog(button.getTopLevelAncestor());
+                if (choice == JFileChooser.APPROVE_OPTION && chooser.getSelectedFile().exists()) {
+                    transcode(chooser.getSelectedFile());
                 }
             }
         });
@@ -192,6 +165,44 @@ public class SVGApplication {
         return toolbar;
     }
 
+    private void transcode(final File file) {
+        lastDir = file.getParent();
+        try {
+            svgCanvas.setURI(file.toURI().toURL().toString());
+            frame.setTitle(APPNAME + " - [" + file.getAbsolutePath() + "]");
+
+            new SwingWorker() {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Transcoding...");
+
+                    NamingStrategy namingStrategy = (NamingStrategy) comboNaming.getSelectedItem();
+
+                    String svgClassName = namingStrategy.getClassName(file);
+
+                    String javaClassFilename = file.getParent() + File.separator + svgClassName + ".java";
+
+                    PrintWriter out = new PrintWriter(javaClassFilename);
+
+                    SvgTranscoder transcoder = new SvgTranscoder(file.toURI().toURL(), svgClassName);
+                    transcoder.setTemplate((Template) comboTemplates.getSelectedItem());
+                    transcoder.setPrintWriter(out);
+                    transcoder.transcode();
+
+                    return null;
+                }
+
+                @Override
+                protected void done() {
+                    setMessage("Transcoding completed");
+                }
+            }.execute();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public JComponent createCanvas() {
         JXPanel panel = new JXPanel(new BorderLayout());
         panel.setBackgroundPainter(new CheckerboardPainter(Color.WHITE, new Color(0xF0F0F0), 15));
@@ -222,6 +233,35 @@ public class SVGApplication {
                 setMessage("Build Done.");
             }
         });
+        
+        panel.setDropTarget(new DropTarget(panel, new DropTargetAdapter() {
+            public void dragEnter(DropTargetDragEvent dtde) {
+                List<File> files = getFiles(dtde.getTransferable());
+                if (files.size() == 1 && (files.get(0).getName().endsWith(".svgz") || files.get(0).getName().endsWith(".svg"))) {
+                    dtde.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
+                    return;
+                } else {
+                    dtde.rejectDrag();
+                }                
+            }
+            
+            private List<File> getFiles(Transferable transferable) {
+                if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    try {
+                        return (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                return Collections.emptyList();
+            }
+
+            public void drop(DropTargetDropEvent dtde) {
+                dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                transcode(getFiles(dtde.getTransferable()).get(0));
+            }
+        }));
 
         return panel;
     }
