@@ -14,7 +14,7 @@
     }
     #container {
       margin: 0 auto;
-      width: 700px;
+      width: 960px;
     }
     h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
     h1 .small { font-size: 0.4em; }
@@ -28,6 +28,7 @@
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
+  <script src="deployJava.js"></script>
 </head>
 
 <body>
@@ -42,32 +43,63 @@
         <img border="0" width="90" src="https://github.com/images/modules/download/tar.png"></a>
     </div>
 
-    <h1><a href="https://github.com/ebourg/flamingo-svg-transcoder">flamingo-svg-transcoder</a>
+    <h1><a href="https://github.com/ebourg/flamingo-svg-transcoder">Flamingo SVG Transcoder</a>
       <span class="small">by <a href="https://github.com/ebourg">ebourg</a></span></h1>
 
     <div class="description">
       Transform SVG images into pure Java2D icons for your Swing applications
     </div>
 
-    
+      <p>This tool let you transform SVG images into pure Java2D code with no external dependencies. The following features are supported:</p>
+      
+      <ul>
+        <li>All geometric shapes and paths</li>
+        <li>Text</li>
+        <li>Transformations</li>
+        <li>Colors and gradients</li>
+      </ul>
+      
+      <p>These SVG features are not supported:</p>
+      
+      <ul>
+        <li>Animations</li>
+        <li>Images</li>
+        <li>Filter effects</li>
+      </ul>
+      
+      <p>The SVG transcoder successfully converted more than 5000 icons from various Gnome and KDE themes. On average
+      the generated <tt>.class</tt> file with gzip compression is about 30% bigger than the corresponding <tt>svgz</tt> image. With
+      pack200+gzip compression it's about 40% smaller.</p>
 
-    
+      <h2>GUI</h2>
+      <p>The transcoder is available as a simple graphical interface, just drop your SVG images on the window and a Java
+      source file will be generated in the directory of the original image.</p>
 
+      <div align="center">
+        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="webstart.png" border="0"></a></p>
+        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="transcoder.png" border="0"></a></p>
+      </div>
+      
+      <h2>Ant Task</h2>
+      <p>You can also transform several SVG images with an Ant Task. The syntax is similar to the <tt>copy</tt> task:</p>
+      
+      <pre>
+&lt;taskdef name="svg2java"
+         classname="org.pushingpixels.flamingo.api.svg.SvgTranscoderTask"
+         classpath="flamingo-svg-transcoder-ant-1.0-SNAPSHOT.jar"/>
+          
+&lt;svg2java todir="build/icons" verbose="true" namingStrategy="default" template="plain">
+  &lt;fileset dir="src/main/resources/svg" includes="**/*.svg"/>
+&lt;/svg2java></pre>
     
-
-    
+      
       <h2>License</h2>
       <p>BSD, Apache License 2.0</p>
     
 
-    
-      <h2>Authors</h2>
-      <p>Emmanuel Bourg (ebourg@apache.org)<br/>Kirill Grouchnikov (kirillcool@yahoo.com)<br/>      </p>
-    
-
-    
       <h2>Contact</h2>
-      <p>Emmanuel Bourg (ebourg@apache.org)<br/>      </p>
+      <p>Emmanuel Bourg (ebourg@apache.org)
+<br/>      </p>
     
 
     <h2>Download</h2>
