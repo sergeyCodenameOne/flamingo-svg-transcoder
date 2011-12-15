@@ -3,7 +3,7 @@
 <head>
   <meta charset='utf-8'>
 
-  <title>ebourg/flamingo-svg-transcoder @ GitHub</title>
+  <title>Flamingo SVG Transcoder - Transform SVG images to Java2D</title>
 
   <style type="text/css">
     body {
@@ -14,21 +14,18 @@
     }
     #container {
       margin: 0 auto;
-      width: 960px;
+      max-width: 960px;
     }
     h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
     h1 a { text-decoration: none }
     h2 { font-size: 1.5em; color: #000000; }
     h3 { text-align: center; color: #000000; }
     a { color: #000000; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
     pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
   </style>
-  <script src="deployJava.js"></script>
 </head>
 
 <body>
@@ -36,15 +33,7 @@
 
   <div id="container">
 
-    <div class="download">
-      <a href="https://github.com/ebourg/flamingo-svg-transcoder/zipball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/zip.png"></a>
-      <a href="https://github.com/ebourg/flamingo-svg-transcoder/tarball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="https://github.com/ebourg/flamingo-svg-transcoder">Flamingo SVG Transcoder</a>
-      <span class="small">by <a href="https://github.com/ebourg">ebourg</a></span></h1>
+    <h1><a href="https://github.com/ebourg/flamingo-svg-transcoder">Flamingo SVG Transcoder</a></h1>
 
     <div class="description">
       Transform SVG images into pure Java2D icons for your Swing applications
@@ -68,29 +57,92 @@
       </ul>
       
       <p>The SVG transcoder successfully converted more than 5000 icons from various Gnome and KDE themes. On average
-      the generated <tt>.class</tt> file with gzip compression is about 30% bigger than the corresponding <tt>svgz</tt> image. With
-      pack200+gzip compression it's about 40% smaller.</p>
+      the generated <code>.class</code> file with gzip compression is about 30% bigger than the corresponding
+      <code>svgz</code> image. With pack200+gzip compression it's about 40% smaller.</p>
 
       <h2>GUI</h2>
       <p>The transcoder is available as a simple graphical interface, just drop your SVG images on the window and a Java
       source file will be generated in the directory of the original image.</p>
 
       <div align="center">
-        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="webstart.png" border="0"></a></p>
-        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="transcoder.png" border="0"></a></p>
+        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="webstart.png" border="0" alt="Launch"></a></p>
+        <p><a href="http://people.apache.org/~ebourg/svg/launch.jnlp"><img src="transcoder.png" border="0" alt="Flamingo SVG Transcoder GUI"></a></p>
       </div>
       
       <h2>Ant Task</h2>
-      <p>You can also transform several SVG images with an Ant Task. The syntax is similar to the <tt>copy</tt> task:</p>
+      <p>You can also transform several SVG images with an Ant task. The syntax is similar to the <code>copy</code> task:</p>
       
       <pre>
 &lt;taskdef name="svg2java"
          classname="org.pushingpixels.flamingo.api.svg.SvgTranscoderTask"
-         classpath="flamingo-svg-transcoder-ant-1.0-SNAPSHOT.jar"/>
+         classpath="flamingo-svg-transcoder-ant-1.0.jar"/>
           
 &lt;svg2java todir="build/icons" verbose="true" namingStrategy="default" template="plain">
-  &lt;fileset dir="src/main/resources/svg" includes="**/*.svg"/>
+  &lt;fileset dir="src/main/resources/svg" includes="**/*.svg*"/>
 &lt;/svg2java></pre>
+      
+      
+<table border="1" style="border-collapse: collapse;">
+  <tr>
+    <td valign="top"><b>Attribute</b></td>
+
+    <td valign="top"><b>Description</b></td>
+    <td align="center" valign="top"><b>Required</b></td>
+  </tr>
+  <tr>
+    <td valign="top">file</td>
+    <td valign="top">The SVG file to transform.</td>
+    <td valign="top" align="center">Yes, unless a nested resource collection element is used.</td>
+  </tr>
+  <tr>
+    <td valign="top">todir</td>
+    <td valign="top">The directory to transform to.</td>
+    <td valign="top" align="center">Yes</td>
+  </tr>
+  <tr>
+    <td valign="top">namingStrategy</td>
+    <td valign="top">
+      The naming strategy used to generate the Java class names from the SVG file names:
+      <ul>
+        <li>"default" tries to keep the original file name and tweaks it to make it a legal Java class name
+            (i.e. <code>edit-copy.svg</code> will turn into <code>edit_copy.java</code>).</li>
+        <li>"camelcase" generates a camel cased class name from the SVG file name
+            (i.e. <code>edit-copy.svg</code> will turn into <code>EditCopy.java</code>)</li>
+      </ul>
+    </td>
+    <td valign="top" align="center">No; defaults to "default".</td>
+  </tr>
+  <tr>
+    <td valign="top">template</td>
+    <td valign="top">
+      The template used to generate the Java class:
+      <ul>
+        <li>"plain": generates a simple class with a static <code>paint()</code> method.</li>
+        <li>"icon": generates an implementation of <code><a href="http://docs.oracle.com/javase/6/docs/api/javax/swing/Icon.html">javax.swing.Icon</a></code>.</li>
+        <li>"resizable": generates a <code>ResizableIcon</code> as defined by the Flamingo API.</li>
+      </ul>
+    </td>
+    <td valign="top" align="center">No; defaults to "plain".</td>
+  </tr>
+  <tr>
+    <td valign="top">overwrite</td>
+    <td valign="top">Overwrite existing files even if the destination files are newer.</td>
+    <td valign="top" align="center">No; defaults to false.</td>
+  </tr>
+  <tr>
+    <td valign="top">flatten</td>
+    <td valign="top">Ignore the directory structure of the source files, and transform all files into the directory
+      specified by the <code>todir</code> attribute.</td>
+    <td valign="top" align="center">No; defaults to false.</td>
+  </tr>
+  <tr>
+    <td valign="top">verbose</td>
+     <td valign="top">Log the files that are being transformed.</td>
+     <td valign="top" align="center">No; defaults to false.</td>
+  </tr>
+</table>
+      
+      <p>The Ant task is available for download <a href="https://github.com/downloads/ebourg/flamingo-svg-transcoder/flamingo-svg-transcoder-ant-1.0.jar">here</a>.</p>
     
       
       <h2>License</h2>
@@ -98,7 +150,7 @@
     
 
       <h2>Contact</h2>
-      <p>Emmanuel Bourg (ebourg@apache.org)
+      <p>Emmanuel Bourg (<a href="mailto:ebourg@apache.org">ebourg@apache.org</a>)
 <br/>      </p>
     
 
@@ -106,7 +158,7 @@
     <p>
       You can download this project in either
       <a href="https://github.com/ebourg/flamingo-svg-transcoder/zipball/master">zip</a> or
-      <a href="https://github.com/ebourg/flamingo-svg-transcoder/tarball/master">tar formats.
+      <a href="https://github.com/ebourg/flamingo-svg-transcoder/tarball/master">tar</a> formats.
     </p>
     <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
       by running:
