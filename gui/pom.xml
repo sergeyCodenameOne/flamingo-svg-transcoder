@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.pushingpixels</groupId>
     <artifactId>flamingo-svg-transcoder</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
   </parent>
   <artifactId>flamingo-svg-transcoder-gui</artifactId>
   <name>SVG Transcoder GUI</name>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
 
   <description>Transform SVG images into Java2D icons for your Swing applications</description>
@@ -23,7 +23,7 @@
     <dependency>
       <groupId>org.pushingpixels</groupId>
       <artifactId>flamingo-svg-transcoder-core</artifactId>
-      <version>1.0-SNAPSHOT</version>
+      <version>1.0</version>
     </dependency>
     
     <dependency>
