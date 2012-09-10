@@ -54,6 +54,10 @@ public class ColorTranscoder extends Transcoder<Color> {
             output.append("CYAN");
         } else if (color.equals(Color.MAGENTA)) {
             output.append("MAGENTA");
+        } else if (color.equals(Color.PINK)) {
+            output.append("PINK");
+        } else if (color.equals(Color.ORANGE)) {
+            output.append("ORANGE");
         } else if (color.getTransparency() == Transparency.OPAQUE) {
             output.append("new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase().substring(2) + ")");
         } else {
