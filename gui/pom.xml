@@ -33,16 +33,21 @@
     </dependency>
 
     <dependency>
-      <groupId>org.swinglabs</groupId>
-      <artifactId>swingx</artifactId>
-      <version>1.6.1</version>
+      <groupId>org.swinglabs.swingx</groupId>
+      <artifactId>swingx-core</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.swinglabs.swingx</groupId>
+      <artifactId>swingx-painters</artifactId>
+      <version>1.6.4</version>
     </dependency>
     
     <dependency>
       <groupId>com.miglayout</groupId>
-      <artifactId>miglayout</artifactId>
-      <version>3.7.4</version>
-      <classifier>swing</classifier>
+      <artifactId>miglayout-swing</artifactId>
+      <version>4.2</version>
     </dependency>
   </dependencies>
 
@@ -76,9 +81,9 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo.webstart</groupId>
+        <groupId>org.codehaus.mojo</groupId>
         <artifactId>webstart-maven-plugin</artifactId>
-        <version>1.0-beta-2</version>
+        <version>1.0-beta-3</version>
         <executions>
           <execution>
             <phase>package</phase>
