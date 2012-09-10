@@ -9,7 +9,7 @@
   </parent>
   <artifactId>flamingo-svg-transcoder-ant</artifactId>
   <name>Transcoder Ant Task</name>
-  <version>1.0</version>
+  <version>${parent.version}</version>
   <packaging>jar</packaging>
 
   <description>Transform SVG images into Java2D icons for your Swing applications</description>
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>org.pushingpixels</groupId>
       <artifactId>flamingo-svg-transcoder-core</artifactId>
-      <version>1.0</version>
+      <version>${project.version}</version>
     </dependency>
     
     <dependency>
