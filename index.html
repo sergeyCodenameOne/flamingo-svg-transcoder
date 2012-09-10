@@ -56,9 +56,10 @@
         <li>Filter effects</li>
         <li>Masks and Clipping</li>
         <li>Patterns</li>
+        <li>Markers</li>
       </ul>
       
-      <p>The SVG transcoder successfully converted more than 5000 icons from various Gnome and KDE themes. On average
+      <p>The SVG transcoder successfully converted more than 5000 icons from various GNOME and KDE themes. On average
       the generated <code>.class</code> file with gzip compression is about 30% bigger than the corresponding
       <code>svgz</code> image. With pack200+gzip compression it's about 40% smaller.</p>
 
@@ -77,7 +78,7 @@
       <pre>
 &lt;taskdef name="svg2java"
          classname="org.pushingpixels.flamingo.api.svg.SvgTranscoderTask"
-         classpath="flamingo-svg-transcoder-ant-1.0.jar"/>
+         classpath="flamingo-svg-transcoder-ant-1.1.jar"/>
           
 &lt;svg2java todir="build/icons" verbose="true" namingStrategy="default" template="plain">
   &lt;fileset dir="src/main/resources/svg" includes="**/*.svg*"/>
@@ -144,32 +145,40 @@
   </tr>
 </table>
       
-      <p>The Ant task is available for download <a href="https://github.com/downloads/ebourg/flamingo-svg-transcoder/flamingo-svg-transcoder-ant-1.0.jar">here</a>.</p>
+  <p>The Ant task is available for download <a href="https://github.com/downloads/ebourg/flamingo-svg-transcoder/flamingo-svg-transcoder-ant-1.1.jar">here</a>.</p>
     
       
-      <h2>License</h2>
-      <p>BSD, Apache License 2.0</p>
+  <h2>License</h2>
+  
+  <p>BSD, Apache License 2.0</p>
+  
+  
+  <h2>Credits</h2>
+  <p>The SVG Transcoder has been originaly developped by Kirill Grouchnikov as
+  part of the Flamingo project (see his <a href="http://weblogs.java.net/blog/kirillcool/archive/2006/10/svg_and_java_ui_3.html?force=524">blog</a>
+  for more information). It leverages the <a href="http://xmlgraphics.apache.org/batik/">Apache Batik project</a> for
+  parsing the SVG files.</p>    
     
 
-      <h2>Contact</h2>
-      <p>Emmanuel Bourg (<a href="mailto:ebourg@apache.org">ebourg@apache.org</a>, <a href="https://twitter.com/smanux">@smanux</a>)
-<br/>      </p>
-    
+  <h2>Contact</h2>
+  
+  <p>Emmanuel Bourg (<a href="mailto:ebourg@apache.org">ebourg@apache.org</a>, <a href="https://twitter.com/smanux">@smanux</a>)</p>
+  
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="https://github.com/ebourg/flamingo-svg-transcoder/zipball/master">zip</a> or
-      <a href="https://github.com/ebourg/flamingo-svg-transcoder/tarball/master">tar</a> formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/ebourg/flamingo-svg-transcoder</pre>
-    </p>
+  <h2>Download</h2>
+  
+  <p>You can download this project in either
+  <a href="https://github.com/ebourg/flamingo-svg-transcoder/zipball/master">zip</a> or
+  <a href="https://github.com/ebourg/flamingo-svg-transcoder/tarball/master">tar</a> formats.
+  </p>
+      
+  <p>You can also clone the project with <a href="http://git-scm.com">Git</a> by running:</p>
+  
+  <pre>$ git clone git://github.com/ebourg/flamingo-svg-transcoder</pre>
 
-    <div class="footer">
-      get the source code on GitHub : <a href="https://github.com/ebourg/flamingo-svg-transcoder">ebourg/flamingo-svg-transcoder</a>
-    </div>
+  <div class="footer">
+    get the source code on GitHub : <a href="https://github.com/ebourg/flamingo-svg-transcoder">ebourg/flamingo-svg-transcoder</a>
+  </div>
 
   </div>
 
