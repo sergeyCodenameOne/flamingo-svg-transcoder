@@ -16,29 +16,24 @@
 
 package org.pushingpixels.flamingo.api.svg.transcoders;
 
-import java.io.PrintWriter;
+import junit.framework.TestCase;
 
 /**
  * @author Emmanuel Bourg
  * @version $Revision$, $Date$
  */
-public class FloatArrayTranscoder extends Transcoder<float[]> {
+public class MultipleGradientPaintTranscoderTest extends TestCase {
 
-    public static FloatArrayTranscoder INSTANCE = new FloatArrayTranscoder(); 
-
-    @Override
-    public void transcode(float[] array, PrintWriter output) {
-        if (array == null) {
-            output.append("null");
-        } else {
-            String comma = "";
-            output.append("new float[]{");
-            for (float value : array) {
-                output.append(comma);
-                output.append(FloatTranscoder.INSTANCE.transcode(value));
-                comma = ", ";
-            }
-            output.append("}");
+    public void testNormalizeFractions() throws Exception {
+        float[] fractions = {0, 1f/3, 1f/3, 0.5f, 0.5f, 1};
+        
+        LinearGradientPaintTranscoder transcoder = new LinearGradientPaintTranscoder();
+        float[] normalized = transcoder.normalizeFractions(fractions);
+        
+        assertNotNull(normalized);
+        
+        for (int i = 1; i < normalized.length; i++) {
+            assertTrue(normalized[i] > normalized[i - 1]);
         }
     }
 }

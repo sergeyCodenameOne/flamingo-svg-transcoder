@@ -43,7 +43,7 @@ public class RadialGradientPaintTranscoder extends MultipleGradientPaintTranscod
                 PointTranscoder.INSTANCE.transcode(paint.getCenterPoint()),
                 FloatTranscoder.INSTANCE.transcode(paint.getRadius()),
                 PointTranscoder.INSTANCE.transcode(paint.getFocusPoint()),
-                transcodeGradientFractions(paint.getFractions()),
+                FloatArrayTranscoder.INSTANCE.transcode(normalizeFractions(paint.getFractions())),
                 colorsRep.toString(),
                 transcode(paint.getCycleMethod()),
                 transcode(paint.getColorSpace()),

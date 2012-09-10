@@ -46,44 +46,33 @@ public abstract class MultipleGradientPaintTranscoder<P extends MultipleGradient
         }
     }
 
-    protected String transcodeGradientFractions(float[] fractions) {
-        float previousFraction = -1.0f;
-        for (float currentFraction : fractions) {
-            if (currentFraction < 0f || currentFraction > 1f) {
-                throw new IllegalArgumentException("Fraction values must be in the range 0 to 1: " + currentFraction);
+    /**
+     * Normalizes the specified array such that the values are stricly increasing.
+     *
+     * @param fractions
+     */
+    protected float[] normalizeFractions(float[] fractions) {
+        float[] values = new float[fractions.length];
+        
+        float previousFraction = -1;
+        for (int i = 0; i < fractions.length; i++) {
+            float fraction = fractions[i];
+            if (fraction < 0f || fraction > 1f) {
+                throw new IllegalArgumentException("Fraction values must be in the range 0 to 1: " + fraction);
             }
-
-            if (currentFraction < previousFraction) {
-                throw new IllegalArgumentException("Keyframe fractions must be non-decreasing: " + currentFraction);
+            if (i >= 1 && fraction < fractions[i - 1]) {
+                throw new IllegalArgumentException("Keyframe fractions must be non-decreasing: " + fraction);
             }
-
-            previousFraction = currentFraction;
+            
+            if (fraction == previousFraction) {
+                fraction = Math.nextAfter(fraction, Float.POSITIVE_INFINITY);
+            }
+            
+            values[i] = fraction;
+            
+            previousFraction = fraction;
         }
-
-        StringBuilder builder = new StringBuilder();
-        if (fractions == null) {
-            builder.append("null");
-        } else {
-            String sep = "";
-            builder.append("new float[]{");
-            previousFraction = -1.0f;
-            for (float fraction : fractions) {
-                builder.append(sep);
-                if (fraction == previousFraction) {
-                    fraction += 0.000000001f;
-                }
-                if (fraction == 0 || fraction == 1) {
-                    builder.append((int) fraction);
-                } else {
-                    builder.append(fraction).append("f");
-                }
-                sep = ", ";
-
-                previousFraction = fraction;
-            }
-            builder.append("}");
-        }
-
-        return builder.toString();
+        
+        return values;
     }
 }
