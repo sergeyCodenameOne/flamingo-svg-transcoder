@@ -23,7 +23,6 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.io.PrintWriter;
-import java.util.Locale;
 
 import org.apache.batik.ext.awt.geom.ExtendedGeneralPath;
 
@@ -39,35 +38,26 @@ public class ShapeTranscoder extends Transcoder<Shape> {
 
     @Override
     public void transcode(Shape shape, PrintWriter output) {
-        if (shape instanceof ExtendedGeneralPath) {
-            PathIteratorTranscoder.INSTANCE.transcode(((ExtendedGeneralPath) shape).getPathIterator(null), output);
-            
-        } else if (shape instanceof GeneralPath) {
-            PathIteratorTranscoder.INSTANCE.transcode(((GeneralPath) shape).getPathIterator(null), output);
-            
+        Transcoder transcoder = null;
+        Object object = shape;
+        
+        if (shape instanceof GeneralPath || shape instanceof ExtendedGeneralPath) {
+            transcoder = PathIteratorTranscoder.INSTANCE;
+            object = shape.getPathIterator(null);
         } else if (shape instanceof Rectangle2D) {
-            Rectangle2D rect = (Rectangle2D) shape;
-            output.println("shape = new Rectangle2D.Double("
-                    + DoubleTranscoder.INSTANCE.transcode(rect.getX()) + ", " + DoubleTranscoder.INSTANCE.transcode(rect.getY()) + ", "
-                    + DoubleTranscoder.INSTANCE.transcode(rect.getWidth()) + ", " + DoubleTranscoder.INSTANCE.transcode(rect.getHeight()) + ");");
-            
+            transcoder = RectangleTranscoder.INSTANCE;
         } else if (shape instanceof RoundRectangle2D) {
-            RoundRectangle2D rRect = (RoundRectangle2D) shape;
-            output.println("shape = new RoundRectangle2D.Double("
-                    + DoubleTranscoder.INSTANCE.transcode(rRect.getX()) + ", " + DoubleTranscoder.INSTANCE.transcode(rRect.getY()) + ", "
-                    + DoubleTranscoder.INSTANCE.transcode(rRect.getWidth()) + ", " + DoubleTranscoder.INSTANCE.transcode(rRect.getHeight()) + ", "
-                    + DoubleTranscoder.INSTANCE.transcode(rRect.getArcWidth()) + ", " + DoubleTranscoder.INSTANCE.transcode(rRect.getArcHeight()) + ");");
-            
+            transcoder = RoundRectangleTranscoder.INSTANCE;
         } else if (shape instanceof Ellipse2D) {
-            Ellipse2D ell = (Ellipse2D) shape;
-            output.println("shape = new Ellipse2D.Double(" + ell.getX() + ", " + ell.getY() + ", " + ell.getWidth() + ", " + ell.getHeight() + ");");
-            
+            transcoder = EllipseTranscoder.INSTANCE;
         } else if (shape instanceof Line2D.Float) {
-            Line2D.Float l2df = (Line2D.Float) shape;
-            output.format(Locale.ENGLISH, "shape = new Line2D.Float(%ff, %ff, %ff, %ff);\n", l2df.x1, l2df.y1, l2df.x2, l2df.y2);
-            
+            transcoder = LineTranscoder.INSTANCE;
+        }
+        
+        if (transcoder == null) {
+            throw new UnsupportedOperationException(shape.getClass().getCanonicalName());            
         } else {
-            throw new UnsupportedOperationException(shape.getClass().getCanonicalName());
+            transcoder.transcode(object, output);
         }
     }
 }
