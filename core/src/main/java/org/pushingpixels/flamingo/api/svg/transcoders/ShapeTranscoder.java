@@ -34,16 +34,16 @@ import org.apache.batik.ext.awt.geom.ExtendedGeneralPath;
  * @version $Revision$, $Date$
  */
 public class ShapeTranscoder extends Transcoder<Shape> {
-    
+
     public static ShapeTranscoder INSTANCE = new ShapeTranscoder();
 
     @Override
     public void transcode(Shape shape, PrintWriter output) {
         if (shape instanceof ExtendedGeneralPath) {
-            PathIteratorTranscoder.INSTANCE.transcode(((ExtendedGeneralPath) shape).getPathIterator(null));
+            PathIteratorTranscoder.INSTANCE.transcode(((ExtendedGeneralPath) shape).getPathIterator(null), output);
             
         } else if (shape instanceof GeneralPath) {
-            PathIteratorTranscoder.INSTANCE.transcode(((GeneralPath) shape).getPathIterator(null));
+            PathIteratorTranscoder.INSTANCE.transcode(((GeneralPath) shape).getPathIterator(null), output);
             
         } else if (shape instanceof Rectangle2D) {
             Rectangle2D rect = (Rectangle2D) shape;
