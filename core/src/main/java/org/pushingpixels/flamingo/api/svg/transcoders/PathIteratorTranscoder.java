@@ -54,5 +54,6 @@ public class PathIteratorTranscoder extends Transcoder<PathIterator> {
                     break;
             }
         }
+        output.println();
     }
 }
