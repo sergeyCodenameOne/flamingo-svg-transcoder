@@ -8,7 +8,7 @@ import static java.awt.MultipleGradientPaint.ColorSpaceType.*;
 
 /**
  * This class has been automatically generated using
- * <a href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
+ * <a href="http://ebourg.github.io/flamingo-svg-transcoder/">Flamingo SVG transcoder</a>.
  */
 public class ${CLASSNAME} {
 
