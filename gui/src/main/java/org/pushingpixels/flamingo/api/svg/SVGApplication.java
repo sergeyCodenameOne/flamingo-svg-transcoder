@@ -2,7 +2,6 @@ package org.pushingpixels.flamingo.api.svg;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -29,7 +28,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -44,7 +42,6 @@ import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.CheckerboardPainter;
-import org.jdesktop.swingx.renderer.DefaultListRenderer;
 
 public class SVGApplication {
 
@@ -61,7 +58,10 @@ public class SVGApplication {
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation((int) (screen.getWidth() - frame.getWidth()) / 2, (int) (screen.getHeight() - frame.getHeight()) / 2);
         frame.setVisible(true);
-        
+        frame.setIconImages(getApplicationIcons());
+    }
+
+    private static List<Image> getApplicationIcons() {
         List<Image> images = new ArrayList<Image>();
         images.add(new ImageIcon(SVGApplication.class.getClassLoader().getResource("svg-16x16.png")).getImage());
         images.add(new ImageIcon(SVGApplication.class.getClassLoader().getResource("svg-32x32.png")).getImage());
@@ -69,7 +69,7 @@ public class SVGApplication {
         images.add(new ImageIcon(SVGApplication.class.getClassLoader().getResource("svg-64x64.png")).getImage());
         images.add(new ImageIcon(SVGApplication.class.getClassLoader().getResource("svg-128x128.png")).getImage());
         images.add(new ImageIcon(SVGApplication.class.getClassLoader().getResource("svg-256x256.png")).getImage());
-        frame.setIconImages(images);
+        return images;
     }
 
     private JFrame frame;
@@ -77,8 +77,8 @@ public class SVGApplication {
     private JLabel label = new JLabel();
     private JSVGCanvas svgCanvas = new JSVGCanvas();
     private String lastDir;
-    private JComboBox comboTemplates = new JComboBox();
-    private JComboBox comboNaming = new JComboBox();
+    private JComboBox<Template> comboTemplates = new JComboBox<Template>();
+    private JComboBox<NamingStrategy> comboNaming = new JComboBox<NamingStrategy>();
 
     public SVGApplication(JFrame frame) {
         this.frame = frame;
@@ -101,46 +101,18 @@ public class SVGApplication {
                 new Template("plain.template"),
                 new Template("resizable.template")
             };
-            comboTemplates.setModel(new DefaultComboBoxModel(templates));
+            comboTemplates.setModel(new DefaultComboBoxModel<Template>(templates));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        comboTemplates.setRenderer(new DefaultListRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                String url = ((Template) value).getURL().toString();
-                String label = null;
-                if (url.contains("icon.template")) {
-                    label = "Swing Icon";
-                } else if (url.contains("plain.template")) {
-                    label = "Plain Java2D";
-                } else if (url.contains("resizable.template")) {
-                    label = "Flamingo Resizable Icon";
-                } else {
-                    label = url.substring(url.lastIndexOf("/") + 1);
-                }
-                
-                return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
-            }
-        });
+        comboTemplates.setRenderer(new TemplateListCellRenderer());
         
-        comboNaming.setModel(new DefaultComboBoxModel(new NamingStrategy[] {
+        comboNaming.setModel(new DefaultComboBoxModel<NamingStrategy>(new NamingStrategy[] {
                 new CamelCaseNamingStrategy(),
                 new IconSuffixNamingStrategy(new CamelCaseNamingStrategy()),
                 new DefaultNamingStrategy()
         }));
-        comboNaming.setRenderer(new DefaultListRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                String label = null;
-                if (value instanceof CamelCaseNamingStrategy) {
-                    label = "Camel Case";
-                } else if (value instanceof IconSuffixNamingStrategy) {
-                    label = "Camel Case + 'Icon' suffix";
-                } else if (value instanceof DefaultNamingStrategy) {
-                    label = "Same as input file";
-                }
-                return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);    //To change body of overridden methods use File | Settings | File Templates.
-            }
-        });
+        comboNaming.setRenderer(new NamingStrategyListCellRenderer());
 
         toolbar.add(new JLabel("Template:"), "right");
         toolbar.add(comboTemplates);
@@ -239,7 +211,6 @@ public class SVGApplication {
                 List<File> files = getFiles(dtde.getTransferable());
                 if (files.size() == 1 && (files.get(0).getName().endsWith(".svgz") || files.get(0).getName().endsWith(".svg"))) {
                     dtde.acceptDrag(DnDConstants.ACTION_COPY_OR_MOVE);
-                    return;
                 } else {
                     dtde.rejectDrag();
                 }                
