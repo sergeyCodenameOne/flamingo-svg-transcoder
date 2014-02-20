@@ -2,3 +2,4 @@ target
 icons
 *.iml
 *.log
+.idea
