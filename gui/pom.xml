@@ -123,7 +123,7 @@
         <configuration>
           <jnlp>
             <mainClass>org.pushingpixels.flamingo.api.svg.SVGApplication</mainClass>
-            <j2seVersion>1.6+</j2seVersion>
+            <j2seVersion>1.7+</j2seVersion>
           </jnlp>
           <sign>
             <keystore>${basedir}/src/main/config/maven.keystore</keystore>
