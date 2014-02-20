@@ -27,7 +27,7 @@ import javax.swing.ListCellRenderer;
  * 
  * @author Emmanuel Bourg
  */
-abstract class BasicListCellRenderer<E> implements ListCellRenderer<E> {
+abstract class BasicListCellRenderer implements ListCellRenderer {
     private ListCellRenderer delegate;
     private Class uiClass;
 

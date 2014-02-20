@@ -21,13 +21,14 @@ import javax.swing.JList;
 
 /**
  * ListCellRenderer for code generation templates.
- * 
+ *
  * @author Emmanuel Bourg
  */
-class TemplateListCellRenderer extends BasicListCellRenderer<Template> {
+class TemplateListCellRenderer extends BasicListCellRenderer {
 
-    public Component getListCellRendererComponent(JList list, Template value, int index, boolean isSelected, boolean cellHasFocus) {
-        String url = value.getURL().toString();
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+        String url = ((Template) value).getURL().toString();
         String label;
         if (url.contains("icon.template")) {
             label = "Swing Icon";

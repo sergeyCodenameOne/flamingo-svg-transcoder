@@ -24,9 +24,10 @@ import javax.swing.JList;
  * 
  * @author Emmanuel Bourg
  */
-class NamingStrategyListCellRenderer extends BasicListCellRenderer<NamingStrategy> {
+class NamingStrategyListCellRenderer extends BasicListCellRenderer {
     
-    public Component getListCellRendererComponent(JList list, NamingStrategy value, int index, boolean isSelected, boolean cellHasFocus) {
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         String label = null;
         if (value instanceof CamelCaseNamingStrategy) {
             label = "Camel Case";
