@@ -33,7 +33,7 @@ import java.util.Map;
 public class Template {
 
     public static enum Token {
-        PACKAGE, CLASSNAME, PAINTING_CODE, X, Y, WIDTH, HEIGHT;
+        PACKAGE, CLASSNAME, PAINTING_CODE, X, Y, WIDTH, HEIGHT
     }
 
     private URL url;
@@ -57,7 +57,7 @@ public class Template {
             StringBuilder buffer = new StringBuilder();
             
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line).append("\n");
             }
