@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class Template {
 
-    public static enum Token {
+    public enum Token {
         PACKAGE, CLASSNAME, PAINTING_CODE, X, Y, WIDTH, HEIGHT
     }
 

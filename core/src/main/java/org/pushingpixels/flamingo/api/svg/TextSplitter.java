@@ -59,14 +59,14 @@ class TextSplitter {
     }
     
     static List<Chunk> getChunks(String content) {
-        List<Chunk> chunks = new LinkedList<Chunk>();
+        List<Chunk> chunks = new LinkedList<>();
         
         Chunk chunk = new Chunk();
         chunks.add(chunk);
 
         try {
             LineNumberReader reader = new LineNumberReader(new StringReader(content));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (line.trim().length() == 0) {
                     chunk = new Chunk();

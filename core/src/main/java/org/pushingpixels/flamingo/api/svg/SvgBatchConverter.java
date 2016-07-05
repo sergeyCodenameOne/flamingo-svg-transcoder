@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.io.PrintWriter;
 
 public class SvgBatchConverter {
+
     /**
      * Main method for testing.
      *

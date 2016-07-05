@@ -27,12 +27,12 @@ import javax.swing.ListCellRenderer;
  * 
  * @author Emmanuel Bourg
  */
-abstract class BasicListCellRenderer implements ListCellRenderer {
+abstract class BasicListCellRenderer<E> implements ListCellRenderer<E> {
     private ListCellRenderer delegate;
     private Class uiClass;
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+    public Component getListCellRendererComponent(JList<? extends E> list, E value, int index, boolean isSelected, boolean cellHasFocus) {
         if (list.getUI().getClass() != uiClass) {
             uiClass = list.getUI().getClass();
             if ("ComboBox.list".equals(list.getName())) {

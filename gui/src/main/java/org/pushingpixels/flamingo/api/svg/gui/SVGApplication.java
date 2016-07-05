@@ -48,6 +48,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import net.miginfocom.swing.MigLayout;
@@ -76,7 +77,7 @@ public class SVGApplication {
         JFrame frame = new JFrame(APPNAME);
         SVGApplication app = new SVGApplication(frame);
         frame.getContentPane().add(app.createComponents());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(640, 480);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setLocation((int) (screen.getWidth() - frame.getWidth()) / 2, (int) (screen.getHeight() - frame.getHeight()) / 2);
@@ -100,8 +101,8 @@ public class SVGApplication {
     private JLabel label = new JLabel();
     private JSVGCanvas svgCanvas = new JSVGCanvas();
     private String lastDir;
-    private JComboBox<Template> comboTemplates = new JComboBox<Template>();
-    private JComboBox<NamingStrategy> comboNaming = new JComboBox<NamingStrategy>();
+    private JComboBox<Template> comboTemplates = new JComboBox<>();
+    private JComboBox<NamingStrategy> comboNaming = new JComboBox<>();
 
     public SVGApplication(JFrame frame) {
         this.frame = frame;
@@ -124,13 +125,13 @@ public class SVGApplication {
                 new Template("plain.template"),
                 new Template("resizable.template")
             };
-            comboTemplates.setModel(new DefaultComboBoxModel<Template>(templates));
+            comboTemplates.setModel(new DefaultComboBoxModel<>(templates));
         } catch (IOException e) {
             e.printStackTrace();
         }
         comboTemplates.setRenderer(new TemplateListCellRenderer());
         
-        comboNaming.setModel(new DefaultComboBoxModel<NamingStrategy>(new NamingStrategy[] {
+        comboNaming.setModel(new DefaultComboBoxModel<>(new NamingStrategy[] {
                 new CamelCaseNamingStrategy(),
                 new IconSuffixNamingStrategy(new CamelCaseNamingStrategy()),
                 new DefaultNamingStrategy()

@@ -24,7 +24,7 @@ import java.io.PrintWriter;
  */
 class IndentingPrintWriter extends PrintWriter {
 
-    private String indentation = "        ";
+    private static final String INDENTATION = "        ";
     
     public IndentingPrintWriter(PrintWriter out) {
         super(out);
@@ -32,6 +32,6 @@ class IndentingPrintWriter extends PrintWriter {
 
     @Override
     public void println(String s) {
-        super.println(indentation + s);
+        super.println(INDENTATION + s);
     }
 }
