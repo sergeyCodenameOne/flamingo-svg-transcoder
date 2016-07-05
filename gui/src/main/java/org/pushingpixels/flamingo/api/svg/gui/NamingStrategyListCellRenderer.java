@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package org.pushingpixels.flamingo.api.svg;
+package org.pushingpixels.flamingo.api.svg.gui;
 
 import java.awt.Component;
 import javax.swing.JList;
 
+import org.pushingpixels.flamingo.api.svg.CamelCaseNamingStrategy;
+import org.pushingpixels.flamingo.api.svg.DefaultNamingStrategy;
+import org.pushingpixels.flamingo.api.svg.IconSuffixNamingStrategy;
+
 /**
- * ListCellRenderer for code generation templates.
- *
+ * ListCellRenderer for the naming strategies.
+ * 
  * @author Emmanuel Bourg
  */
-class TemplateListCellRenderer extends BasicListCellRenderer {
-
+class NamingStrategyListCellRenderer extends BasicListCellRenderer {
+    
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        String url = ((Template) value).getURL().toString();
-        String label;
-        if (url.contains("icon.template")) {
-            label = "Swing Icon";
-        } else if (url.contains("plain.template")) {
-            label = "Plain Java2D";
-        } else if (url.contains("resizable.template")) {
-            label = "Flamingo Resizable Icon";
-        } else {
-            label = url.substring(url.lastIndexOf("/") + 1);
+        String label = null;
+        if (value instanceof CamelCaseNamingStrategy) {
+            label = "Camel Case";
+        } else if (value instanceof IconSuffixNamingStrategy) {
+            label = "Camel Case + 'Icon' suffix";
+        } else if (value instanceof DefaultNamingStrategy) {
+            label = "Same as input file";
         }
-
         return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
     }
 }

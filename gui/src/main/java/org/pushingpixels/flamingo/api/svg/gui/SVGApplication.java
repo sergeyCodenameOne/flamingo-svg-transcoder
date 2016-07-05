@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.pushingpixels.flamingo.api.svg;
+package org.pushingpixels.flamingo.api.svg.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -58,6 +58,13 @@ import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.CheckerboardPainter;
+
+import org.pushingpixels.flamingo.api.svg.CamelCaseNamingStrategy;
+import org.pushingpixels.flamingo.api.svg.DefaultNamingStrategy;
+import org.pushingpixels.flamingo.api.svg.IconSuffixNamingStrategy;
+import org.pushingpixels.flamingo.api.svg.NamingStrategy;
+import org.pushingpixels.flamingo.api.svg.SvgTranscoder;
+import org.pushingpixels.flamingo.api.svg.Template;
 
 public class SVGApplication {
 

@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-package org.pushingpixels.flamingo.api.svg;
+package org.pushingpixels.flamingo.api.svg.gui;
 
 import java.awt.Component;
-import javax.swing.JComboBox;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
+
+import org.pushingpixels.flamingo.api.svg.Template;
 
 /**
- * ListCellRenderer implementation that delegates the rendering to the renderer
- * defined by the current look and feel (unlike DefaultCellRenderer).
- * 
+ * ListCellRenderer for code generation templates.
+ *
  * @author Emmanuel Bourg
  */
-abstract class BasicListCellRenderer implements ListCellRenderer {
-    private ListCellRenderer delegate;
-    private Class uiClass;
+class TemplateListCellRenderer extends BasicListCellRenderer {
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        if (list.getUI().getClass() != uiClass) {
-            uiClass = list.getUI().getClass();
-            if ("ComboBox.list".equals(list.getName())) {
-                delegate = new JComboBox().getRenderer();
-            } else {
-                delegate = new JList().getCellRenderer();
-            }
+        String url = ((Template) value).getURL().toString();
+        String label;
+        if (url.contains("icon.template")) {
+            label = "Swing Icon";
+        } else if (url.contains("plain.template")) {
+            label = "Plain Java2D";
+        } else if (url.contains("resizable.template")) {
+            label = "Flamingo Resizable Icon";
+        } else {
+            label = url.substring(url.lastIndexOf("/") + 1);
         }
-        
-        return delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+        return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
     }
 }

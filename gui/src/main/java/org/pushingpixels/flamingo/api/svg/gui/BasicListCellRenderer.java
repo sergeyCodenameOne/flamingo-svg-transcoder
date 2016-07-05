@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-package org.pushingpixels.flamingo.api.svg;
+package org.pushingpixels.flamingo.api.svg.gui;
 
 import java.awt.Component;
+import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 /**
- * ListCellRenderer for the naming strategies.
+ * ListCellRenderer implementation that delegates the rendering to the renderer
+ * defined by the current look and feel (unlike DefaultCellRenderer).
  * 
  * @author Emmanuel Bourg
  */
-class NamingStrategyListCellRenderer extends BasicListCellRenderer {
-    
+abstract class BasicListCellRenderer implements ListCellRenderer {
+    private ListCellRenderer delegate;
+    private Class uiClass;
+
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        String label = null;
-        if (value instanceof CamelCaseNamingStrategy) {
-            label = "Camel Case";
-        } else if (value instanceof IconSuffixNamingStrategy) {
-            label = "Camel Case + 'Icon' suffix";
-        } else if (value instanceof DefaultNamingStrategy) {
-            label = "Same as input file";
+        if (list.getUI().getClass() != uiClass) {
+            uiClass = list.getUI().getClass();
+            if ("ComboBox.list".equals(list.getName())) {
+                delegate = new JComboBox().getRenderer();
+            } else {
+                delegate = new JList().getCellRenderer();
+            }
         }
-        return super.getListCellRendererComponent(list, label, index, isSelected, cellHasFocus);
+        
+        return delegate.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
     }
 }
