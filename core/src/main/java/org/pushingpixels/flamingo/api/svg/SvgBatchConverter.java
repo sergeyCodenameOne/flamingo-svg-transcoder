@@ -13,7 +13,7 @@ public class SvgBatchConverter {
      *             the second parameter should be the package name for the
      *             transcoded classes.
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         if (args.length != 2) {
             System.out.println("param 0 : dir, param 1 : pkg");
             System.exit(1);
