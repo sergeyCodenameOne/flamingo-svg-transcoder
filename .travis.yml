@@ -5,5 +5,8 @@ jdk:
   - openjdk7
   - openjdk6
 
+git:
+    submodules: false
+
 after_success:
   - mvn clean cobertura:cobertura coveralls:report
