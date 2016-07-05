@@ -53,10 +53,15 @@ public class SvgTranscoderTask extends Copy {
      * Set the naming strategy for the generated classes ("default" or "camelcase")
      */
     public void setNamingStrategy(String strategy) {
-        if ("camelcase".equals(strategy)) {
-            namingStrategy = new CamelCaseNamingStrategy();
-        } else {
-            namingStrategy = new DefaultNamingStrategy();
+        switch (strategy) {
+            case "camelcase":
+                namingStrategy = new CamelCaseNamingStrategy();
+                break;
+            case "default":
+                namingStrategy = new DefaultNamingStrategy();
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported naming strategy: " + strategy);
         }
     }
 
