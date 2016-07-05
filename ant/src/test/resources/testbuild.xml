@@ -1,0 +1,19 @@
+<project name="SVG Transcoder Task Test">
+
+  <taskdef name="svg2java" classname="org.pushingpixels.flamingo.api.svg.SvgTranscoderTask" />
+
+  <target name="invalid-naming-strategy">
+    <svg2java file="../../../core/src/test/resources/svg/apache-feather.svg" todir="target/classes" namingstrategy="foo"/>
+  </target>
+
+  <target name="transcode">
+    <svg2java todir="."
+              namingstrategy="camelcase"
+              template="icon"
+              verbose="true"
+              package="foo">
+      <fileset dir="../../../core/src/test/resources/svg/" includes="apache-feather.svg"/>
+    </svg2java>
+  </target>
+
+</project>
