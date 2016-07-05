@@ -366,7 +366,7 @@ public class SvgTranscoder {
         
         AffineTransform transform = node.getTransform();
         if (transform != null && !transform.isIdentity()) {
-            printWriter.println("transformations.offer(g.getTransform());");
+            printWriter.println("transformations.push(g.getTransform());");
             printWriter.println("g.transform(" + AffineTransformTranscoder.INSTANCE.transcode(transform) + ");");
         }
         
@@ -388,7 +388,7 @@ public class SvgTranscoder {
         } finally {
             if (transform != null && !transform.isIdentity()) {
                 printWriter.println("");
-                printWriter.println("g.setTransform(transformations.poll()); // " + comment);
+                printWriter.println("g.setTransform(transformations.pop()); // " + comment);
             }
         }
     }
