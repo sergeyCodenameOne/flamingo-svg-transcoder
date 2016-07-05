@@ -5,7 +5,7 @@ import java.awt.geom.*;
 
 /**
  * This class has been automatically generated using <a
- * href="https://flamingo.dev.java.net">Flamingo SVG transcoder</a>.
+ * href="http://ebourg.github.io/flamingo-svg-transcoder/">Flamingo SVG transcoder</a>.
  */
 public class font_x_generic implements
         org.pushingpixels.flamingo.api.common.icon.ResizableIcon {
@@ -22,7 +22,7 @@ public class font_x_generic implements
         Stroke stroke = null;
          
         float origAlpha = 1.0f;
-        Composite origComposite = ((Graphics2D)g).getComposite();
+        Composite origComposite = g.getComposite();
         if (origComposite instanceof AlphaComposite) {
             AlphaComposite origAlphaComposite = 
                 (AlphaComposite)origComposite;

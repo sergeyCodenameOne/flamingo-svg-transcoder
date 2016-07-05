@@ -40,12 +40,12 @@ public class SvgTranscoderTest extends TestCase {
         assertEquals(new File("src/test/java/transcoded/edit_copy.java"), transcoded);
     }
     
-    private void assertEquals(File file1, File file2) throws IOException {
-        LineNumberReader in1 = new LineNumberReader(new FileReader(file1));
-        LineNumberReader in2 = new LineNumberReader(new FileReader(file2));
+    private void assertEquals(File expectedFile, File actualFile) throws IOException {
+        LineNumberReader in1 = new LineNumberReader(new FileReader(expectedFile));
+        LineNumberReader in2 = new LineNumberReader(new FileReader(actualFile));
         
-        String line1 = null;
-        String line2 = null;
+        String line1;
+        String line2;
         
         while ((line1 = in1.readLine()) != null | (line2 = in2.readLine()) != null) {
             assertEquals("Line " + in1.getLineNumber(), line1, line2);
