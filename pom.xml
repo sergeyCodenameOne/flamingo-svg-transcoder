@@ -82,6 +82,11 @@
               <format>html</format>
             </formats>
             <aggregate>true</aggregate>
+            <instrumentation>
+              <excludes>
+                <exclude>**/gui/*.class</exclude>
+              </excludes>
+            </instrumentation>
           </configuration>
         </plugin>
       </plugins>
