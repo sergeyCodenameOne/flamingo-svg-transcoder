@@ -114,9 +114,9 @@
         <configuration>
           <keystore>target/maven.keystore</keystore>
           <dname>cn=SVG Transcoder</dname>
-          <keypass>secret</keypass>
-          <storepass>secret</storepass>
-          <alias>maven</alias>
+          <keypass>${keypass}</keypass>
+          <storepass>${keypass}</storepass>
+          <alias>${keyalias}</alias>
           <validity>3650</validity>
         </configuration>
       </plugin>
@@ -138,16 +138,23 @@
             <j2seVersion>1.7+</j2seVersion>
           </jnlp>
           <sign>
-            <keystore>${basedir}/src/main/config/maven.keystore</keystore>
-            <keypass>secret</keypass>
-            <storepass>secret</storepass>
+            <keystore>${keystore}</keystore>
+            <keypass>${keypass}</keypass>
+            <storepass>${keypass}</storepass>
             <storetype>jks</storetype>
-            <alias>maven</alias>
+            <alias>${keyalias}</alias>
+            <tsaLocation>http://timestamp.comodoca.com/rfc3161</tsaLocation>
             <verify>true</verify>
           </sign>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  
+  <properties>
+    <keystore>${basedir}/src/main/config/maven.keystore</keystore>
+    <keyalias>maven</keyalias>
+    <keypass>secret</keypass>
+  </properties>
 
 </project>
