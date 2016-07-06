@@ -30,6 +30,29 @@ The SVG transcoder is available as an Ant task or a GUI application. See the [we
 for more details.
 
 
+### Changes
+
+#### Version 1.2 (in development)
+
+* Fixed the nested transformations (#3)
+* Fixed the opacity of the nested elements (thanks to Paolo Ferracin)
+* The Ant task now throws an exception when an invalid naming strategy is specified.
+
+#### Version 1.1.1 (2012-11-06)
+
+* Fixed the transcoding of general paths
+
+#### Version 1.1 (2012-09-10)
+
+* Fixed the incrementation of the gradient stop fractions (#1)
+* The PINK and ORANGE colors are now transcoded by name.
+
+
+#### Version 1.0 (2011-12-15)
+
+* Initial release
+
+
 ### Credits
 
 The SVG Transcoder has been originaly developped by Kirill Grouchnikov as part of the Flamingo project
