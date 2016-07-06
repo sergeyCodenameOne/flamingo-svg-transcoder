@@ -5,7 +5,7 @@
   <groupId>org.pushingpixels</groupId>
   <artifactId>flamingo-svg-transcoder</artifactId>
   <name>Flamingo SVG Transcoder</name>
-  <version>1.1.1</version>
+  <version>1.2</version>
   <packaging>pom</packaging>
 
   <description>Transform SVG images into pure Java2D icons for your Swing applications</description>

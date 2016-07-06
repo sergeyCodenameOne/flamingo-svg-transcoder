@@ -32,7 +32,7 @@ for more details.
 
 ### Changes
 
-#### Version 1.2 (in development)
+#### Version 1.2 (2016-07-06)
 
 * Fixed the nested transformations (#3)
 * Fixed the opacity of the nested elements (thanks to Paolo Ferracin)
