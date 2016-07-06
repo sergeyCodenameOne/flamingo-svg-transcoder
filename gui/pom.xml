@@ -9,7 +9,6 @@
   </parent>
   <artifactId>flamingo-svg-transcoder-gui</artifactId>
   <name>SVG Transcoder GUI</name>
-  <version>${parent.version}</version>
   <packaging>jar</packaging>
 
   <description>Transform SVG images into Java2D icons for your Swing applications</description>
@@ -99,6 +98,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>keytool-maven-plugin</artifactId>
+        <version>1.2</version>
         <configuration>
           <keystore>target/maven.keystore</keystore>
           <dname>cn=SVG Transcoder</dname>

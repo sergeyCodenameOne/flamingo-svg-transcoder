@@ -10,7 +10,6 @@
   <groupId>org.pushingpixels</groupId>
   <artifactId>flamingo-svg-transcoder-core</artifactId>
   <name>Transcoder Core</name>
-  <version>${parent.version}</version>
   <packaging>jar</packaging>
 
   <description>Transform SVG images into Java2D icons for your Swing applications</description>
