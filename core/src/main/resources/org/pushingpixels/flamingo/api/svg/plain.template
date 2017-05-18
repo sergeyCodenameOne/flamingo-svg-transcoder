@@ -1,29 +1,85 @@
 ${PACKAGE}
 
-import java.awt.*;
-import java.awt.geom.*;
-import static java.awt.Color.*;
-import static java.awt.MultipleGradientPaint.CycleMethod.*;
-import static java.awt.MultipleGradientPaint.ColorSpaceType.*;
+import com.codename1.ui.*;
+import com.codename1.ui.geom.*;
 
 /**
  * This class has been automatically generated using
  * <a href="http://ebourg.github.io/flamingo-svg-transcoder/">Flamingo SVG transcoder</a>.
  */
-public class ${CLASSNAME} {
+public class ${CLASSNAME} extends com.codename1.ui.Image {
+    private int width, height;
 
-    /**
-     * Paints the transcoded SVG image on the specified graphics context. You
-     * can install a custom transformation on the graphics context to scale the
-     * image.
-     * 
-     * @param g Graphics context.
-     */
-    public static void paint(Graphics2D g) {
-        Shape shape = null;
-        
-        float origAlpha = 1.0f;
-        Composite origComposite = g.getComposite();
+    public ${CLASSNAME}() {
+        super(null);
+        width = getOrigWidth();
+        height = getOrigHeight();
+    }
+
+    public ${CLASSNAME}(int width, int height) {
+        super(null);
+        this.width = width;
+        this.height = height;
+    }
+            
+    @Override
+    public int getWidth() {
+        return width;
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
+
+    @Override
+    public void scale(int width, int height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public Image fill(int width, int height) {
+        return new ${CLASSNAME}(width, height);
+    }
+
+    @Override
+    public Image applyMask(Object mask) {
+        return new ${CLASSNAME}(width, height);
+    }
+
+    @Override
+    public boolean isAnimation() {
+        return true;
+    }
+
+    @Override
+    public boolean requiresDrawImage() {
+        return true;
+    }
+
+    @Override
+    protected void drawImage(Graphics g, Object nativeGraphics, int x, int y) {
+        drawImage(g, nativeGraphics, x, y, width, height);
+    }
+
+    @Override
+    protected void drawImage(Graphics g, Object nativeGraphics, int x, int y, int w, int h) {
+        float hRatio = ((float)w) / ((float)getOrigWidth());
+        float vRatio = ((float)h) / ((float)getOrigHeight());
+        g.translate(x, y);
+        g.scale(hRatio, vRatio);
+        paint(g);
+        g.resetAffine();
+        g.translate(-x, -y);
+    }
+
+    private static void paint(Graphics g) {
+        int origAlpha = g.getAlpha();
+        Shape shape;
+        g.setAntiAliased(true);
+        g.setAntiAliasedText(true);
+        /*Composite origComposite = g.getComposite();
         if (origComposite instanceof AlphaComposite) {
             AlphaComposite origAlphaComposite = (AlphaComposite)origComposite;
             if (origAlphaComposite.getRule() == AlphaComposite.SRC_OVER) {
@@ -31,9 +87,12 @@ public class ${CLASSNAME} {
             }
         }
         
-        java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();
+        java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();*/
         
 ${PAINTING_CODE}
+
+        g.setAlpha(origAlpha);
+        g.resetAffine();
     }
 
     /**

@@ -311,14 +311,14 @@ public class SvgTranscoder {
         
         transcodeShape(painter.getShape());
         transcodePaintChange(paint);
-        printWriter.println("g.fill(shape);");
+        printWriter.println("g.fillShape(shape);");
     }
 
     private void transcodePaintChange(Paint paint) {
         String p = PaintTranscoder.INSTANCE.transcode(paint);
         if (!p.equals(currentPaint)) {
             currentPaint = p;
-            printWriter.println("g.setPaint(" + currentPaint + ");");
+            printWriter.println("g.setColor(" + currentPaint + ");");
         }
     }
 
@@ -336,7 +336,7 @@ public class SvgTranscoder {
         transcodeShape(painter.getShape());
         transcodePaintChange(paint);
         transcodeStrokeChange(painter.getStroke());
-        printWriter.println("g.draw(shape);");
+        printWriter.println("g.drawShape(shape);");
     }
 
     private void transcodeStrokeChange(Stroke stroke) {
@@ -428,12 +428,12 @@ public class SvgTranscoder {
         Graphics2D g = new NoOpGraphics2D() {
             public void draw(Shape shape) {
                 transcodeShape(shape);
-                printWriter.println("g.draw(shape);");
+                printWriter.println("g.drawShape(shape);");
             }
 
             public void fill(Shape shape) {
                 transcodeShape(shape);
-                printWriter.println("g.fill(shape);");
+                printWriter.println("fillShape(shape);");
             }
 
             public void setComposite(Composite composite) {

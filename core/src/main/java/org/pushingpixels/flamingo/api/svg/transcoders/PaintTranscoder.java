@@ -36,8 +36,10 @@ public class PaintTranscoder extends Transcoder<Paint> {
     @Override
     public void transcode(Paint paint, PrintWriter output) {
         if (paint instanceof RadialGradientPaint) {
+            // we don't support gradient paints yet
             RadialGradientPaintTranscoder.INSTANCE.transcode((RadialGradientPaint) paint, output);
         } else if (paint instanceof LinearGradientPaint) {
+            // we don't support gradient paints yet
             LinearGradientPaintTranscoder.INSTANCE.transcode((LinearGradientPaint) paint, output);
         } else if (paint instanceof Color) {
             ColorTranscoder.INSTANCE.transcode((Color) paint, output);

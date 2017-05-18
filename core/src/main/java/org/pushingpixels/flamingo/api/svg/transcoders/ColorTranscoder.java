@@ -33,35 +33,35 @@ public class ColorTranscoder extends Transcoder<Color> {
     @Override
     public void transcode(Color color, PrintWriter output) {
         if (color.equals(Color.WHITE)) {
-            output.append("WHITE");
+            output.append("0xffffff");
         } else if (color.equals(Color.BLACK)) {
-            output.append("BLACK");
+            output.append("0");
         } else if (color.equals(Color.RED)) {
-            output.append("RED");
+            output.append("0xff0000");
         } else if (color.equals(Color.GREEN)) {
-            output.append("GREEN");
+            output.append("0xff00");
         } else if (color.equals(Color.BLUE)) {
-            output.append("BLUE");
+            output.append("0xff");
         } else if (color.equals(Color.LIGHT_GRAY)) {
-            output.append("LIGHT_GRAY");
+            output.append("0xc0c0c0");
         } else if (color.equals(Color.GRAY)) {
-            output.append("GRAY");
+            output.append("0x808080");
         } else if (color.equals(Color.DARK_GRAY)) {
-            output.append("DARK_GRAY");
+            output.append("0x404040");
         } else if (color.equals(Color.YELLOW)) {
-            output.append("YELLOW");
+            output.append("0xffff00");
         } else if (color.equals(Color.CYAN)) {
-            output.append("CYAN");
+            output.append("0xffff");
         } else if (color.equals(Color.MAGENTA)) {
-            output.append("MAGENTA");
+            output.append("0xff00ff");
         } else if (color.equals(Color.PINK)) {
-            output.append("PINK");
+            output.append("0xffafaf");
         } else if (color.equals(Color.ORANGE)) {
-            output.append("ORANGE");
+            output.append("0x255c800");
         } else if (color.getTransparency() == Transparency.OPAQUE) {
-            output.append("new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase().substring(2) + ")");
+            output.append("0x" + Integer.toHexString(color.getRGB()).toUpperCase().substring(2) + "");
         } else {
-            output.append("new Color(0x" + Integer.toHexString(color.getRGB()).toUpperCase() + ", true)");
+            output.append("0x" + Integer.toHexString(color.getRGB()).toUpperCase());
         }
     }
 }

@@ -3,3 +3,5 @@ icons
 *.iml
 *.log
 .idea
+
+.DS_Store
