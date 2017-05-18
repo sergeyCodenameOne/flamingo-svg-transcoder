@@ -7,7 +7,7 @@ import com.codename1.ui.geom.*;
  * This class has been automatically generated using
  * <a href="http://ebourg.github.io/flamingo-svg-transcoder/">Flamingo SVG transcoder</a>.
  */
-public class ${CLASSNAME} extends com.codename1.ui.Image {
+public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
     private int width, height;
 
     public ${CLASSNAME}() {
@@ -67,11 +67,16 @@ public class ${CLASSNAME} extends com.codename1.ui.Image {
     protected void drawImage(Graphics g, Object nativeGraphics, int x, int y, int w, int h) {
         float hRatio = ((float)w) / ((float)getOrigWidth());
         float vRatio = ((float)h) / ((float)getOrigHeight());
-        g.translate(x, y);
+        int origX = g.getTranslateX();
+        int origY = g.getTranslateY();
+        g.translate(-origX, -origY);
         g.scale(hRatio, vRatio);
+        int tx = (int)(((float)x) / hRatio);
+        int ty = (int)(((float)y) / vRatio);
+        g.translate(tx, ty);
         paint(g);
         g.resetAffine();
-        g.translate(-x, -y);
+        g.translate(origX - g.getTranslateX(), origY - g.getTranslateY());
     }
 
     private static void paint(Graphics g) {
@@ -129,5 +134,10 @@ ${PAINTING_CODE}
      */
     public static int getOrigHeight() {
         return ${HEIGHT};
+    }
+
+    @Override
+    public void paint(Graphics g, Rectangle rect) {
+        drawImage(g, null, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
     }
 }
