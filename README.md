@@ -5,7 +5,7 @@ This is a fork of [the Swing based Flamingo SVG Transcoder](https://github.com/e
 
 Not all functionality or usage is implemented, gradients just pick the start color instead and no animations are available (weren't supported in source port either). The code is relatively simple and easy to enhance if you need support for additional features.
 
-=== Usage
+## Usage
 
 This can be invoked from command line for a one time conversion using 
 
