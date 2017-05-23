@@ -32,10 +32,10 @@ public class BasicStrokeTranscoder extends Transcoder<BasicStroke> {
     @Override
     public void transcode(BasicStroke stroke, PrintWriter output) {
         if (stroke.getDashArray() == null) {
-            output.append("new BasicStroke(" + FloatTranscoder.INSTANCE.transcode(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
+            output.append("new Stroke(" + FloatTranscoder.INSTANCE.transcode(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
                     + stroke.getLineJoin() + ", " + FloatTranscoder.INSTANCE.transcode(stroke.getMiterLimit()) + ")");
         } else {
-            output.append("new BasicStroke(" + FloatTranscoder.INSTANCE.transcode(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
+            output.append("new Stroke(" + FloatTranscoder.INSTANCE.transcode(stroke.getLineWidth()) + ", " + stroke.getEndCap() + ", "
                     + stroke.getLineJoin() + ", " + FloatTranscoder.INSTANCE.transcode(stroke.getMiterLimit()) + ", "
                     + FloatArrayTranscoder.INSTANCE.transcode(stroke.getDashArray()) + ", " 
                     + FloatTranscoder.INSTANCE.transcode(stroke.getDashPhase()) + ")");

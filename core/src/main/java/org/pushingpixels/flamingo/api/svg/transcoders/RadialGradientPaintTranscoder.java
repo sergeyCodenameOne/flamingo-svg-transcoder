@@ -32,7 +32,8 @@ public class RadialGradientPaintTranscoder extends MultipleGradientPaintTranscod
 
     @Override
     public void transcode(RadialGradientPaint paint, PrintWriter output) {
-        StringBuilder colorsRep = new StringBuilder();
+        output.print("0x" + Integer.toHexString(paint.getColors()[0].getRGB()));
+        /*StringBuilder colorsRep = new StringBuilder();
         if (paint.getFractions() == null) {
             colorsRep.append("null");
         } else {
@@ -47,6 +48,6 @@ public class RadialGradientPaintTranscoder extends MultipleGradientPaintTranscod
                 colorsRep.toString(),
                 transcode(paint.getCycleMethod()),
                 transcode(paint.getColorSpace()),
-                AffineTransformTranscoder.INSTANCE.transcode(paint.getTransform()));
+                AffineTransformTranscoder.INSTANCE.transcode(paint.getTransform()));*/
     }
 }

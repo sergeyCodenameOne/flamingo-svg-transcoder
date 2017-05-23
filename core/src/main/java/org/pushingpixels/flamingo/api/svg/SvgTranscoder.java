@@ -336,14 +336,14 @@ public class SvgTranscoder {
         transcodeShape(painter.getShape());
         transcodePaintChange(paint);
         transcodeStrokeChange(painter.getStroke());
-        printWriter.println("g.drawShape(shape);");
+        printWriter.println("g.drawShape(shape, baseStroke);");
     }
 
     private void transcodeStrokeChange(Stroke stroke) {
         String s = BasicStrokeTranscoder.INSTANCE.transcode((BasicStroke) stroke);
         if (s == null && currentStroke != null || s != null && !s.equals(currentStroke)) {
             currentStroke = s;
-            printWriter.println("g.setStroke(" + s + ");");
+            printWriter.println("baseStroke = " + s + ";");
         }
     }
 
@@ -428,7 +428,7 @@ public class SvgTranscoder {
         Graphics2D g = new NoOpGraphics2D() {
             public void draw(Shape shape) {
                 transcodeShape(shape);
-                printWriter.println("g.drawShape(shape);");
+                printWriter.println("g.drawShape(shape, baseStroke);");
             }
 
             public void fill(Shape shape) {

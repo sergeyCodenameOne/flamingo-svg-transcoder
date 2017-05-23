@@ -81,6 +81,7 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
 
     private static void paint(Graphics g) {
         int origAlpha = g.getAlpha();
+        Stroke baseStroke;
         Shape shape;
         g.setAntiAliased(true);
         g.setAntiAliasedText(true);
