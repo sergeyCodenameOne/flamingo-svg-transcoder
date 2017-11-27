@@ -10,7 +10,7 @@ https://www.codenameone.com/blog/flamingo-svg-transcoder.html
 
 ## Compiling
 If you are in trouble on compiling the sources to jar, you can use:
-https://github.com/jsfan3/flamingo-svg-transcoder/blob/master/flamingo-svg-transcoder-core-1.2-jar-with-dependencies.jar
+https://github.com/codenameone/flamingo-svg-transcoder/blob/master/flamingo-svg-transcoder-core-1.2-jar-with-dependencies.jar
 
 ### Hints to compiling:
 Install maven
