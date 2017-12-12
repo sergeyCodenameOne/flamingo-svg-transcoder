@@ -72,3 +72,30 @@ java -jar ~/flamingo-svg-transcoder-master/core/target/flamingo-svg-transcoder-c
 The output is:
 Processing Logo.svg
 ```
+
+## Tips and tricks to get a working Java code from a simple SVG image:
+
+1. Before export your vectorial drawing to SVG, if you can:
+
+1a. transform any special object (like spirals, circles or stars) in a pure path;
+
+2a. remove all transformations.
+
+2. Export your vectorial drawing to SVG in the simplest format, that means without incorporated rasters, without incorporated fonts (export text as curves), without gradients or translucents (full opaque or full transparent colors are fine). If you can choose the SVG version, SVG 1.0 is fine.
+
+A method to remove transformations (it should work in most simple cases):
+1. Load your SVG in Method Draw http://editor.method.ac (File > Open Image).
+(Method Draw is a vector editor for the web, it is open source and you can find it on Github: https://github.com/duopixel/Method-Draw)
+2. Select the image and ungroup your elements (Object > Ungroup elements), you might have to do this more than once.
+3. Keeping the image selected, reorient the path (Object > Reorient Paths).
+4. Save your image (File > Save Image).
+
+Another method to remove transformations (if the previous method failed because Method Draw doesn't load correctly the image):
+1. Ensure that the SVG has only one layer (you can use the XML editor of Inkscape)
+2. Install Affinity Designer (there is a ten-days trial version for Windows and Mac)
+3. Import the SVG in Affinity Designer and export with "no rasters", "use relative coordinates", "use hex colors", "flatten transforms", "set viewbox", "add line breaks".
+3. Try to use Method Draw (as above) with the just exported SVG: now it should load correctly the image.
+4. Last resort after all above trials: if you get errors in the generate java code related to unused gradients, unused transformations or unused variables, fix the code manually. In a desperate case, I've done few manual corrections and then the code started to work... :-)
+
+More info about removing transformations from an SVG: https://stackoverflow.com/questions/13329125/removing-transforms-in-svg-files
+
