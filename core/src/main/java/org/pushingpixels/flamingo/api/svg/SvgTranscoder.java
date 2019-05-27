@@ -350,7 +350,8 @@ public class SvgTranscoder {
     private void transcodeCompositeChange(AlphaComposite composite) {
         if (composite != null && !composite.equals(currentComposite) && !(currentComposite == null && composite.getAlpha() == 1)) {
             currentComposite = composite;
-            printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + FloatTranscoder.INSTANCE.transcode(composite.getAlpha()) + " * origAlpha));");
+            //printWriter.println("g.setComposite(AlphaComposite.getInstance(" + composite.getRule() + ", " + FloatTranscoder.INSTANCE.transcode(composite.getAlpha()) + " * origAlpha));");
+            printWriter.println("g.setAlpha((int)Math.round("+FloatTranscoder.INSTANCE.transcode(composite.getAlpha()) + " * origAlpha));");
         }
     }
 

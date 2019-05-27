@@ -30,7 +30,7 @@ public class ColorArrayTranscoder extends Transcoder<Color[]> {
     @Override
     public void transcode(Color[] colors, PrintWriter output) {
         String comma = "";
-        output.append("new Color[]{");
+        output.append("new int[]{");
         for (Color color : colors) {
             output.append(comma);
             output.append(ColorTranscoder.INSTANCE.transcode(color));

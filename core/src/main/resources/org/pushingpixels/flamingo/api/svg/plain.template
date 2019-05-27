@@ -2,6 +2,9 @@ ${PACKAGE}
 
 import com.codename1.ui.*;
 import com.codename1.ui.geom.*;
+import static com.codename1.ui.MultipleGradientPaint.*;
+import static com.codename1.ui.MultipleGradientPaint.CycleMethod.*;
+import static com.codename1.ui.MultipleGradientPaint.ColorSpaceType.*;
 
 /**
  * This class has been automatically generated using
@@ -9,6 +12,7 @@ import com.codename1.ui.geom.*;
  */
 public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
     private int width, height;
+    private Transform t = Transform.makeIdentity(), t2 = Transform.makeIdentity();
 
     public ${CLASSNAME}() {
         super(null);
@@ -65,18 +69,15 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
 
     @Override
     protected void drawImage(Graphics g, Object nativeGraphics, int x, int y, int w, int h) {
-        float hRatio = ((float)w) / ((float)getOrigWidth());
-        float vRatio = ((float)h) / ((float)getOrigHeight());
-        int origX = g.getTranslateX();
-        int origY = g.getTranslateY();
-        g.translate(-origX, -origY);
-        g.scale(hRatio, vRatio);
-        int tx = (int)(((float)x) / hRatio);
-        int ty = (int)(((float)y) / vRatio);
-        g.translate(tx, ty);
+        g.getTransform(t);
+        t2.setTransform(t);
+        float hRatio = ((float) w) / ((float) getOrigWidth());
+        float vRatio = ((float) h) / ((float) getOrigHeight());
+        t2.translate(x + g.getTranslateX(), y + g.getTranslateY());
+        t2.scale(hRatio, vRatio);
+        g.setTransform(t2);
         paint(g);
-        g.resetAffine();
-        g.translate(origX - g.getTranslateX(), origY - g.getTranslateY());
+        g.setTransform(t);
     }
 
     private static void paint(Graphics g) {
@@ -92,13 +93,12 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
                 origAlpha = origAlphaComposite.getAlpha();
             }
         }
-        
-        java.util.LinkedList<AffineTransform> transformations = new java.util.LinkedList<AffineTransform>();*/
+        */
+        java.util.LinkedList<Transform> transformations = new java.util.LinkedList<Transform>();
         
 ${PAINTING_CODE}
 
         g.setAlpha(origAlpha);
-        g.resetAffine();
     }
 
     /**

@@ -32,7 +32,7 @@ public class AffineTransformTranscoder extends Transcoder<AffineTransform> {
     @Override
     public void transcode(AffineTransform transform, PrintWriter output) {
         if (transform.isIdentity()) {
-            output.append("new AffineTransform()");
+            output.append("new AffineTransform().toTransform()");
         } else {
             double[] matrix = new double[6];
             transform.getMatrix(matrix);
@@ -40,7 +40,7 @@ public class AffineTransformTranscoder extends Transcoder<AffineTransform> {
             output.append("new AffineTransform("
                     + FloatTranscoder.INSTANCE.transcode((float) matrix[0]) + ", " + FloatTranscoder.INSTANCE.transcode((float) matrix[1]) + ", "
                     + FloatTranscoder.INSTANCE.transcode((float) matrix[2]) + ", " + FloatTranscoder.INSTANCE.transcode((float) matrix[3]) + ", "
-                    + FloatTranscoder.INSTANCE.transcode((float) matrix[4]) + ", " + FloatTranscoder.INSTANCE.transcode((float) matrix[5]) + ")");
+                    + FloatTranscoder.INSTANCE.transcode((float) matrix[4]) + ", " + FloatTranscoder.INSTANCE.transcode((float) matrix[5]) + ").toTransform()");
         }
     }
 }

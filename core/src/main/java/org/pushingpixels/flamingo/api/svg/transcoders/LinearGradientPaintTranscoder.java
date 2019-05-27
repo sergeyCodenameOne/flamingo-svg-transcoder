@@ -39,9 +39,12 @@ public class LinearGradientPaintTranscoder extends MultipleGradientPaintTranscod
             colorsRep.append(ColorArrayTranscoder.INSTANCE.transcode(paint.getColors()));
         }
 
-        output.printf("new LinearGradientPaint(%s, %s, %s, %s, %s, %s, %s)",
-                PointTranscoder.INSTANCE.transcode(paint.getStartPoint()),
-                PointTranscoder.INSTANCE.transcode(paint.getEndPoint()),
+        output.printf("new LinearGradientPaint(%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                //
+                DoubleTranscoder.INSTANCE.transcode(paint.getStartPoint().getX()),
+                DoubleTranscoder.INSTANCE.transcode(paint.getStartPoint().getY()),
+                DoubleTranscoder.INSTANCE.transcode(paint.getEndPoint().getX()),
+                DoubleTranscoder.INSTANCE.transcode(paint.getEndPoint().getY()),
                 FloatArrayTranscoder.INSTANCE.transcode(normalizeFractions(paint.getFractions())),
                 colorsRep.toString(),
                 transcode(paint.getCycleMethod()),
