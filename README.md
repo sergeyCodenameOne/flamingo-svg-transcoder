@@ -15,37 +15,6 @@ https://github.com/codenameone/flamingo-svg-transcoder/blob/master/flamingo-svg-
 ### Hints to compiling:
 Install maven
 
-Download flamingo-svg-transcoder-master.zip and extract it in your home
-
-Remove ~/flamingo-svg-transcoder-master/core/src/test (because the tests generate errors)
-
-Add to ~/flamingo-svg-transcoder-master/core/pom.xml in the <build><plugins> section:
-  
-```
-<plugin>
-  <artifactId>maven-assembly-plugin</artifactId>
-  <configuration>
-    <archive>
-      <manifest>
-        <mainClass>org.pushingpixels.flamingo.api.svg.SvgBatchConverter</mainClass>
-      </manifest>
-    </archive>
-    <descriptorRefs>
-      <descriptorRef>jar-with-dependencies</descriptorRef>
-    </descriptorRefs>
-  </configuration>
-  <executions>
-    <execution>
-      <id>make-assembly</id> <!-- this is used for inheritance merges -->
-      <phase>package</phase> <!-- bind to the packaging phase -->
-      <goals>
-        <goal>single</goal>
-      </goals>
-    </execution>
-  </executions>
-</plugin>
-```
-
 In the terminal:
 ```
 cd ~/flamingo-svg-transcoder-master/core/
