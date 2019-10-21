@@ -434,7 +434,7 @@ public class SvgTranscoder {
 
             public void fill(Shape shape) {
                 transcodeShape(shape);
-                printWriter.println("fillShape(shape);");
+                printWriter.println("g.fillShape(shape);");
             }
 
             public void setComposite(Composite composite) {
