@@ -24,6 +24,7 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
         super(null);
         this.width = width;
         this.height = height;
+        fixAspectRatio();
     }
             
     @Override
@@ -40,6 +41,32 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
     public void scale(int width, int height) {
         this.width = width;
         this.height = height;
+        fixAspectRatio();
+    }
+
+    @Override
+    public ${CLASSNAME} scaled(int width, int height) {
+        ${CLASSNAME} f = new ${CLASSNAME}(width, height);
+        f.fixAspectRatio();
+        return f;
+    }
+
+    public Image toImage() {
+        Image i = Image.createImage(width, height, 0);
+        Graphics g = i.getGraphics();
+        drawImage(g, null, 0, 0, width, height);
+        return i;
+    }
+
+    private void fixAspectRatio() {
+        if(width == -1) {
+            float ar = ((float)getOrigWidth()) / ((float)getOrigHeight());
+            width = Math.round(((float)height) * ar);
+        }
+        if (height == -1) {
+            float ar = ((float)getOrigHeight()) / ((float)getOrigWidth());
+            height = Math.round(((float)width) * ar);
+        }
     }
 
     @Override
