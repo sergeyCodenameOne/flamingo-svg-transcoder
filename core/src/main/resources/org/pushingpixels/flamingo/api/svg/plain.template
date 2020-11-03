@@ -96,15 +96,19 @@ public class ${CLASSNAME} extends com.codename1.ui.Image implements Painter {
 
     @Override
     protected void drawImage(Graphics g, Object nativeGraphics, int x, int y, int w, int h) {
+        int tx = g.getTranslateX();
+        int ty = g.getTranslateY();
+        g.translate(-tx, -ty);
         g.getTransform(t);
         t2.setTransform(t);
         float hRatio = ((float) w) / ((float) getOrigWidth());
         float vRatio = ((float) h) / ((float) getOrigHeight());
-        t2.translate(x + g.getTranslateX(), y + g.getTranslateY());
+        t2.translate(tx + x, ty + y);
         t2.scale(hRatio, vRatio);
         g.setTransform(t2);
         paint(g);
         g.setTransform(t);
+        g.translate(tx, ty);
     }
 
     private static void paint(Graphics g) {
