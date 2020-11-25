@@ -51,7 +51,6 @@ public class EllipseTranscoder extends Transcoder<Ellipse2D> {
                 case PathIterator.SEG_LINETO:
                     output.println("((GeneralPath) shape).lineTo(" + coords[0] + ", " + coords[1] + ");");
                     break;
-                // through
                 case PathIterator.SEG_CLOSE:
                     output.println("((GeneralPath) shape).closePath();");
                     break;
